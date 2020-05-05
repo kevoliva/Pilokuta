@@ -7,10 +7,40 @@
   <link rel="stylesheet" href="/css/bootstrap.min.css">
 
   {% endblock %}
-
 </head>
+
+
+
 <body>
-  {% block body %}{% endblock %}
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+
+        {% block entete %}
+        <div>
+          <center>
+            <h1 class="display-4">
+              <b>Pilokuta</b>
+            </h1>
+          </center>
+          <hr>
+        </div>
+        {% endblock %}
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+
+        {% block body %}
+
+        {% endblock %}
+
+      </div>
+    </div>
+  </div>
+
 
   {% block javascripts %}
   <script src = "/js/bootstrap.min.js">
