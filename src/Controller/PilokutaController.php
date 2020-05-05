@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PilokutaController extends AbstractController
 {
     /**
-     * @Route("/pilokuta", name="pilokuta")
+     * @Route("/", name="pilokuta")
      */
     public function index()
     {
