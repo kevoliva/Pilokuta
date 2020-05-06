@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Tournoi;
 use App\Form\TournoiType;
 use App\Repository\TournoiRepository;
+use App\Repository\CreneauRepository;
+use App\Entity\Creneau;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -82,6 +85,16 @@ class TournoiController extends AbstractController
   public function exporterCalendrier(Tournoi $tournoi): Response
   {
 
+    $creneauRepository = $this->getDoctrine()->getRepository(Creneau::class);
+
+    $creneaux = $creneauRepository->getCreneauByTournoi($tournoi);
+
+    foreach ($creneaux as $creneau) {
+      $event = new CalendarEvent();
+
+      dump($creneau->getLaDate()); exit;
+
+    }
 
     //setup an event
     $eventOne = new CalendarEvent();

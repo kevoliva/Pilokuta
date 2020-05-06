@@ -40,13 +40,24 @@ class AppFixtures extends Fixture
 
     $creneau = new Creneau();
     $creneau->setTournoi($tournoi);
-    $creneau->setLaDate(new \DateTime('now'));
-    $creneau->setHeureDebut('14H00');
+    $creneau->setLaDate(new \DateTime('2020-05-07 17:00:00'));
+    $creneau->setHeureDebut('14');
+    $creneau->setMinuteDebut('00');
     $creneau->setDuree(60);
     $creneau->setCommentaire('Blablabla');
     $creneau->setJoueur($joueur);
 
     $manager->persist($creneau);
+
+    $creneau3 = new Creneau();
+    $creneau3->setTournoi($tournoi);
+    $creneau3->setLaDate(new \DateTime('2020-05-06T14:00:00Z'));
+    $creneau3->setHeureDebut('16');
+    $creneau3->setMinuteDebut('30');
+    $creneau3->setDuree(60);
+    $creneau3->setCommentaire('Blebleble');
+
+    $manager->persist($creneau3);
 
     $serie = new Serie();
     $serie->setLibelle("Série 1");
@@ -95,6 +106,24 @@ class AppFixtures extends Fixture
     $partie->setScoreEquipe2(30);
 
     $manager->persist($partie);
+
+    $tournoi2 = new Tournoi();
+    $tournoi2->setLibelle('Tournoi 2v2');
+    $tournoi2->setDateDebut(new \DateTime('now'));
+    $tournoi2->setDateFin(new \DateTime('now'));
+    $tournoi2->setNbJoueursParEquipe(2);
+    $tournoi2->setEtat('Terminé');
+
+    $manager->persist($tournoi2);
+
+    $creneau2 = new Creneau();
+    $creneau2->setTournoi($tournoi2);
+    $creneau2->setLaDate(new \DateTime('now'));
+    $creneau2->setHeureDebut('18H00');
+    $creneau2->setDuree(90);
+    $creneau2->setCommentaire('Bliblibli');
+
+    $manager->persist($creneau2);
 
     $manager->flush();
   }

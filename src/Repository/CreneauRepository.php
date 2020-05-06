@@ -47,4 +47,15 @@ class CreneauRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getCreneauByTournoi($tournoi)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.tournoi = :tournoi')
+            ->setParameter('tournoi', $tournoi)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 }
