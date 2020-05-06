@@ -101,6 +101,7 @@ class TournoiController extends AbstractController
 
     $calendar = new Calendar();
     $calendar->setProdId('-//My Company//Cool Calendar App//EN');
+    $calendar->setTimezone(new \DateTimeZone('Europe/Paris'));
     $id = 1;
 
     foreach ($creneaux as $creneau) {
@@ -110,6 +111,7 @@ class TournoiController extends AbstractController
       $event->setStart($creneau->getLaDate());
       $event->setSummary('Match pelote');
       $event->setUid('event-uid'.$id);
+
 
       $calendar->addEvent($event);
       unset($event);
