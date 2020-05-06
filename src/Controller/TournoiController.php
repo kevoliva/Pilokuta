@@ -81,6 +81,8 @@ class TournoiController extends AbstractController
   */
   public function exporterCalendrier(Tournoi $tournoi): Response
   {
+
+
     //setup an event
     $eventOne = new CalendarEvent();
     $eventOne->setStart(new \DateTime('2020-05-06T12:45:00Z'))

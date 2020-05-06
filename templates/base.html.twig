@@ -20,9 +20,11 @@
         {% block entete %}
         <div>
           <center>
-            <h1 class="display-4">
-              <b>Pilokuta</b>
-            </h1>
+            <a href="{{path('tournoi_index')}}" style="color:black; text-decoration:none">
+              <h1 class="display-4">
+                <b>Pilokuta</b>
+              </h1>
+            </a>
           </center>
           <hr>
         </div>
@@ -39,26 +41,26 @@
         </nav>
 
 
-      {% endblock %}
+        {% endblock %}
 
-      <br><br>
+        <br><br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+
+        {% block body %}
+
+        {% endblock %}
+
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-
-      {% block body %}
-
-      {% endblock %}
-
-    </div>
-  </div>
-</div>
 
 
-{% block javascripts %}
-<script src = "/js/bootstrap.min.js">
-</script>
+  {% block javascripts %}
+  <script src = "/js/bootstrap.min.js">
+  </script>
 {% endblock %}
 </body>
 </html>
