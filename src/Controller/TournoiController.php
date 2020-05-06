@@ -59,6 +59,16 @@ class TournoiController extends AbstractController
     }
 
     /**
+     * @Route("/show/{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
+     */
+    public function calendrierTournoi(Tournoi $tournoi): Response
+    {
+        return $this->render('tournoi/calendrier.html.twig', [
+            'tournoi' => $tournoi,
+        ]);
+    }
+
+    /**
      * @Route("/{id}/edit", name="tournoi_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Tournoi $tournoi): Response

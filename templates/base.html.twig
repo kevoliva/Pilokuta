@@ -30,32 +30,35 @@
         <br>
         {% block navbar %}
 
+
         <nav class="nav nav-pills nav-justified">
-          <a class="nav-item nav-link active" href="#">Informations</a>
+          <a class="nav-item nav-link" href="#">Informations</a>
           <a class="nav-item nav-link" href="#">Calendrier</a>
           <a class="nav-item nav-link" href="#">Résultats</a>
           <a class="nav-item nav-link" href="#">Phases finales</a>
         </nav>
 
-        {% endblock %}
-        <br><br>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
 
-        {% block body %}
+      {% endblock %}
 
-        {% endblock %}
-
-      </div>
+      <br><br>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-12">
+
+      {% block body %}
+
+      {% endblock %}
+
+    </div>
+  </div>
+</div>
 
 
-  {% block javascripts %}
-  <script src = "/js/bootstrap.min.js">
-  </script>
+{% block javascripts %}
+<script src = "/js/bootstrap.min.js">
+</script>
 {% endblock %}
 </body>
 </html>
