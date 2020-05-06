@@ -49,7 +49,7 @@ class TournoiController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="tournoi_show", methods={"GET"})
+     * @Route("/show/{id}", name="tournoi_show", methods={"GET"})
      */
     public function show(Tournoi $tournoi): Response
     {
