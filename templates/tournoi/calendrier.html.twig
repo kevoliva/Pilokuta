@@ -8,3 +8,16 @@
   <a class="nav-item nav-link" href="#">Phases finales</a>
 </nav>
 {% endblock %}
+
+{% block body %}
+<center>
+  <a href="{{path('tournoi_download_calendrier', {id:tournoi.id})}}">
+    <button class ="btn btn-outline-info btn-sm">Exporter le calendrier</button>
+  </a>
+</center>
+<br><br>
+
+<!-- CALENDRIER A FAIRE : DODO ET MATHIEU -->
+
+
+{% endblock %}
