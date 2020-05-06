@@ -118,7 +118,7 @@ class AppFixtures extends Fixture
 
     $creneau2 = new Creneau();
     $creneau2->setTournoi($tournoi2);
-    $creneau2->setLaDate(new \DateTime('now'));
+    $creneau2->setLaDate(new \DateTime('2020-05-12T11:45:00Z'));
     $creneau2->setHeureDebut('18H00');
     $creneau2->setDuree(90);
     $creneau2->setCommentaire('Bliblibli');

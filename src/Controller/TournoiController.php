@@ -125,22 +125,23 @@ class TournoiController extends AbstractController
     $leCalendrier = $calendarExport->getStream();
 
 
-    $file = "Mon calendrier.ics";
-    $txt = fopen($file, "w") or die("Unable to open file!");
-    fwrite($txt, $leCalendrier);
-    fclose($txt);
+    $filee = "Calendrier - ".$tournoi->getLibelle().".ics";
+    $f = fopen($filee, "w") or die("Unable to open file!");
+    fwrite($f, $leCalendrier);
+
+    fclose($f);
 
     header('Content-Description: File Transfer');
-    header('Content-Disposition: attachment; filename='.basename($file));
+    header('Content-Disposition: attachment; filename='.basename($filee));
     header('Expires: 0');
     header('Cache-Control: must-revalidate');
     header('Pragma: public');
-    header('Content-Length: ' . filesize($file));
+    header('Content-Length: ' . filesize($filee));
     header("Content-Type: text/plain");
 
-    readfile($file);
+    readfile($filee);
 
-    unlink($file);
+    unlink($filee);
   }
 
   /**
