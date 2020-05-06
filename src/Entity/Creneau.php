@@ -18,7 +18,7 @@ class Creneau
     private $id;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $laDate;
 

@@ -40,7 +40,7 @@ class AppFixtures extends Fixture
 
     $creneau = new Creneau();
     $creneau->setTournoi($tournoi);
-    $creneau->setLaDate(new \DateTime('2020-05-07 17:00:00'));
+    $creneau->setLaDate(new \DateTime('2020-05-07T17:45:00Z'));
     $creneau->setHeureDebut('14');
     $creneau->setMinuteDebut('00');
     $creneau->setDuree(60);

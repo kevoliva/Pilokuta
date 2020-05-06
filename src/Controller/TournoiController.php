@@ -80,59 +80,50 @@ class TournoiController extends AbstractController
   }
 
   /**
-  * @Route("/show/{id}/calendrier/download", name="tournoi_download_calendrier", methods={"GET"})
+  * @Route("/show/{id}/calendrier/download", name="tournoi_download_calendrier")
   */
-  public function exporterCalendrier(Tournoi $tournoi): Response
+
+  public function exporterCalendrier(Tournoi $tournoi)
+  {
+    $this->genererCalendrier($tournoi);
+
+    return $this->render('tournoi/calendrier.html.twig', [
+      'tournoi' => $tournoi,
+    ]);
+  }
+
+  public function genererCalendrier(Tournoi $tournoi)
   {
 
     $creneauRepository = $this->getDoctrine()->getRepository(Creneau::class);
 
     $creneaux = $creneauRepository->getCreneauByTournoi($tournoi);
 
+    $calendar = new Calendar();
+    $calendar->setProdId('-//My Company//Cool Calendar App//EN');
+    $id = 1;
+
     foreach ($creneaux as $creneau) {
+
       $event = new CalendarEvent();
 
-      dump($creneau->getLaDate()); exit;
+      $event->setStart($creneau->getLaDate());
+      $event->setSummary('Match pelote');
+      $event->setUid('event-uid'.$id);
+
+      $calendar->addEvent($event);
+      unset($event);
+      $id++;
 
     }
 
-    //setup an event
-    $eventOne = new CalendarEvent();
-    $eventOne->setStart(new \DateTime('2020-05-06T12:45:00Z'))
-    ->setSummary('Match football')
-    ->setUid('event-uid');
 
-    //add an Attendee
-    $attendee = new Attendee(new Formatter());
-    $attendee->setValue('moe@example.com')
-    ->setName('Moe Smith');
-    $eventOne->addAttendee($attendee);
-
-    //set the Organizer
-    $organizer = new Organizer(new Formatter());
-    $organizer->setValue('heidi@example.com')
-    ->setName('Heidi Merkell')
-    ->setLanguage('de');
-    $eventOne->setOrganizer($organizer);
-
-    //new event
-    $eventTwo = new CalendarEvent();
-    $eventTwo->setStart(new \DateTime('2020-05-05T10:37:37Z'))
-    ->setSummary('Rendez-vous dentiste')
-    ->setUid('event-uid2');
-
-    //setup calendar
-    $calendar = new Calendar();
-    $calendar->setProdId('-//My Company//Cool Calendar App//EN')
-    ->addEvent($eventOne)
-    ->addEvent($eventTwo);
-
-    //setup exporter
     $calendarExport = new CalendarExport(new CalendarStream, new Formatter());
     $calendarExport->addCalendar($calendar);
 
     //output .ics formatted text
     $leCalendrier = $calendarExport->getStream();
+
 
     $file = "Mon calendrier.ics";
     $txt = fopen($file, "w") or die("Unable to open file!");
@@ -146,13 +137,10 @@ class TournoiController extends AbstractController
     header('Pragma: public');
     header('Content-Length: ' . filesize($file));
     header("Content-Type: text/plain");
+
     readfile($file);
 
     unlink($file);
-
-    return $this->render('tournoi/calendrier.html.twig', [
-      'tournoi' => $tournoi,
-    ]);
   }
 
   /**
