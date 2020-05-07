@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tournoi;
+use App\Entity\Partie;
 use App\Form\TournoiType;
 use App\Repository\TournoiRepository;
 use App\Repository\CreneauRepository;
@@ -94,10 +95,12 @@ class TournoiController extends AbstractController
 
   public function genererCalendrier(Tournoi $tournoi)
   {
+    $partieRepository = $this->getDoctrine()->getRepository(Partie::class);
 
     $creneauRepository = $this->getDoctrine()->getRepository(Creneau::class);
 
     $creneaux = $creneauRepository->getCreneauByTournoi($tournoi);
+    
 
     $calendar = new Calendar();
     $calendar->setProdId('-//My Company//Cool Calendar App//EN');
@@ -106,17 +109,51 @@ class TournoiController extends AbstractController
 
     foreach ($creneaux as $creneau) {
 
-      $event = new CalendarEvent();
+      $partie = $partieRepository->getPartieByCreneau($creneau);
 
-      $event->setStart($creneau->getLaDate());
-      $event->setSummary('Match pelote');
-      $event->setUid('event-uid'.$id);
+      if(count($partie)==1){
+        $event = new CalendarEvent();
+        
+        $dateDeb=$creneau->getLaDate();
 
 
-      $calendar->addEvent($event);
-      unset($event);
-      $id++;
+        $event->setStart($dateDeb);
 
+        $dateFin=$event->getEnd();
+        $dateFin->setTimestamp($dateFin->getTimestamp()+(($creneau->getDuree()-30)*60));
+
+        $event->setEnd($dateFin);
+
+        $equipes=$partie[0]->getEquipes();
+
+        $event->setSummary($equipes[0]->getLibelle()."-".$equipes[1]->getLibelle());
+        $event->setUid('event-uid'.$id);
+
+
+        $calendar->addEvent($event);
+        unset($event);
+        $id++;
+      }else if($creneau->getCommentaire()!=null){
+        $event = new CalendarEvent();
+        
+        $dateDeb=$creneau->getLaDate();
+
+
+        $event->setStart($dateDeb);
+
+        $dateFin=$event->getEnd();
+        $dateFin->setTimestamp($dateFin->getTimestamp()+(($creneau->getDuree()-30)*60));
+
+        $event->setEnd($dateFin);
+
+        $event->setSummary($creneau->getCommentaire());
+        $event->setUid('event-uid'.$id);
+
+
+        $calendar->addEvent($event);
+        unset($event);
+        $id++;
+      }
     }
 
 

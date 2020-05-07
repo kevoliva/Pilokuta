@@ -47,4 +47,13 @@ class PartieRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getPartieByCreneau($creneau)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.creneau = :creneau')
+            ->setParameter('creneau', $creneau)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

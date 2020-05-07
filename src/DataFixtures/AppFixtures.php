@@ -44,7 +44,7 @@ class AppFixtures extends Fixture
     $creneau->setHeureDebut('14');
     $creneau->setMinuteDebut('00');
     $creneau->setDuree(60);
-    $creneau->setCommentaire('Blablabla');
+    $creneau->setCommentaire(NULL);
     $creneau->setJoueur($joueur);
 
     $manager->persist($creneau);
@@ -55,7 +55,7 @@ class AppFixtures extends Fixture
     $creneau3->setHeureDebut('16');
     $creneau3->setMinuteDebut('30');
     $creneau3->setDuree(60);
-    $creneau3->setCommentaire('Blebleble');
+    $creneau3->setCommentaire('Créneau indisponible');
 
     $manager->persist($creneau3);
 
@@ -84,14 +84,14 @@ class AppFixtures extends Fixture
     $manager->persist($poule2);
 
     $equipe = new Equipe();
-    $equipe->setLibelle("La team");
+    $equipe->setLibelle("18");
     $equipe->addJoueur($joueur);
     $equipe->setPoule($poule);
 
     $manager->persist($equipe);
 
     $equipe2 = new Equipe();
-    $equipe2->setLibelle("Yo");
+    $equipe2->setLibelle("27");
     $equipe2->addJoueur($joueur);
     $equipe2->setPoule($poule);
 
@@ -121,7 +121,7 @@ class AppFixtures extends Fixture
     $creneau2->setLaDate(new \DateTime('2020-05-12T11:45:00Z'));
     $creneau2->setHeureDebut('18H00');
     $creneau2->setDuree(90);
-    $creneau2->setCommentaire('Bliblibli');
+    $creneau2->setCommentaire(NULL);
 
     $manager->persist($creneau2);
 

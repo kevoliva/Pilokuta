@@ -22,15 +22,6 @@ class Creneau
      */
     private $laDate;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $heureDebut;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $minuteDebut;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
