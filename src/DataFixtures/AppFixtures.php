@@ -40,7 +40,7 @@ class AppFixtures extends Fixture
 
     $creneau = new Creneau();
     $creneau->setTournoi($tournoi);
-    $creneau->setLaDate(new \DateTime('2020-05-07T17:45:00Z'));
+    $creneau->setLaDate(new \DateTime('2020-05-13T17:45:00Z'));
     $creneau->setHeureDebut('14');
     $creneau->setMinuteDebut('00');
     $creneau->setDuree(60);
@@ -51,7 +51,7 @@ class AppFixtures extends Fixture
 
     $creneau3 = new Creneau();
     $creneau3->setTournoi($tournoi);
-    $creneau3->setLaDate(new \DateTime('2020-05-06T14:00:00Z'));
+    $creneau3->setLaDate(new \DateTime('2020-05-12T14:00:00Z'));
     $creneau3->setHeureDebut('16');
     $creneau3->setMinuteDebut('30');
     $creneau3->setDuree(60);
@@ -118,7 +118,7 @@ class AppFixtures extends Fixture
 
     $creneau2 = new Creneau();
     $creneau2->setTournoi($tournoi2);
-    $creneau2->setLaDate(new \DateTime('2020-05-12T11:45:00Z'));
+    $creneau2->setLaDate(new \DateTime('2020-05-13T11:45:00Z'));
     $creneau2->setHeureDebut('18H00');
     $creneau2->setDuree(90);
     $creneau2->setCommentaire(NULL);
