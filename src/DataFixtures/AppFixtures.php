@@ -33,9 +33,10 @@ class AppFixtures extends Fixture
 
     $joueur = new User();
     $joueur->setEmail("marco@polo.fr");
-    $joueur->setPassword("marco");
-    $joueur->setNom("Marco");
-    $joueur->setPrenom("Polo");
+    $joueur->setRoles(['ROLE_USER']);
+    $joueur->setPassword('$2y$10$LYa1ESfqz5kP2rJCQ/md5O9YciYOkAi.//fk8MHMqiq5JYS.6.M5G');
+    $joueur->setPrenom("Marco");
+    $joueur->setNom("Polo");
     $joueur->setTelephone("0600000000");
 
     $manager->persist($joueur);
