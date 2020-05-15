@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use App\Entity\Tournoi;
 use App\Entity\Partie;
 use App\Entity\Serie;
-use App\Entity\Joueur;
+use App\Entity\User;
 use App\Entity\Equipe;
 use App\Entity\Creneau;
 use App\Entity\Poule;
@@ -31,7 +31,9 @@ class AppFixtures extends Fixture
 
     $manager->persist($tournoi);
 
-    $joueur = new Joueur();
+    $joueur = new User();
+    $joueur->setEmail("marco@polo.fr");
+    $joueur->setPassword("marco");
     $joueur->setNom("Marco");
     $joueur->setPrenom("Polo");
     $joueur->setTelephone("0600000000");
@@ -45,7 +47,7 @@ class AppFixtures extends Fixture
     $creneau->setMinuteDebut('00');
     $creneau->setDuree(60);
     $creneau->setCommentaire(NULL);
-    $creneau->setJoueur($joueur);
+    $creneau->setUser($joueur);
 
     $manager->persist($creneau);
 
@@ -85,14 +87,14 @@ class AppFixtures extends Fixture
 
     $equipe = new Equipe();
     $equipe->setLibelle("18");
-    $equipe->addJoueur($joueur);
+    $equipe->addUser($joueur);
     $equipe->setPoule($poule);
 
     $manager->persist($equipe);
 
     $equipe2 = new Equipe();
     $equipe2->setLibelle("27");
-    $equipe2->addJoueur($joueur);
+    $equipe2->addUser($joueur);
     $equipe2->setPoule($poule);
 
     $manager->persist($equipe2);

@@ -38,10 +38,7 @@ class Creneau
      */
     private $tournoi;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Joueur::class, inversedBy="creneau")
-     */
-    private $joueur;
+  
 
     /**
      * @ORM\OneToOne(targetEntity=Partie::class, mappedBy="creneau", cascade={"persist", "remove"})
@@ -130,17 +127,7 @@ class Creneau
         return $this;
     }
 
-    public function getJoueur(): ?Joueur
-    {
-        return $this->joueur;
-    }
-
-    public function setJoueur(?Joueur $joueur): self
-    {
-        $this->joueur = $joueur;
-
-        return $this;
-    }
+  
 
     public function getPartie(): ?Partie
     {

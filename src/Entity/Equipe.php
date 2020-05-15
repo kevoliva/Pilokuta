@@ -24,10 +24,7 @@ class Equipe
      */
     private $libelle;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Joueur::class, mappedBy="equipe")
-     */
-    private $joueurs;
+   
 
     /**
      * @ORM\ManyToMany(targetEntity=Partie::class, inversedBy="equipes")
@@ -68,33 +65,7 @@ class Equipe
         return $this;
     }
 
-    /**
-     * @return Collection|Joueur[]
-     */
-    public function getJoueurs(): Collection
-    {
-        return $this->joueurs;
-    }
-
-    public function addJoueur(Joueur $joueur): self
-    {
-        if (!$this->joueurs->contains($joueur)) {
-            $this->joueurs[] = $joueur;
-            $joueur->addEquipe($this);
-        }
-
-        return $this;
-    }
-
-    public function removeJoueur(Joueur $joueur): self
-    {
-        if ($this->joueurs->contains($joueur)) {
-            $this->joueurs->removeElement($joueur);
-            $joueur->removeEquipe($this);
-        }
-
-        return $this;
-    }
+    
 
     /**
      * @return Collection|Partie[]
