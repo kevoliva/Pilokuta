@@ -41,9 +41,19 @@ class AppFixtures extends Fixture
 
     $manager->persist($joueur);
 
+    $joueur2 = new User();
+    $joueur2->setEmail("toto@lolo.fr");
+    $joueur2->setRoles(['ROLE_USER']);
+    $joueur2->setPassword('$2y$10$8packIXcEE96mm8/D0Md/OCX9apKLuV945YkJyRliNMUfQy.qYNqS');
+    $joueur2->setPrenom("Toto");
+    $joueur2->setNom("Lolo");
+    $joueur2->setTelephone("0700000000");
+
+    $manager->persist($joueur2);
+
     $creneau = new Creneau();
     $creneau->setTournoi($tournoi);
-    $creneau->setLaDate(new \DateTime('2020-05-13T17:45:00Z'));
+    $creneau->setLaDate(new \DateTime('2020-05-20T17:45:00Z'));
     $creneau->setHeureDebut('14');
     $creneau->setMinuteDebut('00');
     $creneau->setDuree(60);
@@ -54,7 +64,7 @@ class AppFixtures extends Fixture
 
     $creneau3 = new Creneau();
     $creneau3->setTournoi($tournoi);
-    $creneau3->setLaDate(new \DateTime('2020-05-12T14:00:00Z'));
+    $creneau3->setLaDate(new \DateTime('2020-05-19T14:00:00Z'));
     $creneau3->setHeureDebut('16');
     $creneau3->setMinuteDebut('30');
     $creneau3->setDuree(60);
@@ -121,7 +131,7 @@ class AppFixtures extends Fixture
 
     $creneau2 = new Creneau();
     $creneau2->setTournoi($tournoi2);
-    $creneau2->setLaDate(new \DateTime('2020-05-13T11:45:00Z'));
+    $creneau2->setLaDate(new \DateTime('2020-05-20T11:45:00Z'));
     $creneau2->setHeureDebut('18H00');
     $creneau2->setDuree(90);
     $creneau2->setCommentaire(NULL);

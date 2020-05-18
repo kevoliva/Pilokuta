@@ -26,7 +26,7 @@
               </h1> </a>
             <div align="right"> 
              {% if is_granted('ROLE_USER') %}
-                    {{ app.user.prenom }} {{ app.user.nom }}
+                    {{ app.user.prenom }} {{ app.user.nom }} 
                     <i class="icon-user"></i>
                     <a  href="{{path('app_logout')}}">
                       Déconnexion

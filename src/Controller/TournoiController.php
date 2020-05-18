@@ -116,7 +116,6 @@ class TournoiController extends AbstractController
         
         $dateDeb=$creneau->getLaDate();
 
-
         $event->setStart($dateDeb);
 
         $dateFin=$event->getEnd();
@@ -182,6 +181,8 @@ class TournoiController extends AbstractController
 
     unlink($filee);
   }
+
+  
 
   /**
   * @Route("/{id}/edit", name="tournoi_edit", methods={"GET","POST"})
