@@ -61,7 +61,7 @@ class TournoiController extends AbstractController
   }
 
   /**
-  * @Route("/show/{id}", name="tournoi_show", methods={"GET"})
+  * @Route(":{id}", name="tournoi_show", methods={"GET"})
   */
   public function show(Tournoi $tournoi): Response
   {
@@ -71,7 +71,7 @@ class TournoiController extends AbstractController
   }
 
   /**
-  * @Route("/show/{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
+  * @Route(":{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
   */
   public function calendrierTournoi(Tournoi $tournoi): Response
   {
@@ -81,7 +81,7 @@ class TournoiController extends AbstractController
   }
 
   /**
-  * @Route("/show/{id}/calendrier/download", name="tournoi_download_calendrier")
+  * @Route(":{id}/calendrier/download", name="tournoi_download_calendrier")
   */
 
   public function exporterCalendrier(Tournoi $tournoi)
@@ -182,28 +182,7 @@ class TournoiController extends AbstractController
     unlink($filee);
   }
 
-  
-
-  /**
-  * @Route("/{id}/edit", name="tournoi_edit", methods={"GET","POST"})
-  */
-  public function edit(Request $request, Tournoi $tournoi): Response
-  {
-    $form = $this->createForm(TournoiType::class, $tournoi);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-      $this->getDoctrine()->getManager()->flush();
-
-      return $this->redirectToRoute('tournoi_index');
-    }
-
-    return $this->render('tournoi/edit.html.twig', [
-      'tournoi' => $tournoi,
-      'form' => $form->createView(),
-    ]);
-  }
-
+ 
   /**
   * @Route("/{id}", name="tournoi_delete", methods={"DELETE"})
   */
