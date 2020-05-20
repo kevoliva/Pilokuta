@@ -29,11 +29,6 @@ class Creneau
     private $duree;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $commentaire;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Tournoi::class, inversedBy="creneau")
      */
     private $tournoi;
@@ -95,18 +90,6 @@ class Creneau
     public function setDuree(?int $duree): self
     {
         $this->duree = $duree;
-
-        return $this;
-    }
-
-    public function getCommentaire(): ?string
-    {
-        return $this->commentaire;
-    }
-
-    public function setCommentaire(?string $commentaire): self
-    {
-        $this->commentaire = $commentaire;
 
         return $this;
     }
