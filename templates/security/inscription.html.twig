@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block titrePage %}Inscription {% endblock %}
+
+
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12" style="text-align: left">
+            <div class="card" style="width: 18 rem;">
+                <b>
+                    <div class="card-header">
+                        Inscription sur Pilokuta
+                    </div>
+                </b>
+                {{ form_start(vueFormulaire) }}
+
+                <label>&nbsp;Prénom </label>
+                {{form_errors(vueFormulaire.prenom)}}<br>
+                {{ form_widget(vueFormulaire.prenom, {'attr':{'placeholder':"Votre prénom"}})}}<br><br>
+
+                <label>&nbsp;Nom</label>
+                {{form_errors(vueFormulaire.nom)}}<br>
+                {{ form_widget(vueFormulaire.nom, {'attr':{'placeholder':"Votre nom"}})}}<br><br>
+
+                <label>&nbsp;Email</label>
+                {{form_errors(vueFormulaire.email)}}<br>
+                {{ form_widget(vueFormulaire.email, {'attr':{'placeholder':"Votre email"}})}}<br><br>
+
+                <label>&nbsp;Mot de passe</label>
+                {{form_errors(vueFormulaire.password)}}<br>
+                {{ form_widget(vueFormulaire.password, {'attr':{'placeholder':"Votre mot de passe"}})}}<br><br>
+              
+                <label>&nbsp;Téléphone</label>
+                {{form_errors(vueFormulaire.password)}}<br>
+                {{ form_widget(vueFormulaire.telephone, {'attr':{'placeholder':"Votre numéro de téléphone"}})}}<br><br>
+
+
+                <pre> <button type="submit" class="btn btn-secondary">S'inscrire</button></pre>
+
+
+                {{ form_end(vueFormulaire) }}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
