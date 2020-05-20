@@ -45,7 +45,7 @@ class Tournoi
     private $libelle;
 
     /**
-     * @ORM\OneToMany(targetEntity=Creneau::class, mappedBy="tournoi")
+     * @ORM\OneToMany(targetEntity="App\Entity\Creneau", mappedBy="tournoi")
      */
     private $creneau;
 

@@ -48,6 +48,16 @@ class Creneau
      */
     private $partie;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $heureDebut;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $disponibilite;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -73,18 +83,6 @@ class Creneau
     public function setHeureDebut(?string $heureDebut): self
     {
         $this->heureDebut = $heureDebut;
-
-        return $this;
-    }
-
-    public function getMinuteDebut(): ?string
-    {
-        return $this->minuteDebut;
-    }
-
-    public function setMinuteDebut(?string $minuteDebut): self
-    {
-        $this->minuteDebut = $minuteDebut;
 
         return $this;
     }
@@ -151,6 +149,18 @@ class Creneau
         if ($partie->getCreneau() !== $newCreneau) {
             $partie->setCreneau($newCreneau);
         }
+
+        return $this;
+    }
+
+    public function getDisponibilite(): ?string
+    {
+        return $this->disponibilite;
+    }
+
+    public function setDisponibilite(?string $disponibilite): self
+    {
+        $this->disponibilite = $disponibilite;
 
         return $this;
     }
