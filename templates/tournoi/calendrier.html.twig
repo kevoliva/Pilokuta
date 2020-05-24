@@ -21,21 +21,22 @@
 <center>
 
 
-<p>
-  <span id="tocopy">http://localhost:8000/tournoi:{{tournoi.id}}/calendrier/download</span>
-  <button  class ="js-copy btn btn-outline-secondary btn-sm" data-target="#tocopy" >Copier le lien   <i  class="icon-docs"></i></button>
+  <p>
+    <span id="tocopy">http://localhost:8000/tournoi:{{tournoi.id}}/calendrier/download</span>
+    <button class="js-copy btn btn-outline-secondary btn-sm" data-target="#tocopy">Copier le lien <i
+        class="icon-docs"></i></button>
 
 
-</p>
+  </p>
 </center>
 <script>
 
-var btncopy = document.querySelector('.js-copy');
-if(btncopy) {
+  var btncopy = document.querySelector('.js-copy');
+  if (btncopy) {
     btncopy.addEventListener('click', docopy);
-}
+  }
 
-function docopy() {
+  function docopy() {
     var range = document.createRange();
     var target = this.dataset.target;
     var fromElement = document.querySelector(target);
@@ -46,26 +47,43 @@ function docopy() {
     selection.addRange(range);
 
     try {
-        var result = document.execCommand('copy');
-        
+      var result = document.execCommand('copy');
+
     }
-    catch(err) {
-        // Une erreur est surevnue lors de la tentative de copie
-        alert(err);
+    catch (err) {
+      // Une erreur est surevnue lors de la tentative de copie
+      alert(err);
     }
 
     selection = window.getSelection();
 
     if (typeof selection.removeRange === 'function') {
-        selection.removeRange(range);
+      selection.removeRange(range);
     } else if (typeof selection.removeAllRanges === 'function') {
-        selection.removeAllRanges();
+      selection.removeAllRanges();
     }
-}
+  }
 </script>
 
 
-<!-- CALENDRIER A FAIRE : DODO ET MATHIEU -->
 
 
-{% endblock %}
+
+<select name="choose" id="choose ">
+
+$joueurs = $this->getDoctrine()->getRepository(User::class);
+  $id=1;
+foreach($joueurs as $id => $joueur){
+  echo <option value= $joueurs[$id]->getPrenom(). " " .$joueurs[$id]->getNom()></option> ;
+
+id++;
+}
+</select>
+
+
+
+
+  <!-- CALENDRIER A FAIRE : DODO ET MATHIEU -->
+
+
+  {% endblock %}
