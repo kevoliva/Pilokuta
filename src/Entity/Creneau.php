@@ -29,11 +29,6 @@ class Creneau
     private $duree;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $commentaire;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Tournoi::class, inversedBy="creneau")
      */
     private $tournoi;
@@ -49,6 +44,16 @@ class Creneau
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="creneau")
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $heureDebut;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $disponibilite;
 
     public function getId(): ?int
     {
@@ -79,18 +84,6 @@ class Creneau
         return $this;
     }
 
-    public function getMinuteDebut(): ?string
-    {
-        return $this->minuteDebut;
-    }
-
-    public function setMinuteDebut(?string $minuteDebut): self
-    {
-        $this->minuteDebut = $minuteDebut;
-
-        return $this;
-    }
-
     public function getDuree(): ?int
     {
         return $this->duree;
@@ -99,18 +92,6 @@ class Creneau
     public function setDuree(?int $duree): self
     {
         $this->duree = $duree;
-
-        return $this;
-    }
-
-    public function getCommentaire(): ?string
-    {
-        return $this->commentaire;
-    }
-
-    public function setCommentaire(?string $commentaire): self
-    {
-        $this->commentaire = $commentaire;
 
         return $this;
     }
@@ -155,6 +136,16 @@ class Creneau
     public function setUser(?User $user): self
     {
         $this->user = $user;
+    }
+    
+    public function getDisponibilite(): ?string
+    {
+        return $this->disponibilite;
+    }
+
+    public function setDisponibilite(?string $disponibilite): self
+    {
+        $this->disponibilite = $disponibilite;
 
         return $this;
     }

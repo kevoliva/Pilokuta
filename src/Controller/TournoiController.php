@@ -8,6 +8,8 @@ use App\Form\TournoiType;
 use App\Repository\TournoiRepository;
 use App\Repository\CreneauRepository;
 use App\Entity\Creneau;
+use App\Service\Calendrier;
+use App\Service\CalendrierTournoi;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,12 +75,34 @@ class TournoiController extends AbstractController
   /**
   * @Route(":{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
   */
-  public function calendrierTournoi(Tournoi $tournoi): Response
-  {
-    return $this->render('tournoi/calendrier.html.twig', [
-      'tournoi' => $tournoi,
-    ]);
-  }
+  public function calendrier($id,$time=NULL)
+    {
+        //trouver le tournoi correspondant
+        $tournoi=$this->getDoctrine()->getRepository(Tournoi::class)->find($id);
+        
+        $creneaux=$tournoi->getCreneau();
+        $parties=array();
+        foreach ($creneaux as $key => $creneau) {
+            $date=$creneau->getLaDate()->format("d/m/Y");
+            $heure=$creneau->getHeureDebut();
+            if(($partie=$creneau->getPartie())!=null){
+                $eqs=$partie->getEquipes();
+                $eq1=$eqs[0]->getId();
+                $eq2=$eqs[1]->getId();
+            }
+            $partieStr=($creneau->getDisponibilite()==null || $creneau->getDisponibilite()=="" ?($creneau->getPartie()!=null? $eq1."-".$eq2 :"N/A"):$creneau->getDisponibilite());
+            $aAjouter=array($heure=>$partieStr);
+            $parties[$date]=(isset($parties[$date]) && is_array($parties[$date]) ? array_merge($parties[$date],$aAjouter):$aAjouter);
+        }
+
+        $cal=new CalendrierTournoi($parties);
+        $textCalendrier=$cal->getCalendrier($id);
+        
+        //Envoi à la vue des informations
+        return $this->render('tournoi/calendrier.html.twig', [
+            'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi
+        ]);
+    }
 
   /**
   * @Route(":{id}/calendrier/download", name="tournoi_download_calendrier")
