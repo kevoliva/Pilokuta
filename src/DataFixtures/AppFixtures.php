@@ -57,15 +57,14 @@ class AppFixtures extends Fixture
     $creneau->setHeureDebut('14h00');
     $creneau->setDuree(60);
     $creneau->setDisponibilite(NULL);
-    $creneau->setJoueur($joueur);
+    $creneau->setUser($joueur);
 
     $manager->persist($creneau);
 
     $creneau3 = new Creneau();
     $creneau3->setTournoi($tournoi);
     $creneau3->setLaDate(new \DateTime('2020-05-19T14:00:00Z'));
-    $creneau3->setHeureDebut('16');
-    $creneau3->setMinuteDebut('30');
+    $creneau3->setHeureDebut('16h30');
     $creneau3->setDuree(60);
     $creneau3->setDisponibilite('Fronton indisponible');
 
