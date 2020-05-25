@@ -64,4 +64,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ;
     }
     */
+
+    public function getJoueursByTournoi($tournoi)
+    {
+        return $this->createQueryBuilder('joueurs')
+            ->join('joueurs.equipe', 'equipe')
+            ->join('equipe.poule', 'poule')
+            ->join('poule.serie', 'serie')
+            ->join('serie.tournoi', 'tournoi')
+            ->andWhere('tournoi = :tournoi')
+            ->setParameter('tournoi', $tournoi)
+            ->orderBy('joueurs.nom', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 }

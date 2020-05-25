@@ -103,7 +103,7 @@ class AppFixtures extends Fixture
 
     $equipe2 = new Equipe();
     $equipe2->setLibelle("27");
-    $equipe2->addUser($joueur);
+    $equipe2->addUser($joueur2);
     $equipe2->setPoule($poule);
 
     $manager->persist($equipe2);
