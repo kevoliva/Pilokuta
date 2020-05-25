@@ -12,7 +12,7 @@
                 <th>LaDate</th>
                 <th>HeureDebut</th>
                 <th>Duree</th>
-                <th>Commentaire</th>
+                <th>disponibilite</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -23,7 +23,7 @@
                 <td>{{ creneau.laDate ? creneau.laDate|date('Y-m-d') : '' }}</td>
                 <td>{{ creneau.heureDebut }}</td>
                 <td>{{ creneau.duree }}</td>
-                <td>{{ creneau.commentaire }}</td>
+                <td>{{ creneau.disponibilite }}</td>
                 <td>
                     <a href="{{ path('creneau_show', {'id': creneau.id}) }}">show</a>
                     <a href="{{ path('creneau_edit', {'id': creneau.id}) }}">edit</a>
