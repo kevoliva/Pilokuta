@@ -24,10 +24,7 @@ class Equipe
      */
     private $libelle;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Joueur::class, mappedBy="equipe")
-     */
-    private $joueurs;
+   
 
     /**
      * @ORM\ManyToMany(targetEntity=Partie::class, inversedBy="equipes")
@@ -39,10 +36,16 @@ class Equipe
      */
     private $poule;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="equipe")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->joueurs = new ArrayCollection();
         $this->partie = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -62,33 +65,7 @@ class Equipe
         return $this;
     }
 
-    /**
-     * @return Collection|Joueur[]
-     */
-    public function getJoueurs(): Collection
-    {
-        return $this->joueurs;
-    }
-
-    public function addJoueur(Joueur $joueur): self
-    {
-        if (!$this->joueurs->contains($joueur)) {
-            $this->joueurs[] = $joueur;
-            $joueur->addEquipe($this);
-        }
-
-        return $this;
-    }
-
-    public function removeJoueur(Joueur $joueur): self
-    {
-        if ($this->joueurs->contains($joueur)) {
-            $this->joueurs->removeElement($joueur);
-            $joueur->removeEquipe($this);
-        }
-
-        return $this;
-    }
+    
 
     /**
      * @return Collection|Partie[]
@@ -124,6 +101,34 @@ class Equipe
     public function setPoule(?Poule $poule): self
     {
         $this->poule = $poule;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addEquipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            $user->removeEquipe($this);
+        }
 
         return $this;
     }

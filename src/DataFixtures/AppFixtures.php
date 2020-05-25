@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use App\Entity\Tournoi;
 use App\Entity\Partie;
 use App\Entity\Serie;
-use App\Entity\Joueur;
+use App\Entity\User;
 use App\Entity\Equipe;
 use App\Entity\Creneau;
 use App\Entity\Poule;
@@ -31,31 +31,42 @@ class AppFixtures extends Fixture
 
     $manager->persist($tournoi);
 
-    $joueur = new Joueur();
-    $joueur->setNom("Marco");
-    $joueur->setPrenom("Polo");
+    $joueur = new User();
+    $joueur->setEmail("marco@polo.fr");
+    $joueur->setRoles(['ROLE_USER']);
+    $joueur->setPassword('$2y$10$LYa1ESfqz5kP2rJCQ/md5O9YciYOkAi.//fk8MHMqiq5JYS.6.M5G');
+    $joueur->setPrenom("Marco");
+    $joueur->setNom("Polo");
     $joueur->setTelephone("0600000000");
 
     $manager->persist($joueur);
 
+    $joueur2 = new User();
+    $joueur2->setEmail("toto@lolo.fr");
+    $joueur2->setRoles(['ROLE_USER']);
+    $joueur2->setPassword('$2y$10$8packIXcEE96mm8/D0Md/OCX9apKLuV945YkJyRliNMUfQy.qYNqS');
+    $joueur2->setPrenom("Toto");
+    $joueur2->setNom("Lolo");
+    $joueur2->setTelephone("0700000000");
+
+    $manager->persist($joueur2);
+
     $creneau = new Creneau();
     $creneau->setTournoi($tournoi);
-    $creneau->setLaDate(new \DateTime('2020-05-13T17:45:00Z'));
-    $creneau->setHeureDebut('14');
-    $creneau->setMinuteDebut('00');
+    $creneau->setLaDate(new \DateTime('2020-05-20T17:45:00Z'));
+    $creneau->setHeureDebut('14h00');
     $creneau->setDuree(60);
-    $creneau->setCommentaire(NULL);
-    $creneau->setJoueur($joueur);
+    $creneau->setDisponibilite(NULL);
+    $creneau->setUser($joueur);
 
     $manager->persist($creneau);
 
     $creneau3 = new Creneau();
     $creneau3->setTournoi($tournoi);
-    $creneau3->setLaDate(new \DateTime('2020-05-12T14:00:00Z'));
-    $creneau3->setHeureDebut('16');
-    $creneau3->setMinuteDebut('30');
+    $creneau3->setLaDate(new \DateTime('2020-05-19T14:00:00Z'));
+    $creneau3->setHeureDebut('16h30');
     $creneau3->setDuree(60);
-    $creneau3->setCommentaire('Créneau indisponible');
+    $creneau3->setDisponibilite('Fronton indisponible');
 
     $manager->persist($creneau3);
 
@@ -85,14 +96,14 @@ class AppFixtures extends Fixture
 
     $equipe = new Equipe();
     $equipe->setLibelle("18");
-    $equipe->addJoueur($joueur);
+    $equipe->addUser($joueur);
     $equipe->setPoule($poule);
 
     $manager->persist($equipe);
 
     $equipe2 = new Equipe();
     $equipe2->setLibelle("27");
-    $equipe2->addJoueur($joueur);
+    $equipe2->addUser($joueur2);
     $equipe2->setPoule($poule);
 
     $manager->persist($equipe2);
@@ -118,10 +129,10 @@ class AppFixtures extends Fixture
 
     $creneau2 = new Creneau();
     $creneau2->setTournoi($tournoi2);
-    $creneau2->setLaDate(new \DateTime('2020-05-13T11:45:00Z'));
+    $creneau2->setLaDate(new \DateTime('2020-05-20T11:45:00Z'));
     $creneau2->setHeureDebut('18H00');
     $creneau2->setDuree(90);
-    $creneau2->setCommentaire(NULL);
+    $creneau2->setDisponibilite(NULL);
 
     $manager->persist($creneau2);
 

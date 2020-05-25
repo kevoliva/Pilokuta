@@ -29,24 +29,31 @@ class Creneau
     private $duree;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $commentaire;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Tournoi::class, inversedBy="creneau")
      */
     private $tournoi;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Joueur::class, inversedBy="creneau")
-     */
-    private $joueur;
+  
 
     /**
      * @ORM\OneToOne(targetEntity=Partie::class, mappedBy="creneau", cascade={"persist", "remove"})
      */
     private $partie;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="creneau")
+     */
+    private $user;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $heureDebut;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $disponibilite;
 
     public function getId(): ?int
     {
@@ -77,18 +84,6 @@ class Creneau
         return $this;
     }
 
-    public function getMinuteDebut(): ?string
-    {
-        return $this->minuteDebut;
-    }
-
-    public function setMinuteDebut(?string $minuteDebut): self
-    {
-        $this->minuteDebut = $minuteDebut;
-
-        return $this;
-    }
-
     public function getDuree(): ?int
     {
         return $this->duree;
@@ -97,18 +92,6 @@ class Creneau
     public function setDuree(?int $duree): self
     {
         $this->duree = $duree;
-
-        return $this;
-    }
-
-    public function getCommentaire(): ?string
-    {
-        return $this->commentaire;
-    }
-
-    public function setCommentaire(?string $commentaire): self
-    {
-        $this->commentaire = $commentaire;
 
         return $this;
     }
@@ -125,17 +108,7 @@ class Creneau
         return $this;
     }
 
-    public function getJoueur(): ?Joueur
-    {
-        return $this->joueur;
-    }
-
-    public function setJoueur(?Joueur $joueur): self
-    {
-        $this->joueur = $joueur;
-
-        return $this;
-    }
+  
 
     public function getPartie(): ?Partie
     {
@@ -151,6 +124,31 @@ class Creneau
         if ($partie->getCreneau() !== $newCreneau) {
             $partie->setCreneau($newCreneau);
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+
+    }
+    
+    public function getDisponibilite(): ?string
+    {
+        return $this->disponibilite;
+    }
+
+    public function setDisponibilite(?string $disponibilite): self
+    {
+        $this->disponibilite = $disponibilite;
 
         return $this;
     }

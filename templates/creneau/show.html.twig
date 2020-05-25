@@ -24,13 +24,13 @@
                 <td>{{ creneau.duree }}</td>
             </tr>
             <tr>
-                <th>Commentaire</th>
-                <td>{{ creneau.commentaire }}</td>
+                <th>disponibilite</th>
+                <td>{{ creneau.disponibilite }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('creneau_index') }}">back to list</a>
+    <a href="{{ path('creneau_index') }}">back to list</a> <br>
 
     <a href="{{ path('creneau_edit', {'id': creneau.id}) }}">edit</a>
 

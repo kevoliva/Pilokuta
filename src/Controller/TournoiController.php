@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Tournoi;
 use App\Entity\Partie;
+use App\Entity\User;
 use App\Form\TournoiType;
 use App\Repository\TournoiRepository;
 use App\Repository\CreneauRepository;
 use App\Entity\Creneau;
+use App\Service\Calendrier;
+use App\Service\CalendrierTournoi;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,7 +64,7 @@ class TournoiController extends AbstractController
   }
 
   /**
-  * @Route("/show/{id}", name="tournoi_show", methods={"GET"})
+  * @Route(":{id}", name="tournoi_show", methods={"GET"})
   */
   public function show(Tournoi $tournoi): Response
   {
@@ -71,17 +74,49 @@ class TournoiController extends AbstractController
   }
 
   /**
-  * @Route("/show/{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
+  * @Route(":{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
   */
-  public function calendrierTournoi(Tournoi $tournoi): Response
-  {
-    return $this->render('tournoi/calendrier.html.twig', [
-      'tournoi' => $tournoi,
-    ]);
-  }
+  public function calendrier($id,$time=NULL, User $user)
+    {
+        //trouver le tournoi correspondant
+        $tournoi=$this->getDoctrine()->getRepository(Tournoi::class)->find($id);
+        
+        $creneaux=$tournoi->getCreneau();
+        $parties=array();
+        foreach ($creneaux as $key => $creneau) {
+            $date=$creneau->getLaDate()->format("d/m/Y");
+            $heure=$creneau->getHeureDebut();
+            if(($partie=$creneau->getPartie())!=null){
+                $eqs=$partie->getEquipes();
+                $eq1=$eqs[0]->getId();
+                $eq2=$eqs[1]->getId();
+            }
+            $partieStr=($creneau->getDisponibilite()==null || $creneau->getDisponibilite()=="" ?($creneau->getPartie()!=null? $eq1."-".$eq2 :"N/A"):$creneau->getDisponibilite());
+            $aAjouter=array($heure=>$partieStr);
+            $parties[$date]=(isset($parties[$date]) && is_array($parties[$date]) ? array_merge($parties[$date],$aAjouter):$aAjouter);
+        }
+
+        $cal=new CalendrierTournoi($parties);
+        $textCalendrier=$cal->getCalendrier($id);
+
+        // Récupérer joueurs tournoi
+
+        $joueursRepository = $this->getDoctrine()->getRepository(User::class);
+        
+        $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);
+
+
+        //Envoi à la vue des informations
+        return $this->render('tournoi/calendrier.html.twig', [
+          'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi, "joueurs" => $joueurs
+      ]);
+}
+        
+        
+    
 
   /**
-  * @Route("/show/{id}/calendrier/download", name="tournoi_download_calendrier")
+  * @Route(":{id}/calendrier/download", name="tournoi_download_calendrier")
   */
   public function exporterCalendrier(Tournoi $tournoi)
   {
@@ -114,7 +149,6 @@ class TournoiController extends AbstractController
         $event = new CalendarEvent();
         
         $dateDeb=$creneau->getLaDate();
-
 
         $event->setStart($dateDeb);
 
@@ -182,26 +216,7 @@ class TournoiController extends AbstractController
     unlink($filee);
   }
 
-  /**
-  * @Route("/{id}/edit", name="tournoi_edit", methods={"GET","POST"})
-  */
-  public function edit(Request $request, Tournoi $tournoi): Response
-  {
-    $form = $this->createForm(TournoiType::class, $tournoi);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-      $this->getDoctrine()->getManager()->flush();
-
-      return $this->redirectToRoute('tournoi_index');
-    }
-
-    return $this->render('tournoi/edit.html.twig', [
-      'tournoi' => $tournoi,
-      'form' => $form->createView(),
-    ]);
-  }
-
+ 
   /**
   * @Route("/{id}", name="tournoi_delete", methods={"DELETE"})
   */

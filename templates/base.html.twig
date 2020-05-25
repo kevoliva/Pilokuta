@@ -5,7 +5,7 @@
   <title>{% block title %}Pilokuta{% endblock %}</title>
   {% block stylesheets %}
   <link rel="stylesheet" href="/css/bootstrap.min.css">
-
+  <link rel="stylesheet" href="{{asset('/css/fontello.css')}}">
   {% endblock %}
 </head>
 
@@ -23,9 +23,26 @@
             <a href="{{path('tournoi_index')}}" style="color:black; text-decoration:none">
               <h1 class="display-4">
                 <b>Pilokuta</b>
-              </h1>
-            </a>
+              </h1> </a>
+            <div align="right"> 
+             {% if is_granted('ROLE_USER') %}
+                    {{ app.user.prenom }} {{ app.user.nom }} 
+                    <i class="icon-user"></i>
+                    <a  href="{{path('app_logout')}}">
+                      Déconnexion
+                    <span class="sr-only">(current)</span></a>
+             {% else %}
+                    <a href="{{path('app_inscription')}}">
+                      Inscription
+                    <span class="sr-only">(current)</span></a>
+                    <i class="icon-user"></i>
+                    <a  href="{{path('app_login')}}">
+                      Connexion
+                    <span class="sr-only">(current)</span></a>
+             {% endif %}
+             </div>
           </center>
+          
           <hr>
         </div>
         {% endblock %}
