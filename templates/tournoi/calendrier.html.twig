@@ -63,8 +63,9 @@
 	{{time}}
 {% endif %}
 {% endblock %}
+  
 
-    range.selectNode(fromElement);
+  range.selectNode(fromElement);
     selection.removeAllRanges();
     selection.addRange(range);
 
@@ -85,22 +86,49 @@
       selection.removeAllRanges();
     }
   }
+
 </script>
 
-
-
-
-
+<br>
+<center>
 <select name="choose" id="choose ">
+  <option>Sélectionnez un joueur</option>
 
-$joueurs = $this->getDoctrine()->getRepository(User::class);
-  $id=1;
-foreach($joueurs as $id => $joueur){
-  echo <option value= $joueurs[$id]->getPrenom(). " " .$joueurs[$id]->getNom()></option> ;
+  {% for joueur in joueurs %}
+<option>{{ joueur.prenom }} {{ joueur.nom }}</option>
 
-id++;
-}
+  {% endfor %}
+
 </select>
+</center>
+
+
+
+<!-- CALENDRIER A FAIRE : DODO ET MATHIEU -->
+
+{% block hello %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+<div class="example-wrapper">
+	<center>
+		<br>
+		<h1>Calendrier</h1>
+	</center>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+{{(calendrier)|raw}}
+{% if time != NULL %}
+	{{time}}
+{% endif %}
+{% endblock %}
+
+
+
+    
+
+
 
 
 

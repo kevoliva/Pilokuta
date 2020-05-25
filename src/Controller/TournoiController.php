@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Tournoi;
 use App\Entity\Partie;
+use App\Entity\User;
 use App\Form\TournoiType;
 use App\Repository\TournoiRepository;
 use App\Repository\CreneauRepository;
@@ -75,7 +76,7 @@ class TournoiController extends AbstractController
   /**
   * @Route(":{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
   */
-  public function calendrier($id,$time=NULL)
+  public function calendrier($id,$time=NULL, User $user)
     {
         //trouver le tournoi correspondant
         $tournoi=$this->getDoctrine()->getRepository(Tournoi::class)->find($id);
@@ -97,12 +98,22 @@ class TournoiController extends AbstractController
 
         $cal=new CalendrierTournoi($parties);
         $textCalendrier=$cal->getCalendrier($id);
+
+        // Récupérer joueurs tournoi
+
+        $joueursRepository = $this->getDoctrine()->getRepository(User::class);
         
+        $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);
+
+
         //Envoi à la vue des informations
         return $this->render('tournoi/calendrier.html.twig', [
-            'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi
-        ]);
-    }
+          'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi, "joueurs" => $joueurs
+      ]);
+}
+        
+        
+    
 
   /**
   * @Route(":{id}/calendrier/download", name="tournoi_download_calendrier")
