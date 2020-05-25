@@ -83,7 +83,6 @@ class TournoiController extends AbstractController
   /**
   * @Route("/show/{id}/calendrier/download", name="tournoi_download_calendrier")
   */
-
   public function exporterCalendrier(Tournoi $tournoi)
   {
     $this->genererCalendrier($tournoi);
