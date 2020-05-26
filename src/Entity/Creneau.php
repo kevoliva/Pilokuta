@@ -20,7 +20,7 @@ class Creneau
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $laDate;
+    private $dateEtHeure;
 
 
     /**
@@ -57,14 +57,14 @@ class Creneau
         return $this->id;
     }
 
-    public function getLaDate(): ?\DateTimeInterface
+    public function getDateEtHeure(): ?\DateTimeInterface
     {
-        return $this->laDate;
+        return $this->dateEtHeure;
     }
 
-    public function setLaDate(?\DateTimeInterface $laDate): self
+    public function setDateEtHeure(?\DateTimeInterface $dateEtHeure): self
     {
-        $this->laDate = $laDate;
+        $this->dateEtHeure = $dateEtHeure;
 
         return $this;
     }
