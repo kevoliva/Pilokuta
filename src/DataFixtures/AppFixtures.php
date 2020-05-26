@@ -56,7 +56,7 @@ class AppFixtures extends Fixture
     $creneau->setLaDate(new \DateTime('2020-05-20T17:45:00Z'));
     $creneau->setHeureDebut('14h00');
     $creneau->setDuree(60);
-    $creneau->setDisponibilite(NULL);
+    $creneau->setCommentaire(NULL);
     $creneau->setUser($joueur);
 
     $manager->persist($creneau);
@@ -66,7 +66,7 @@ class AppFixtures extends Fixture
     $creneau3->setLaDate(new \DateTime('2020-05-19T14:00:00Z'));
     $creneau3->setHeureDebut('16h30');
     $creneau3->setDuree(60);
-    $creneau3->setDisponibilite('Fronton indisponible');
+    $creneau3->setCommentaire('Fronton indisponible');
 
     $manager->persist($creneau3);
 
@@ -132,7 +132,7 @@ class AppFixtures extends Fixture
     $creneau2->setLaDate(new \DateTime('2020-05-20T11:45:00Z'));
     $creneau2->setHeureDebut('18H00');
     $creneau2->setDuree(90);
-    $creneau2->setDisponibilite(NULL);
+    $creneau2->setCommentaire(NULL);
 
     $manager->persist($creneau2);
 

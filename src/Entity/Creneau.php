@@ -53,7 +53,7 @@ class Creneau
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $disponibilite;
+    private $commentaire;
 
     public function getId(): ?int
     {
@@ -141,14 +141,14 @@ class Creneau
 
     }
     
-    public function getDisponibilite(): ?string
+    public function getCommentaire(): ?string
     {
-        return $this->disponibilite;
+        return $this->commentaire;
     }
 
-    public function setDisponibilite(?string $disponibilite): self
+    public function setCommentaire(?string $commentaire): self
     {
-        $this->disponibilite = $disponibilite;
+        $this->commentaire = $commentaire;
 
         return $this;
     }

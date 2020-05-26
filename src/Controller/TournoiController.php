@@ -91,7 +91,7 @@ class TournoiController extends AbstractController
                 $eq1=$eqs[0]->getId();
                 $eq2=$eqs[1]->getId();
             }
-            $partieStr=($creneau->getDisponibilite()==null || $creneau->getDisponibilite()=="" ?($creneau->getPartie()!=null? $eq1."-".$eq2 :"N/A"):$creneau->getDisponibilite());
+            $partieStr=($creneau->getCommentaire()==null || $creneau->getCommentaire()=="" ?($creneau->getPartie()!=null? $eq1."-".$eq2 :"N/A"):$creneau->getCommentaire());
             $aAjouter=array($heure=>$partieStr);
             $parties[$date]=(isset($parties[$date]) && is_array($parties[$date]) ? array_merge($parties[$date],$aAjouter):$aAjouter);
         }
@@ -167,7 +167,7 @@ class TournoiController extends AbstractController
         $calendar->addEvent($event);
         unset($event);
         $id++;
-      }else if($creneau->getCommentaire()!=null){
+      }else if($creneau->getDisponibilite()!=null){
         $event = new CalendarEvent();
         
         $dateDeb=$creneau->getLaDate();
@@ -180,7 +180,7 @@ class TournoiController extends AbstractController
 
         $event->setEnd($dateFin);
 
-        $event->setSummary($creneau->getCommentaire());
+        $event->setSummary($creneau->getDisponibilite());
         $event->setUid('event-uid'.$id);
 
 
