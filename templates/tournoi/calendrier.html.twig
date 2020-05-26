@@ -83,6 +83,7 @@
 
 
 <!-- CALENDRIER A FAIRE : DODO ET MATHIEU -->
+<script src="{{asset('js/scriptCal.js')}}"></script>
 
 {% block hello %}
 <style>
@@ -96,123 +97,125 @@
 	</center>
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Formulaire Ajouter partie</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Formulaire Ajouter partie</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
 
-          <div class="col-sm-8"> 
+					<div class="col-sm-8"> 
 
-            <p id="dateP">Partie du lundi "jour" "mois"> à 20h30</p>
+						<p id="dateP">Partie du lundi "jour" "mois"> à 20h30</p>
 
-            <div class="d-inline-flex justify-content-start">
+						<div class="d-inline-flex justify-content-start">
 
-              <div class="d-inline-flex justify-content-center">
+							<div class="d-inline-flex justify-content-center">
 
-                <p>Filtrer par :</p> 
+								<p>Filtrer par :</p> 
 
-              </div>
+							</div>
 
-              <div class="dropdown" style="margin-left: 10px;">
+							<div class="dropdown" style="margin-left: 10px;">
+								<select>
+                  {% for serie in series %}
+									<option>{{serie.libelle}}</option>
+									{% endfor %}
+								</select>
 
-                <select>
-                  <option>Série</option>
-                  <option>Série1</option>
-                  <option>Série2</option>
-                  <option>Série3</option>
-                </select>
+							</div>
 
-              </div>
+							<div class="dropdown" style="margin-left: 10px;">
 
-              <div class="dropdown" style="margin-left: 10px;">
+								<select>
+                  {% for poule in poules %}
+                  <option>{{poule}}</option>
+                  {% endfor %}
+								</select>
 
-                <select>
-                  <option>Poule</option>
-                  <option>Poule1</option>
-                  <option>Poule2</option>
-                  <option>Poule3</option>
-                </select>
+							</div>
 
-              </div>
+						</div>
 
-            </div>
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="exampleCheck1">
+							<label class="form-check-label" for="exampleCheck1">Vérifier disponibilités</label>
+						</div>
 
-            <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <label class="form-check-label" for="exampleCheck1">Vérifier disponibilités</label>
-            </div>
+					</div>
 
-          </div>
+				</div>
+				<hr>
+				<div class="d-flex justify-content-center">
 
-        </div>
-        <hr>
-        <div class="d-flex justify-content-center">
+					<p class="text-center">Parties</p>
 
-          <p class="text-center">Parties</p>
+				</div>
 
-        </div>
+				<div class="d-flex justify-content-center">
+					<select style="width: 200px;text-align: center;text-align-last: center;">
+						<option>Partie</option>
+						<option>Partie1</option>
+						<option>Partie2</option>
+						<option>Partie3</option>
+					</select>
 
-        <div class="d-flex justify-content-center">
-          <select style="width: 200px;text-align: center;text-align-last: center;">
-            <option>Partie</option>
-            <option>Partie1</option>
-            <option>Partie2</option>
-            <option>Partie3</option>
-          </select>
+				</div>
+				<br>
+				<div class="d-flex justify-content-center">
 
-        </div>
-        <br>
-        <div class="d-flex justify-content-center">
+					<p class="text-center">Juge</p>
 
-          <p class="text-center">Juge</p>
+				</div>
 
-        </div>
+				<div class="d-flex justify-content-center">
+					<select style="width: 200px;text-align: center;text-align-last: center;">
+						<option>User</option>
+						<option>User1</option>
+						<option>User2</option>
+						<option>User3</option>
+					</select>
 
-        <div class="d-flex justify-content-center">
-          <select style="width: 200px;text-align: center;text-align-last: center;">
-            <option>Juge</option>
-            <option>Juge1</option>
-            <option>Juge2</option>
-            <option>Juge3</option>
-          </select>
+				</div>
 
-        </div>
+				<hr>
+				<textarea id="descrIndispo" type="textarea" class="form-control" placeholder="Descrption de la potentielle indisponibilité des créneaux"></textarea>
 
-        <hr>
-        <textarea id="descrIndispo" type="textarea" class="form-control" placeholder="Descrption de la potentielle indisponibilité des créneaux"></textarea>
-        
-      </div>
+			</div>
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-dismiss="modal" id="btnValid">Valider</button>
-        <button type="button" class="btn btn-danger" id="btnSuppr">Supprimer</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancel">Annuler</button>
-      </div>
-    </div>
-  </div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-dismiss="modal" id="btnValid">Valider</button>
+				<button type="button" class="btn btn-danger" id="btnSuppr">Supprimer</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancel">Annuler</button>
+			</div>
+		</div>
+	</div>
 </div>
 {{(calendrier)|raw}}
+<a href="{{path('creneau_new')}}">Creneau</a> <br>
 {% if time != NULL %}
 	{{time}}
 {% endif %}
 {% endblock %}
+  
 
 
+<br>
+<center>
+<select name="choose" id="choose ">
+  <option>Sélectionnez un joueur</option>
 
-    
+  {% for joueur in joueurs %}
+<option>{{ joueur.prenom }} {{ joueur.nom }}</option>
+
+  {% endfor %}
+
+</select>
+</center>
 
 
-
-
-
-
-  <!-- CALENDRIER A FAIRE : DODO ET MATHIEU -->
-
-
-  {% endblock %}
+{% endblock %}

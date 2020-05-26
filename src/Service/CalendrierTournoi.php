@@ -43,8 +43,6 @@ class CalendrierTournoi
 
 	*/
 
-
-
 	public $creneaux=array();
 	/*
 		$creneaux => créneaux déduits de $tabValeurs de la forme
