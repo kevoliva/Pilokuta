@@ -41,8 +41,34 @@
     var target = this.dataset.target;
     var fromElement = document.querySelector(target);
     var selection = window.getSelection();
+  
+
+  range.selectNode(fromElement);
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    try {
+      var result = document.execCommand('copy');
+
+    }
+    catch (err) {
+      // Une erreur est surevnue lors de la tentative de copie
+      alert(err);
+    }
+
+    selection = window.getSelection();
+
+    if (typeof selection.removeRange === 'function') {
+      selection.removeRange(range);
+    } else if (typeof selection.removeAllRanges === 'function') {
+      selection.removeAllRanges();
+    }
   }
+
 </script>
+
+
+
 <!-- CALENDRIER A FAIRE : DODO ET MATHIEU -->
 <script src="{{asset('js/scriptCal.js')}}"></script>
 
@@ -163,30 +189,7 @@
 {% endif %}
 {% endblock %}
   
-<script>
-  range.selectNode(fromElement);
-    selection.removeAllRanges();
-    selection.addRange(range);
 
-    try {
-      var result = document.execCommand('copy');
-
-    }
-    catch (err) {
-      // Une erreur est surevnue lors de la tentative de copie
-      alert(err);
-    }
-
-    selection = window.getSelection();
-
-    if (typeof selection.removeRange === 'function') {
-      selection.removeRange(range);
-    } else if (typeof selection.removeAllRanges === 'function') {
-      selection.removeAllRanges();
-    }
-  }
-
-</script>
 
 <br>
 <center>
