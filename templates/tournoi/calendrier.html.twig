@@ -67,20 +67,6 @@
 </script>
 
 
-<br>
-<center>
-<select name="choose" id="choose ">
-  <option>Sélectionnez un joueur</option>
-
-  {% for joueur in joueurs %}
-<option>{{ joueur.prenom }} {{ joueur.nom }}</option>
-
-  {% endfor %}
-
-</select>
-</center>
-
-
 
 <!-- CALENDRIER A FAIRE : DODO ET MATHIEU -->
 <script src="{{asset('js/scriptCal.js')}}"></script>
