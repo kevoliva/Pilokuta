@@ -97,8 +97,8 @@ class TournoiController extends AbstractController
           $parties=array();
           foreach ($creneaux as $key => $creneau) 
           {
-            $date=$creneau->getLaDate()->format("d/m/Y");
-            $heure=$creneau->getLaDate()->format("H:i");
+            $date=$creneau->getDateEtHeure()->format("d/m/Y");
+            $heure=$creneau->getDateEtHeure()->format("H:i");
             if(($partie=$creneau->getPartie())!=null)
             {
               $eqs=$partie->getEquipes();
@@ -162,7 +162,7 @@ class TournoiController extends AbstractController
                 {
                   $event = new CalendarEvent();
                   
-                  $dateDeb=$creneau->getLaDate();
+                  $dateDeb=$creneau->getDateEtHeure();
                   
                   $event->setStart($dateDeb);
                   
@@ -184,7 +184,7 @@ class TournoiController extends AbstractController
                 {
                   $event = new CalendarEvent();
                   
-                  $dateDeb=$creneau->getLaDate();
+                  $dateDeb=$creneau->getDateEtHeure();
                   
                   
                   $event->setStart($dateDeb);
