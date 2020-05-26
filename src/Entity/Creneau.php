@@ -45,10 +45,7 @@ class Creneau
      */
     private $user;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $heureDebut;
+
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -72,17 +69,7 @@ class Creneau
         return $this;
     }
 
-    public function getHeureDebut(): ?string
-    {
-        return $this->heureDebut;
-    }
-
-    public function setHeureDebut(?string $heureDebut): self
-    {
-        $this->heureDebut = $heureDebut;
-
-        return $this;
-    }
+   
 
     public function getDuree(): ?int
     {

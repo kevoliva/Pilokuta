@@ -98,7 +98,7 @@ class TournoiController extends AbstractController
           foreach ($creneaux as $key => $creneau) 
           {
             $date=$creneau->getLaDate()->format("d/m/Y");
-            $heure=$creneau->getHeureDebut();
+            $heure=$creneau->getLaDate()->format("H:i");
             if(($partie=$creneau->getPartie())!=null)
             {
               $eqs=$partie->getEquipes();
