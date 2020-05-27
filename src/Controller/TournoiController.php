@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Tournoi;
 use App\Entity\Partie;
 use App\Entity\User;
+use App\Entity\Serie;
+use App\Entity\Poule;
 use App\Form\TournoiType;
 use App\Repository\TournoiRepository;
 use App\Repository\CreneauRepository;
@@ -114,7 +116,7 @@ class TournoiController extends AbstractController
           $textCalendrier=$cal->getCalendrier($id);
           
           // Récupérer joueurs tournoi
-          
+
           $joueursRepository = $this->getDoctrine()->getRepository(User::class);
           
           $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);
@@ -132,12 +134,23 @@ class TournoiController extends AbstractController
           
           public function choisirExport(Tournoi $tournoi): Response
           {
+           
+
+
+            $series=$tournoi->getSeries();
+            
+
+            
+
+           
             $joueursRepository = $this->getDoctrine()->getRepository(User::class);
           
             $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);
 
+            
+
             return $this->render('tournoi/exportation.html.twig', [
-              'tournoi' => $tournoi, 'joueurs' => $joueurs
+              'tournoi' => $tournoi, 'joueurs' => $joueurs,  "series" =>$series
               ]);
           }
           
