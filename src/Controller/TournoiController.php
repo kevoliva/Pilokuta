@@ -126,18 +126,31 @@ class TournoiController extends AbstractController
             ]);
         }
           
-          
-          
-          
           /**
-          * @Route(":{id}/calendrier/download", name="tournoi_download_calendrier")
+          * @Route(":{id}/calendrier/exportation", name="tournoi_export_calendrier")
+          */
+          
+          public function choisirExport(Tournoi $tournoi): Response
+          {
+            $joueursRepository = $this->getDoctrine()->getRepository(User::class);
+          
+            $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);
+
+            return $this->render('tournoi/exportation.html.twig', [
+              'tournoi' => $tournoi, 'joueurs' => $joueurs
+              ]);
+          }
+          
+           
+          /**
+          * @Route(":{id}/calendrier/exportation/download", name="tournoi_download_calendrier")
           */
           
           public function exporterCalendrier(Tournoi $tournoi)
           {
             $this->genererCalendrier($tournoi);
             
-            return $this->render('tournoi/calendrier.html.twig', [
+            return $this->render('tournoi/exportation.html.twig', [
               'tournoi' => $tournoi,
               ]);
           }
