@@ -35,7 +35,7 @@ class Partie
     private $equipes;
 
     /**
-     * @ORM\OneToOne(targetEntity=Creneau::class, inversedBy="partie", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Creneau::class, mappedBy="partie", cascade={"persist", "remove"})
      */
     private $creneau;
 
@@ -110,6 +110,13 @@ class Partie
     {
         $this->creneau = $creneau;
 
+        // set (or unset) the owning side of the relation if necessary
+        $newPartie = null === $creneau ? null : $this;
+        if ($creneau->getPartie() !== $newPartie) {
+            $creneau->setPartie($newPartie);
+        }
+
         return $this;
     }
+
 }

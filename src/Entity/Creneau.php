@@ -20,7 +20,7 @@ class Creneau
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $laDate;
+    private $dateEtHeure;
 
 
     /**
@@ -33,56 +33,43 @@ class Creneau
      */
     private $tournoi;
 
-  
-
-    /**
-     * @ORM\OneToOne(targetEntity=Partie::class, mappedBy="creneau", cascade={"persist", "remove"})
-     */
-    private $partie;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="creneau")
      */
     private $user;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $heureDebut;
+
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $disponibilite;
+    private $commentaire;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Partie::class, inversedBy="creneau", cascade={"persist", "remove"})
+     */
+    private $partie;
+
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLaDate(): ?\DateTimeInterface
+    public function getDateEtHeure(): ?\DateTimeInterface
     {
-        return $this->laDate;
+        return $this->dateEtHeure;
     }
 
-    public function setLaDate(?\DateTimeInterface $laDate): self
+    public function setDateEtHeure(?\DateTimeInterface $dateEtHeure): self
     {
-        $this->laDate = $laDate;
+        $this->dateEtHeure = $dateEtHeure;
 
         return $this;
     }
 
-    public function getHeureDebut(): ?string
-    {
-        return $this->heureDebut;
-    }
-
-    public function setHeureDebut(?string $heureDebut): self
-    {
-        $this->heureDebut = $heureDebut;
-
-        return $this;
-    }
+   
 
     public function getDuree(): ?int
     {
@@ -108,25 +95,6 @@ class Creneau
         return $this;
     }
 
-  
-
-    public function getPartie(): ?Partie
-    {
-        return $this->partie;
-    }
-
-    public function setPartie(?Partie $partie): self
-    {
-        $this->partie = $partie;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newCreneau = null === $partie ? null : $this;
-        if ($partie->getCreneau() !== $newCreneau) {
-            $partie->setCreneau($newCreneau);
-        }
-
-        return $this;
-    }
 
     public function getUser(): ?User
     {
@@ -141,14 +109,26 @@ class Creneau
 
     }
     
-    public function getDisponibilite(): ?string
+    public function getCommentaire(): ?string
     {
-        return $this->disponibilite;
+        return $this->commentaire;
     }
 
-    public function setDisponibilite(?string $disponibilite): self
+    public function setCommentaire(?string $commentaire): self
     {
-        $this->disponibilite = $disponibilite;
+        $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function getPartie(): ?Partie
+    {
+        return $this->partie;
+    }
+
+    public function setPartie(?Partie $partie): self
+    {
+        $this->partie = $partie;
 
         return $this;
     }
