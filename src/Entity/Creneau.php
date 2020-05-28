@@ -120,6 +120,7 @@ class Creneau
 
         return $this;
     }
+<<<<<<< HEAD
 
     public function getPartie(): ?Partie
     {
@@ -129,6 +130,17 @@ class Creneau
     public function setPartie(?Partie $partie): self
     {
         $this->partie = $partie;
+=======
+    
+    public function getCommentaire(): ?string
+    {
+        return $this->commentaire;
+    }
+
+    public function setCommentaire(?string $commentaire): self
+    {
+        $this->commentaire = $commentaire;
+>>>>>>> 356b6b5ebb877bcfe643ecfee0797080216bca3d
 
         return $this;
     }

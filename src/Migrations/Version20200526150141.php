@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200524131359 extends AbstractMigration
+final class Version20200526150141 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,7 @@ final class Version20200524131359 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE creneau (id INT AUTO_INCREMENT NOT NULL, tournoi_id INT DEFAULT NULL, user_id INT DEFAULT NULL, la_date DATETIME DEFAULT NULL, duree INT DEFAULT NULL, heure_debut VARCHAR(255) NOT NULL, disponibilite VARCHAR(255) DEFAULT NULL, INDEX IDX_F9668B5FF607770A (tournoi_id), INDEX IDX_F9668B5FA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE creneau (id INT AUTO_INCREMENT NOT NULL, tournoi_id INT DEFAULT NULL, user_id INT DEFAULT NULL, date_et_heure DATETIME DEFAULT NULL, duree INT DEFAULT NULL, commentaire VARCHAR(255) DEFAULT NULL, INDEX IDX_F9668B5FF607770A (tournoi_id), INDEX IDX_F9668B5FA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE equipe (id INT AUTO_INCREMENT NOT NULL, poule_id INT DEFAULT NULL, libelle VARCHAR(255) NOT NULL, INDEX IDX_2449BA1526596FD8 (poule_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE equipe_partie (equipe_id INT NOT NULL, partie_id INT NOT NULL, INDEX IDX_8AC79956D861B89 (equipe_id), INDEX IDX_8AC7995E075F7A4 (partie_id), PRIMARY KEY(equipe_id, partie_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE partie (id INT AUTO_INCREMENT NOT NULL, creneau_id INT DEFAULT NULL, score_equipe1 INT DEFAULT NULL, score_equipe2 INT DEFAULT NULL, UNIQUE INDEX UNIQ_59B1F3D7D0729A9 (creneau_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
