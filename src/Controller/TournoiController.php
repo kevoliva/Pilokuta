@@ -98,7 +98,6 @@ class TournoiController extends AbstractController
             }
           }
           $parties=array();
-<<<<<<< HEAD
           $lesUsers=array();
           foreach ($creneaux as $key => $creneau) 
           { 
@@ -110,27 +109,17 @@ class TournoiController extends AbstractController
             $date=$creneau->getDateEtHeure()->format("d/m/Y");
             $heure=$creneau->getDateEtHeure()->format("H:i");
             
-=======
-          foreach ($creneaux as $key => $creneau) 
-          {
-            $date=$creneau->getDateEtHeure()->format("d/m/Y");
-            $heure=$creneau->getDateEtHeure()->format("H:i");
->>>>>>> 356b6b5ebb877bcfe643ecfee0797080216bca3d
             if(($partie=$creneau->getPartie())!=null)
             {
               $eqs=$partie->getEquipes();
               $eq1=$eqs[0]->getId();
               $eq2=$eqs[1]->getId();
-<<<<<<< HEAD
              
-=======
->>>>>>> 356b6b5ebb877bcfe643ecfee0797080216bca3d
             }
             $partieStr=($creneau->getCommentaire()==null || $creneau->getCommentaire()=="" ?($creneau->getPartie()!=null? $eq1."-".$eq2 :"N/A"):$creneau->getCommentaire());
             $aAjouter=array($heure=>$partieStr);
             $parties[$date]=(isset($parties[$date]) && is_array($parties[$date]) ? array_merge($parties[$date],$aAjouter):$aAjouter);
           }
-<<<<<<< HEAD
 
           $event=array();
           foreach($parties as $key => $partieStr)
@@ -144,18 +133,11 @@ class TournoiController extends AbstractController
 
 
 
-=======
-          
->>>>>>> 356b6b5ebb877bcfe643ecfee0797080216bca3d
           $cal=new CalendrierTournoi($parties);
           $textCalendrier=$cal->getCalendrier($id);
           
           // Récupérer joueurs tournoi
-<<<<<<< HEAD
           
-=======
-
->>>>>>> 356b6b5ebb877bcfe643ecfee0797080216bca3d
           $joueursRepository = $this->getDoctrine()->getRepository(User::class);
           
           $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);
@@ -163,7 +145,6 @@ class TournoiController extends AbstractController
           
           //Envoi à la vue des informations
           return $this->render('tournoi/calendrier.html.twig', [
-<<<<<<< HEAD
             'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi, "joueurs" => $joueurs, "series" =>$series, "poules"=>$lesPoules, "users"=>$lesUsers, 'evenements'=>$evenements
             ]);
         }
@@ -173,52 +154,13 @@ class TournoiController extends AbstractController
           
           /**
           * @Route(":{id}/calendrier/download", name="tournoi_download_calendrier")
-=======
-            'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi, "joueurs" => $joueurs, "series" =>$series, "poules"=>$lesPoules
-            ]);
-        }
-          
-          /**
-          * @Route(":{id}/calendrier/exportation", name="tournoi_export_calendrier")
-          */
-          
-          public function choisirExport(Tournoi $tournoi): Response
-          {
-           
-
-
-            $series=$tournoi->getSeries();
-            
-
-            
-
-           
-            $joueursRepository = $this->getDoctrine()->getRepository(User::class);
-          
-            $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);
-
-            
-
-            return $this->render('tournoi/exportation.html.twig', [
-              'tournoi' => $tournoi, 'joueurs' => $joueurs,  "series" =>$series
-              ]);
-          }
-          
-           
-          /**
-          * @Route(":{id}/calendrier/exportation/download", name="tournoi_download_calendrier")
->>>>>>> 356b6b5ebb877bcfe643ecfee0797080216bca3d
           */
           
           public function exporterCalendrier(Tournoi $tournoi)
           {
             $this->genererCalendrier($tournoi);
             
-<<<<<<< HEAD
             return $this->render('tournoi/calendrier.html.twig', [
-=======
-            return $this->render('tournoi/exportation.html.twig', [
->>>>>>> 356b6b5ebb877bcfe643ecfee0797080216bca3d
               'tournoi' => $tournoi,
               ]);
           }
