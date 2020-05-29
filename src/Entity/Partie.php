@@ -35,7 +35,7 @@ class Partie
     private $equipes;
 
     /**
-     * @ORM\OneToOne(targetEntity=Creneau::class, inversedBy="partie", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Creneau::class, mappedBy="partie", cascade={"persist", "remove"})
      */
     private $creneau;
 

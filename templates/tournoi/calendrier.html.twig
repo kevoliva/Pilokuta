@@ -71,9 +71,13 @@
 							<div class="dropdown" style="margin-left: 10px;">
 
 								<select>
-                  					{% for poule in poules %}
-                  						<option>{{poule}}</option>
-                  					{% endfor %}
+									{% for poule in poules %}
+										{% for serie in series %}
+									  		{% if poule.serie.id == serie.id %}
+										  	<option>{{poule.libelle}}</option>
+											{% endif %}  
+									  	{% endfor %}
+									{% endfor %}
 								</select>
 
 							</div>
@@ -120,7 +124,11 @@
 				</div>
 
 				<hr>
-				<textarea id="descrIndispo" type="textarea" class="form-control" placeholder="Descrption de la potentielle indisponibilité des créneaux"></textarea>
+				<textarea id="descrIndispo" type="textarea" class="form-control" placeholder="Description de la potentielle indisponibilité des créneaux">
+					{% for commentaire in commentaires %}
+                  			{{commentaire}}
+                  		{% endfor %}
+				</textarea>
 
 			</div>
 
