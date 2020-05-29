@@ -67,7 +67,7 @@ class TournoiController extends AbstractController
     }
       
       /**
-      * @Route(":{id}", name="tournoi_show", methods={"GET"})
+      * @Route("/{id}", name="tournoi_show", methods={"GET"})
       */
       public function show(Tournoi $tournoi): Response
       {
@@ -77,7 +77,7 @@ class TournoiController extends AbstractController
       }
         
         /**
-        * @Route(":{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
+        * @Route("/{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
         */
         public function calendrier($id,$time=NULL, User $user)
         {
@@ -129,14 +129,12 @@ class TournoiController extends AbstractController
         }
           
           /**
-          * @Route(":{id}/calendrier/exportation", name="tournoi_export_calendrier")
+          * @Route("/{id}/calendrier/exportation", name="tournoi_export_calendrier")
           */
           
           public function choisirExport(Tournoi $tournoi): Response
           {
            
-
-
             $series=$tournoi->getSeries();
             
 
@@ -150,115 +148,106 @@ class TournoiController extends AbstractController
             
 
             return $this->render('tournoi/exportation.html.twig', [
-              'tournoi' => $tournoi, 'joueurs' => $joueurs,  "series" =>$series
+              'tournoi' => $tournoi, 'joueurs' => $joueurs,  "series" =>$series, 
               ]);
           }
           
            
           /**
-          * @Route(":{id}/calendrier/exportation/download", name="tournoi_download_calendrier")
+          * @Route("/{id}/calendrier/exportation/download", name="tournoi_download_calendrier")
           */
           
           public function exporterCalendrier(Tournoi $tournoi)
           {
-            $this->genererCalendrier($tournoi);
+            $partieRepository = $this->getDoctrine()->getRepository(Partie::class);
+              
+            $creneauRepository = $this->getDoctrine()->getRepository(Creneau::class);
             
-            return $this->render('tournoi/exportation.html.twig', [
-              'tournoi' => $tournoi,
-              ]);
-          }
+            $creneaux = $creneauRepository->getCreneauByTournoi($tournoi);
             
-            public function genererCalendrier(Tournoi $tournoi)
+            
+            $calendar = new Calendar();
+            $calendar->setProdId('-//My Company//Cool Calendar App//EN');
+            $calendar->setTimezone(new \DateTimeZone('Europe/Paris'));
+            $id = 1;
+            
+            foreach ($creneaux as $creneau) 
             {
-              $partieRepository = $this->getDoctrine()->getRepository(Partie::class);
               
-              $creneauRepository = $this->getDoctrine()->getRepository(Creneau::class);
+              $partie = $partieRepository->getPartieByCreneau($creneau);
               
-              $creneaux = $creneauRepository->getCreneauByTournoi($tournoi);
-              
-              
-              $calendar = new Calendar();
-              $calendar->setProdId('-//My Company//Cool Calendar App//EN');
-              $calendar->setTimezone(new \DateTimeZone('Europe/Paris'));
-              $id = 1;
-              
-              foreach ($creneaux as $creneau) 
+              if(count($partie)==1)
               {
+                $event = new CalendarEvent();
                 
-                $partie = $partieRepository->getPartieByCreneau($creneau);
+                $dateDeb=$creneau->getDateEtHeure();
                 
-                if(count($partie)==1)
-                {
-                  $event = new CalendarEvent();
-                  
-                  $dateDeb=$creneau->getDateEtHeure();
-                  
-                  $event->setStart($dateDeb);
-                  
-                  $dateFin=$event->getEnd();
-                  $dateFin->setTimestamp($dateFin->getTimestamp()+(($creneau->getDuree()-30)*60));
-                  
-                  $event->setEnd($dateFin);
-                  
-                  $equipes=$partie[0]->getEquipes();
-                  
-                  $event->setSummary($equipes[0]->getLibelle()."-".$equipes[1]->getLibelle());
-                  $event->setUid('event-uid'.$id);
-                  
-                  
-                  $calendar->addEvent($event);
-                  unset($event);
-                  $id++;
-                }else if($creneau->getCommentaire()!=null)
-                {
-                  $event = new CalendarEvent();
-                  
-                  $dateDeb=$creneau->getDateEtHeure();
-                  
-                  
-                  $event->setStart($dateDeb);
-                  
-                  $dateFin=$event->getEnd();
-                  $dateFin->setTimestamp($dateFin->getTimestamp()+(($creneau->getDuree()-30)*60));
-                  
-                  $event->setEnd($dateFin);
-                  
-                  $event->setSummary($creneau->getCommentaire());
-                  $event->setUid('event-uid'.$id);
-                  
-                  
-                  $calendar->addEvent($event);
-                  unset($event);
-                  $id++;
-                }
+                $event->setStart($dateDeb);
+                
+                $dateFin=$event->getEnd();
+                $dateFin->setTimestamp($dateFin->getTimestamp()+(($creneau->getDuree()-30)*60));
+                
+                $event->setEnd($dateFin);
+                
+                $equipes=$partie[0]->getEquipes();
+                
+                $event->setSummary($equipes[0]->getLibelle()."-".$equipes[1]->getLibelle());
+                $event->setUid('event-uid'.$id);
+                
+                
+                $calendar->addEvent($event);
+                unset($event);
+                $id++;
+              }else if($creneau->getCommentaire()!=null)
+              {
+                $event = new CalendarEvent();
+                
+                $dateDeb=$creneau->getDateEtHeure();
+                
+                
+                $event->setStart($dateDeb);
+                
+                $dateFin=$event->getEnd();
+                $dateFin->setTimestamp($dateFin->getTimestamp()+(($creneau->getDuree()-30)*60));
+                
+                $event->setEnd($dateFin);
+                
+                $event->setSummary($creneau->getCommentaire());
+                $event->setUid('event-uid'.$id);
+                
+                
+                $calendar->addEvent($event);
+                unset($event);
+                $id++;
               }
+            }
             
-              
-              $calendarExport = new CalendarExport(new CalendarStream, new Formatter());
-              $calendarExport->addCalendar($calendar);
-              
-              //output .ics formatted text
-              $leCalendrier = $calendarExport->getStream();
-              
-              
-              $filee = "Calendrier - ".$tournoi->getLibelle().".ics";
-              $f = fopen($filee, "w") or die("Unable to open file!");
-              fwrite($f, $leCalendrier);
-              
-              fclose($f);
-              
-              header('Content-Description: File Transfer');
-              header('Content-Disposition: attachment; filename='.basename($filee));
+            $calendarExport = new CalendarExport(new CalendarStream, new Formatter());
+            $calendarExport->addCalendar($calendar);
+            //output .ics formatted text
+            $leCalendrier = $calendarExport->getStream();
+            
+
+            $file = "Calendrier - ".$tournoi->getLibelle().".ics";
+            $f = fopen($file, "w") or die("Unable to open file!");
+            fwrite($f, $leCalendrier);
+
+            fclose($f);
+
+            header('Content-Description: File Transfer');
+              header('Content-Disposition: attachment; filename='.basename($file));
               header('Expires: 0');
               header('Cache-Control: must-revalidate');
               header('Pragma: public');
-              header('Content-Length: ' . filesize($filee));
+              header('Content-Length: ' . filesize($file));
               header("Content-Type: text/plain");
               
-              readfile($filee);
-              
-              unlink($filee);
-            }
+              readfile($file);
+              unlink($file);
+              exit;
+          }
+            
+           
           
         
             
