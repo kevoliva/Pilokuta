@@ -109,7 +109,7 @@ class CalendrierTournoi
 
 	public function getIntByHeure($heureStr)
 	{
-		$separe=explode("h", $heureStr);
+		$separe=explode(":", $heureStr);
 		$heureInt=intval($separe[0])+intval($separe[1])/60;
 		return $heureInt;
 	}
@@ -297,11 +297,13 @@ class CalendrierTournoi
 			if($libelJour!="debug"){
 				$trs[$libelJour]=array("<td class=\"lblJour\">$libelJour</td>");
 			}
+			
 			foreach ($listeCreneaux as $key => $heure) {
 				$trs[$libelJour."-".$heure]=array("<td>$heure</td>");
 			}
+			
 		}
-
+		
 		$premJourStrs = explode("/",$this->minDate($this->tabValeursRange));
 		$datePrem = mktime(0,0,0,intval($premJourStrs[1]),intval($premJourStrs[0]),intval($premJourStrs[2]));
 		$currDate = $datePrem;
@@ -337,7 +339,7 @@ class CalendrierTournoi
 			}
 			$currDate+=86400;
 		}
-
+		//dd($trs);
 
 		//Éviter la fin abrupte : on comble les jours du jour de fin au dimanche qui suit par des cases vides
 		$dimancheAfter = $this->getDayAfter($dateDern,"dimanche");

@@ -86,6 +86,7 @@ class TournoiController extends AbstractController
           
           $creneaux=$tournoi->getCreneau();
           $series=$tournoi->getSeries();
+          
           $lesPoules=array();
           foreach($series as $key => $serie)
           {
@@ -97,26 +98,46 @@ class TournoiController extends AbstractController
             }
           }
           $parties=array();
+          $lesUsers=array();
           foreach ($creneaux as $key => $creneau) 
-          {
+          { 
+            if(($users=$creneau->getUser())!=null)
+            {
+              $userNom=$users->getNom();
+              $lesUsers[$userNom]=$userNom;
+            }
             $date=$creneau->getDateEtHeure()->format("d/m/Y");
             $heure=$creneau->getDateEtHeure()->format("H:i");
+            
             if(($partie=$creneau->getPartie())!=null)
             {
               $eqs=$partie->getEquipes();
               $eq1=$eqs[0]->getId();
               $eq2=$eqs[1]->getId();
+             
             }
             $partieStr=($creneau->getCommentaire()==null || $creneau->getCommentaire()=="" ?($creneau->getPartie()!=null? $eq1."-".$eq2 :"N/A"):$creneau->getCommentaire());
             $aAjouter=array($heure=>$partieStr);
             $parties[$date]=(isset($parties[$date]) && is_array($parties[$date]) ? array_merge($parties[$date],$aAjouter):$aAjouter);
           }
-          
+
+          $event=array();
+          foreach($parties as $key => $partieStr)
+          {
+            foreach($partieStr as $cle => $valeur)
+            {
+              $evenements[]=$valeur;
+            }
+             
+          }
+
+
+
           $cal=new CalendrierTournoi($parties);
           $textCalendrier=$cal->getCalendrier($id);
           
           // Récupérer joueurs tournoi
-
+          
           $joueursRepository = $this->getDoctrine()->getRepository(User::class);
           
           $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);
@@ -124,7 +145,7 @@ class TournoiController extends AbstractController
           
           //Envoi à la vue des informations
           return $this->render('tournoi/calendrier.html.twig', [
-            'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi, "joueurs" => $joueurs, "series" =>$series, "poules"=>$lesPoules
+            'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi, "joueurs" => $joueurs, "series" =>$series, "poules"=>$lesPoules, "users"=>$lesUsers, 'evenements'=>$evenements
             ]);
         }
           
@@ -152,7 +173,6 @@ class TournoiController extends AbstractController
               ]);
           }
           
-           
           /**
           * @Route("/{id}/calendrier/exportation/download", name="tournoi_download_calendrier")
           */
@@ -165,25 +185,24 @@ class TournoiController extends AbstractController
             
             $creneaux = $creneauRepository->getCreneauByTournoi($tournoi);
             
-            
             $calendar = new Calendar();
             $calendar->setProdId('-//My Company//Cool Calendar App//EN');
             $calendar->setTimezone(new \DateTimeZone('Europe/Paris'));
             $id = 1;
-            
+
             foreach ($creneaux as $creneau) 
             {
-              
+
               $partie = $partieRepository->getPartieByCreneau($creneau);
-              
+
               if(count($partie)==1)
               {
                 $event = new CalendarEvent();
-                
+
                 $dateDeb=$creneau->getDateEtHeure();
                 
                 $event->setStart($dateDeb);
-                
+
                 $dateFin=$event->getEnd();
                 $dateFin->setTimestamp($dateFin->getTimestamp()+(($creneau->getDuree()-30)*60));
                 
@@ -198,6 +217,7 @@ class TournoiController extends AbstractController
                 $calendar->addEvent($event);
                 unset($event);
                 $id++;
+
               }else if($creneau->getCommentaire()!=null)
               {
                 $event = new CalendarEvent();
@@ -221,7 +241,7 @@ class TournoiController extends AbstractController
                 $id++;
               }
             }
-            
+
             $calendarExport = new CalendarExport(new CalendarStream, new Formatter());
             $calendarExport->addCalendar($calendar);
             //output .ics formatted text

@@ -110,6 +110,13 @@ class Partie
     {
         $this->creneau = $creneau;
 
+        // set (or unset) the owning side of the relation if necessary
+        $newPartie = null === $creneau ? null : $this;
+        if ($creneau->getPartie() !== $newPartie) {
+            $creneau->setPartie($newPartie);
+        }
+
         return $this;
     }
+
 }

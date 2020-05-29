@@ -33,12 +33,6 @@ class Creneau
      */
     private $tournoi;
 
-  
-
-    /**
-     * @ORM\OneToOne(targetEntity=Partie::class, mappedBy="creneau", cascade={"persist", "remove"})
-     */
-    private $partie;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="creneau")
@@ -51,6 +45,12 @@ class Creneau
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $commentaire;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Partie::class, inversedBy="creneau", cascade={"persist", "remove"})
+     */
+    private $partie;
+
 
     public function getId(): ?int
     {
@@ -95,25 +95,6 @@ class Creneau
         return $this;
     }
 
-  
-
-    public function getPartie(): ?Partie
-    {
-        return $this->partie;
-    }
-
-    public function setPartie(?Partie $partie): self
-    {
-        $this->partie = $partie;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newCreneau = null === $partie ? null : $this;
-        if ($partie->getCreneau() !== $newCreneau) {
-            $partie->setCreneau($newCreneau);
-        }
-
-        return $this;
-    }
 
     public function getUser(): ?User
     {
@@ -136,6 +117,18 @@ class Creneau
     public function setCommentaire(?string $commentaire): self
     {
         $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function getPartie(): ?Partie
+    {
+        return $this->partie;
+    }
+
+    public function setPartie(?Partie $partie): self
+    {
+        $this->partie = $partie;
 
         return $this;
     }

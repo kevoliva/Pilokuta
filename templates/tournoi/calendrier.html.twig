@@ -1,6 +1,13 @@
 {% extends 'base.html.twig' %}
 
-
+{% block navbar %}
+<nav class="nav nav-pills nav-justified">
+  <a class="nav-item nav-link" href="{{path('tournoi_show', {id:tournoi.id})}}">Informations</a>
+  <a class="nav-item nav-link active" href="{{path('tournoi_show_calendrier', {id:tournoi.id})}}">Calendrier</a>
+  <a class="nav-item nav-link" href="#">Résultats</a>
+  <a class="nav-item nav-link" href="#">Phases finales</a>
+</nav>
+{% endblock %}
 
 {% block body %}
 <center>
@@ -8,6 +15,8 @@
     <button class ="btn btn-outline-info btn-sm">Exporter le calendrier</button>
   </a><br><br>
   </center>
+
+
 
 
 
@@ -52,8 +61,8 @@
 
 							<div class="dropdown" style="margin-left: 10px;">
 								<select>
-                  {% for serie in series %}
-									<option>{{serie.libelle}}</option>
+                  					{% for serie in series %}
+										<option>{{serie.libelle}}</option>
 									{% endfor %}
 								</select>
 
@@ -62,9 +71,9 @@
 							<div class="dropdown" style="margin-left: 10px;">
 
 								<select>
-                  {% for poule in poules %}
-                  <option>{{poule}}</option>
-                  {% endfor %}
+                  					{% for poule in poules %}
+                  						<option>{{poule}}</option>
+                  					{% endfor %}
 								</select>
 
 							</div>
@@ -88,10 +97,9 @@
 
 				<div class="d-flex justify-content-center">
 					<select style="width: 200px;text-align: center;text-align-last: center;">
-						<option>Partie</option>
-						<option>Partie1</option>
-						<option>Partie2</option>
-						<option>Partie3</option>
+						{% for evenement in evenements %}
+                  			<option>{{evenement}}</option>
+                  		{% endfor %}
 					</select>
 
 				</div>
@@ -104,10 +112,9 @@
 
 				<div class="d-flex justify-content-center">
 					<select style="width: 200px;text-align: center;text-align-last: center;">
-						<option>User</option>
-						<option>User1</option>
-						<option>User2</option>
-						<option>User3</option>
+						{% for user in users %}
+                  			<option>{{user}}</option>
+                  		{% endfor %}
 					</select>
 
 				</div>
