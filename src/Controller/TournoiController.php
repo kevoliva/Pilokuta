@@ -93,14 +93,17 @@ class TournoiController extends AbstractController
             $poules = $serie->getPoules();
             foreach($poules as $key => $poule)
             {
-              $leLibelle=$poule->getLibelle();
-              $lesPoules[$leLibelle]=$leLibelle;
+              $lesPoules[]=$poule;
             }
           }
+
           $parties=array();
           $lesUsers=array();
+          $lesCommentaires=array();
           foreach ($creneaux as $key => $creneau) 
           { 
+            $unCommentaire=$creneau->getCommentaire();
+            $lesCommentaires[]=$unCommentaire;
             if(($users=$creneau->getUser())!=null)
             {
               $userNom=$users->getNom();
@@ -120,17 +123,21 @@ class TournoiController extends AbstractController
             $aAjouter=array($heure=>$partieStr);
             $parties[$date]=(isset($parties[$date]) && is_array($parties[$date]) ? array_merge($parties[$date],$aAjouter):$aAjouter);
           }
-
+        
+          $motif="/^[0-9]/";
           $event=array();
           foreach($parties as $key => $partieStr)
           {
             foreach($partieStr as $cle => $valeur)
             {
-              $evenements[]=$valeur;
+              
+              if(preg_match($motif, $valeur))
+              {
+                $evenements[]=$valeur;
+              } 
             }
-             
           }
-
+          
 
 
           $cal=new CalendrierTournoi($parties);
@@ -145,7 +152,7 @@ class TournoiController extends AbstractController
           
           //Envoi à la vue des informations
           return $this->render('tournoi/calendrier.html.twig', [
-            'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi, "joueurs" => $joueurs, "series" =>$series, "poules"=>$lesPoules, "users"=>$lesUsers, 'evenements'=>$evenements
+            'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi, "joueurs" => $joueurs, "series" =>$series, "poules"=>$lesPoules, "users"=>$lesUsers, 'evenements'=>$evenements, 'commentaires'=>$lesCommentaires
             ]);
         }
           
