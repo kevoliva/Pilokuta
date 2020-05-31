@@ -2,6 +2,7 @@
 {% block body %}
 
 <center>
+  
 <h3>Saisissez vos paramètres pour exporter le calendrier souhaité</h3>
 
 
@@ -26,20 +27,19 @@
   <option>Sélectionnez une série</option>
 
   {% for serie in series %}
-<option>{{ serie.libelle }}</option>
-
+<option value="{{ serie.tournoi.id }}">{{ serie.libelle }}</option>
   {% endfor %}
 
 </select>
-
 
 
   <br><br>
 
 <select name="choosePoule" id="choosePoule ">
     <option>Sélectionnez une poule</option>
-
-  
+    {% for poule in poules %}
+    <option></option>
+  {% endfor %}
 
   </select>
 

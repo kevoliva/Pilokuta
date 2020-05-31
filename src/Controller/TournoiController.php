@@ -87,10 +87,10 @@ class TournoiController extends AbstractController
           $creneaux=$tournoi->getCreneau();
           $series=$tournoi->getSeries();
           
-          $lesPoules=array();
+         $lesPoules=array();
           foreach($series as $key => $serie)
           {
-            $poules=$serie->getPoules();
+            $poules = $serie->getPoules();
             foreach($poules as $key => $poule)
             {
               $leLibelle=$poule->getLibelle();
@@ -152,14 +152,23 @@ class TournoiController extends AbstractController
           /**
           * @Route("/{id}/calendrier/exportation", name="tournoi_export_calendrier")
           */
-          
           public function choisirExport(Tournoi $tournoi): Response
           {
            
             $series=$tournoi->getSeries();
             
+            $poules = [];
+            foreach($series as $key => $serie)
+            {
+              $poule = $serie->getPoules();
+              array_push($poules,$poule);
+            }
 
             
+            
+
+
+
 
            
             $joueursRepository = $this->getDoctrine()->getRepository(User::class);
@@ -169,7 +178,7 @@ class TournoiController extends AbstractController
             
 
             return $this->render('tournoi/exportation.html.twig', [
-              'tournoi' => $tournoi, 'joueurs' => $joueurs,  "series" =>$series, 
+              'tournoi' => $tournoi, 'joueurs' => $joueurs,  "series" => $series, "poules"=> $poules
               ]);
           }
           

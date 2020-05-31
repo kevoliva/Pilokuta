@@ -35,9 +35,11 @@ class Partie
     private $equipes;
 
     /**
-     * @ORM\OneToOne(targetEntity=Creneau::class,  cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Creneau::class, cascade={"persist", "remove"})
      */
     private $creneau;
+
+ 
 
     public function __construct()
     {
@@ -118,5 +120,7 @@ class Partie
 
         return $this;
     }
+
+   
 
 }

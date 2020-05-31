@@ -41,11 +41,14 @@ class Equipe
      */
     private $users;
 
+   
+
     public function __construct()
     {
         $this->joueurs = new ArrayCollection();
         $this->partie = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->parties = new ArrayCollection();
     }
 
     public function getId(): ?int
