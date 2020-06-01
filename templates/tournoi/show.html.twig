@@ -13,7 +13,7 @@
 
 <center>
   <h3 class="display-1"><b>{{ tournoi.libelle }}</b></h3>
-  <h5 class="display-4">{{ tournoi.dateDebut ? tournoi.dateDebut|date('Y-m-d') : '' }} - {{ tournoi.dateFin ? tournoi.dateFin|date('Y-m-d') : '' }}</h5>
+  <h5 class="display-4">{{ tournoi.dateDebut ? tournoi.dateDebut|date('d-m-Y') : '' }} - {{ tournoi.dateFin ? tournoi.dateFin|date('d-m-Y') : '' }}</h5>
 
   {% if tournoi.nbJoueursParEquipe == 1 %}
   <h2>1 vs 1</h2>

@@ -26,7 +26,7 @@
           2 vs 2
           {% endif %}
         </h6>
-        <h6 class="card-subtitle mb-4 text-muted">{{ tournoi.dateDebut ? tournoi.dateDebut|date('Y-m-d') : '' }} - {{ tournoi.dateFin ? tournoi.dateFin|date('Y-m-d') : '' }}</h6>
+        <h6 class="card-subtitle mb-4 text-muted">{{ tournoi.dateDebut ? tournoi.dateDebut|date('d-m-Y') : '' }} - {{ tournoi.dateFin ? tournoi.dateFin|date('d-m-Y') : '' }}</h6>
         <a href="{{path('tournoi_show', {id:tournoi.id})}}">
           <button class="btn btn-outline-success">Consulter</button>
         </a>

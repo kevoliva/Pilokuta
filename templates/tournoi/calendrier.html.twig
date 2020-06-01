@@ -10,61 +10,14 @@
 {% endblock %}
 
 {% block body %}
-<!--<center>
-  <a href="{{path('tournoi_download_calendrier', {id:tournoi.id})}}">
+<center>
+  <a href="{{path('tournoi_export_calendrier', {id:tournoi.id})}}">
     <button class ="btn btn-outline-info btn-sm">Exporter le calendrier</button>
   </a><br><br>
   </center>
--->
 
 
-<center>
 
-
-  <p>
-    <span id="tocopy">http://localhost:8000/tournoi:{{tournoi.id}}/calendrier/download</span>
-    <button class="js-copy btn btn-outline-secondary btn-sm" data-target="#tocopy">Copier le lien <i
-        class="icon-docs"></i></button>
-
-
-  </p>
-</center>
-<script src="{{asset('js/scriptCal.js')}}"></script>
-<script>
-
-  var btncopy = document.querySelector('.js-copy');
-  if (btncopy) {
-    btncopy.addEventListener('click', docopy);
-  }
-
-  function docopy() {
-    var range = document.createRange();
-    var target = this.dataset.target;
-    var fromElement = document.querySelector(target);
-    var selection = window.getSelection();
-    range.selectNode(fromElement);
-    selection.removeAllRanges();
-    selection.addRange(range);
-
-    try {
-      var result = document.execCommand('copy');
-
-    }
-    catch (err) {
-      // Une erreur est surevnue lors de la tentative de copie
-      alert(err);
-    }
-
-    selection = window.getSelection();
-
-    if (typeof selection.removeRange === 'function') {
-      selection.removeRange(range);
-    } else if (typeof selection.removeAllRanges === 'function') {
-      selection.removeAllRanges();
-    }
-  }
-
-</script>
 
 
 
@@ -108,8 +61,8 @@
 
 							<div class="dropdown" style="margin-left: 10px;">
 								<select>
-                  {% for serie in series %}
-									<option>{{serie.libelle}}</option>
+                  					{% for serie in series %}
+										<option>{{serie.libelle}}</option>
 									{% endfor %}
 								</select>
 
@@ -118,9 +71,13 @@
 							<div class="dropdown" style="margin-left: 10px;">
 
 								<select>
-                  {% for poule in poules %}
-                  <option>{{poule}}</option>
-                  {% endfor %}
+									{% for poule in poules %}
+										{% for serie in series %}
+									  		{% if poule.serie.id == serie.id %}
+										  	<option>{{poule.libelle}}</option>
+											{% endif %}  
+									  	{% endfor %}
+									{% endfor %}
 								</select>
 
 							</div>
@@ -144,10 +101,9 @@
 
 				<div class="d-flex justify-content-center">
 					<select style="width: 200px;text-align: center;text-align-last: center;">
-						<option>Partie</option>
-						<option>Partie1</option>
-						<option>Partie2</option>
-						<option>Partie3</option>
+						{% for evenement in evenements %}
+                  			<option>{{evenement}}</option>
+                  		{% endfor %}
 					</select>
 
 				</div>
@@ -160,16 +116,19 @@
 
 				<div class="d-flex justify-content-center">
 					<select style="width: 200px;text-align: center;text-align-last: center;">
-						<option>User</option>
-						<option>User1</option>
-						<option>User2</option>
-						<option>User3</option>
+						{% for user in users %}
+                  			<option>{{user}}</option>
+                  		{% endfor %}
 					</select>
 
 				</div>
 
 				<hr>
-				<textarea id="descrIndispo" type="textarea" class="form-control" placeholder="Descrption de la potentielle indisponibilité des créneaux"></textarea>
+				<textarea id="descrIndispo" type="textarea" class="form-control" placeholder="Description de la potentielle indisponibilité des créneaux">
+					{% for commentaire in commentaires %}
+                  			{{commentaire}}
+                  		{% endfor %}
+				</textarea>
 
 			</div>
 
@@ -190,18 +149,6 @@
   
 
 
-<br>
-<center>
-<select name="choose" id="choose ">
-  <option>Sélectionnez un joueur</option>
-
-  {% for joueur in joueurs %}
-<option>{{ joueur.prenom }} {{ joueur.nom }}</option>
-
-  {% endfor %}
-
-</select>
-</center>
 
 
 {% endblock %}

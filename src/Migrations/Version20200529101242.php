@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200526150141 extends AbstractMigration
+final class Version20200529101242 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,7 @@ final class Version20200526150141 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE creneau (id INT AUTO_INCREMENT NOT NULL, tournoi_id INT DEFAULT NULL, user_id INT DEFAULT NULL, date_et_heure DATETIME DEFAULT NULL, duree INT DEFAULT NULL, commentaire VARCHAR(255) DEFAULT NULL, INDEX IDX_F9668B5FF607770A (tournoi_id), INDEX IDX_F9668B5FA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE creneau (id INT AUTO_INCREMENT NOT NULL, tournoi_id INT DEFAULT NULL, user_id INT DEFAULT NULL, partie_id INT DEFAULT NULL, date_et_heure DATETIME DEFAULT NULL, duree INT DEFAULT NULL, commentaire VARCHAR(255) DEFAULT NULL, INDEX IDX_F9668B5FF607770A (tournoi_id), INDEX IDX_F9668B5FA76ED395 (user_id), UNIQUE INDEX UNIQ_F9668B5FE075F7A4 (partie_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE equipe (id INT AUTO_INCREMENT NOT NULL, poule_id INT DEFAULT NULL, libelle VARCHAR(255) NOT NULL, INDEX IDX_2449BA1526596FD8 (poule_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE equipe_partie (equipe_id INT NOT NULL, partie_id INT NOT NULL, INDEX IDX_8AC79956D861B89 (equipe_id), INDEX IDX_8AC7995E075F7A4 (partie_id), PRIMARY KEY(equipe_id, partie_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE partie (id INT AUTO_INCREMENT NOT NULL, creneau_id INT DEFAULT NULL, score_equipe1 INT DEFAULT NULL, score_equipe2 INT DEFAULT NULL, UNIQUE INDEX UNIQ_59B1F3D7D0729A9 (creneau_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -33,6 +33,7 @@ final class Version20200526150141 extends AbstractMigration
         $this->addSql('CREATE TABLE user_equipe (user_id INT NOT NULL, equipe_id INT NOT NULL, INDEX IDX_411BA128A76ED395 (user_id), INDEX IDX_411BA1286D861B89 (equipe_id), PRIMARY KEY(user_id, equipe_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE creneau ADD CONSTRAINT FK_F9668B5FF607770A FOREIGN KEY (tournoi_id) REFERENCES tournoi (id)');
         $this->addSql('ALTER TABLE creneau ADD CONSTRAINT FK_F9668B5FA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE creneau ADD CONSTRAINT FK_F9668B5FE075F7A4 FOREIGN KEY (partie_id) REFERENCES partie (id)');
         $this->addSql('ALTER TABLE equipe ADD CONSTRAINT FK_2449BA1526596FD8 FOREIGN KEY (poule_id) REFERENCES poule (id)');
         $this->addSql('ALTER TABLE equipe_partie ADD CONSTRAINT FK_8AC79956D861B89 FOREIGN KEY (equipe_id) REFERENCES equipe (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE equipe_partie ADD CONSTRAINT FK_8AC7995E075F7A4 FOREIGN KEY (partie_id) REFERENCES partie (id) ON DELETE CASCADE');
@@ -51,6 +52,7 @@ final class Version20200526150141 extends AbstractMigration
         $this->addSql('ALTER TABLE partie DROP FOREIGN KEY FK_59B1F3D7D0729A9');
         $this->addSql('ALTER TABLE equipe_partie DROP FOREIGN KEY FK_8AC79956D861B89');
         $this->addSql('ALTER TABLE user_equipe DROP FOREIGN KEY FK_411BA1286D861B89');
+        $this->addSql('ALTER TABLE creneau DROP FOREIGN KEY FK_F9668B5FE075F7A4');
         $this->addSql('ALTER TABLE equipe_partie DROP FOREIGN KEY FK_8AC7995E075F7A4');
         $this->addSql('ALTER TABLE equipe DROP FOREIGN KEY FK_2449BA1526596FD8');
         $this->addSql('ALTER TABLE poule DROP FOREIGN KEY FK_FA1FEB40D94388BD');

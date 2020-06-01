@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+<center>
+  
+<h3>Saisissez vos paramètres pour exporter le calendrier souhaité</h3>
+
+
+
+<br>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-4">
+		</div>
+		<div class="col-md-4">
+			 {{ tournoi.libelle }}
+		</div>
+		<div class="col-md-4" align="justify">
+            <a  href="{{path('tournoi_index')}}">Changer de tournoi</a>
+		</div>
+	</div>
+</div>
+
+  <br><br>
+  
+<select name="chooseSerie" id="chooseSerie ">
+  <option>Sélectionnez une série</option>
+
+  {% for serie in series %}
+<option value="{{ serie.tournoi.id }}">{{ serie.libelle }}</option>
+  {% endfor %}
+
+</select>
+
+
+  <br><br>
+
+<select name="choosePoule" id="choosePoule ">
+    <option>Sélectionnez une poule</option>
+    {% for poule in poules %}
+    <option></option>
+  {% endfor %}
+
+  </select>
+
+<br><br>
+
+<select name="chooseJoueur" id="chooseJoueur ">
+    <option>Sélectionnez un joueur</option>
+  
+    {% for joueur in joueurs %}
+  <option>{{ joueur.prenom }} {{ joueur.nom }}</option>
+  
+    {% endfor %}
+  
+  </select>
+
+  <br><br><br>
+
+  <a href="{{path('tournoi_download_calendrier', {id:tournoi.id})}}">
+    <button class ="btn btn-outline-info btn-sm">Télécharger le calendrier</button>
+  </a>
+  <br><br><br>
+
+    <p>
+      <span id="tocopy">http://localhost:8000/tournoi/{{tournoi.id}}/calendrier/exportation/download</span><br>
+      <button class="js-copy btn btn-outline-secondary btn-sm" data-target="#tocopy">Copier le lien de téléchargement <i
+          class="icon-docs"></i></button>
+  
+  
+    </p>
+    <script>
+
+        var btncopy = document.querySelector('.js-copy');
+        if (btncopy) {
+          btncopy.addEventListener('click', docopy);
+        }
+      
+        function docopy() {
+          var range = document.createRange();
+          var target = this.dataset.target;
+          var fromElement = document.querySelector(target);
+          var selection = window.getSelection();
+        
+      
+        range.selectNode(fromElement);
+          selection.removeAllRanges();
+          selection.addRange(range);
+      
+          try {
+            var result = document.execCommand('copy');
+      
+          }
+          catch (err) {
+            // Une erreur est surevnue lors de la tentative de copie
+            alert(err);
+          }
+      
+          selection = window.getSelection();
+      
+          if (typeof selection.removeRange === 'function') {
+            selection.removeRange(range);
+          } else if (typeof selection.removeAllRanges === 'function') {
+            selection.removeAllRanges();
+          }
+        }
+      
+      </script>
+  </center>
+
+
+{% endblock %}
