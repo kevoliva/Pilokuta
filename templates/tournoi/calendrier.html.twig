@@ -5,7 +5,7 @@
   <a class="nav-item nav-link" href="{{path('tournoi_show', {id:tournoi.id})}}">Informations</a>
   <a class="nav-item nav-link active" href="{{path('tournoi_show_calendrier', {id:tournoi.id})}}">Calendrier</a>
   <a class="nav-item nav-link" href="#">Résultats</a>
-  <a class="nav-item nav-link" href="#">Phases finales</a>
+  <a class="nav-item nav-link" href="{{path('phasesFinales',{'id':tournoi.id,'indic':0}) }}">Phases finales</a>
 </nav>
 {% endblock %}
 

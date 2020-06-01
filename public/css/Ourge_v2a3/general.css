@@ -1,0 +1,65 @@
+/* SIZES */
+.large {
+    font-size: large !important;
+}
+.small {
+    font-size: small !important;
+}
+
+/* COLORS */
+.white {
+    color: #F5F5F4;
+}
+.silver {
+    color: #C8C8C7;
+}
+.pebble {
+    color: #8C8D8B;
+}
+.grey {
+    color: #50514F;
+}
+.blue {
+    color: #028CF3;
+}
+.teal {
+    color: #3CB6BD;
+}
+.green {
+    color: #00AF54;
+}
+.yellow {
+    color: #F3C206;
+}
+.red {
+    color: #BC2C1A;
+}
+
+/* BACKGROUND COLORS */
+.bg-white {
+    background-color: #F5F5F4;
+}
+.bg-silver {
+    background-color: #C8C8C7;
+}
+.bg-pebble {
+    background-color: #8C8D8B;
+}
+.bg-grey {
+    background-color: #50514F;
+}
+.bg-blue {
+    background-color: #028CF3;
+}
+.bg-teal {
+    background-color: #3CB6BD;
+}
+.bg-green {
+    background-color: #00AF54;
+}
+.bg-yellow {
+    background-color: #F3C206;
+}
+.bg-red {
+    background-color: #BC2C1A;
+}

@@ -1,0 +1,186 @@
+/* BASE STYLE */
+.button {
+    color: black;
+    font-size: medium;
+
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 0.3em;
+    border-color: transparent;
+    
+    box-shadow: #aaa 0 0 0;
+
+    background-color: transparent;
+
+    padding: 0.4em 0.8em 0.4em 0.8em;
+
+    transition:
+    border-color 100ms ease-in-out,
+    box-shadow 100ms ease-in-out;
+
+    cursor: pointer;
+}
+.button:hover {
+    border-color: transparent;
+
+    box-shadow:  #aaa 0 0 0.5em;
+    
+    transition:
+    border-color 100ms ease-in-out,
+    box-shadow 100ms ease-in-out;
+}
+.button:active {
+    box-shadow:  #aaa 0 0 0.25em;
+
+    transition:
+    box-shadow 100ms ease-in-out;
+}
+.button:focus {
+    box-shadow:  #aaa 0 0 0.25em;
+
+    transition:
+    border-color 100ms ease-in-out,
+    box-shadow 100ms ease-in-out;
+}
+
+/* COLORS AND OUTLINES */
+.button.outline {
+    color: black;
+    border-color: #bfbfbf;
+    background-color: transparent;
+}
+.button.outline:hover {
+    border-color: transparent;
+}
+
+.button.white {
+    color: black;
+    background-color: #F5F5F4;
+}
+
+.button.outline.white{ /* MAY CAUSE AN ISSUE WHILE :FOCUS */
+    color: #F5F5F4;
+    border-color: #F5F5F4;
+    background-color: transparent;
+}
+.button.outline.white:hover {
+    border-color: transparent;
+}
+
+.button.silver {
+    color: black;
+    background-color: #C8C8C7;
+}
+
+.button.outline.silver{ /* MAY CAUSE AN ISSUE WHILE :FOCUS */
+    color: #C8C8C7;
+    border-color: #C8C8C7;
+    background-color: transparent;
+}
+.button.outline.silver:hover {
+    border-color: transparent;
+}
+
+.button.pebble {
+    color: white;
+    background-color: #8C8D8B;
+}
+
+.button.outline.pebble{ /* MAY CAUSE AN ISSUE WHILE :FOCUS */
+    color: #8C8D8B;
+    border-color: #8C8D8B;
+    background-color: transparent;
+}
+.button.outline.pebble:hover {
+    border-color: transparent;
+}
+
+.button.grey {
+    color: white;
+    background-color: #50514F;
+}
+
+.button.outline.grey{ /* MAY CAUSE AN ISSUE WHILE :FOCUS */
+    color: #50514F;
+    border-color: #50514F;
+    background-color: transparent;
+}
+.button.outline.grey:hover {
+    border-color: transparent;
+}
+
+.button.blue {
+    color: white;
+    background-color: #028CF3;
+}
+
+.button.outline.blue{ /* MAY CAUSE AN ISSUE WHILE :FOCUS */
+    color: #028CF3;
+    border-color: #028CF3;
+    background-color: transparent;
+}
+.button.outline.blue:hover {
+    border-color: transparent;
+}
+
+.button.teal {
+    color: white;
+    background-color: #3CB6BD;
+}
+
+.button.outline.teal{ /* MAY CAUSE AN ISSUE WHILE :FOCUS */
+    color: #3CB6BD;
+    border-color: #3CB6BD;
+    background-color: transparent;
+}
+.button.outline.teal:hover {
+    border-color: transparent;
+}
+
+.button.green {
+    color: white;
+    background-color: #00AF54;
+}
+
+.button.outline.green{ /* MAY CAUSE AN ISSUE WHILE :FOCUS */
+    color: #00AF54;
+    border-color: #00AF54;
+    background-color: transparent;
+}
+.button.outline.green:hover {
+    border-color: transparent;
+}
+
+.button.yellow {
+    color: white;
+    background-color: #F3C206;
+}
+
+.button.outline.yellow{ /* MAY CAUSE AN ISSUE WHILE :FOCUS */
+    color: #F3C206;
+    border-color: #F3C206;
+    background-color: transparent;
+}
+.button.outline.yellow:hover {
+    border-color: transparent;
+}
+
+.button.red {
+    color: white;
+    background-color: #BC2C1A;
+}
+
+.button.outline.red{ /* MAY CAUSE AN ISSUE WHILE :FOCUS */
+    color: #BC2C1A;
+    border-color: #BC2C1A;
+    background-color: transparent;
+}
+.button.outline.red:hover {
+    border-color: transparent;
+}
+
+/* SHAPES */
+.button.pill {
+    border-radius: 1.5em;
+}
+

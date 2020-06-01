@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Phases Finales - {{tournoi.libelle}} {% endblock %}
+
+{% block navbar %}
+<nav class="nav nav-pills nav-justified">
+  <a class="nav-item nav-link" href="{{path('tournoi_show', {id:tournoi.id})}}">Informations</a>
+  <a class="nav-item nav-link" href="{{path('tournoi_show_calendrier', {id:tournoi.id})}}">Calendrier</a>
+  <a class="nav-item nav-link" href="#">Résultats</a>
+  <a class="nav-item nav-link active" href="{{path('phasesFinales',{'id':tournoi.id,'indic':0}) }}">Phases finales</a>
+</nav>
+{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 1400px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    td{
+    	font-size: 0.75em;
+    	margin-right: 150px;
+    	border-style: none none;
+    }
+    td div table tr td {
+    	border-style: none;
+    	width: 80%;
+    }
+    td div table tr td * {
+    	width: 100%;
+    }
+    td div table tr td+td {
+    	border-style: none;
+    	width: 20%;
+    }
+    tr+tr > td{ /*tous les cellules appartenant à une ligne qui en suit une autre : permet de distancer par groupe de deux*/
+    	padding-bottom: 10px;
+    }
+
+    select{
+    	width : 75px;
+    }
+    #entete td{
+		font-size: 18px;
+    }
+</style>
+<div class="example-wrapper">
+	<center>
+		<br>
+
+		<h1>Phases Finales</h1>
+		<br>
+		
+		{{(phasesFinales)|raw}}
+
+		<div>
+			
+		</div>
+	</center>
+</div>
+{% endblock %}

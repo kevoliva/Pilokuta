@@ -13,6 +13,7 @@ use App\Repository\CreneauRepository;
 use App\Entity\Creneau;
 use App\Service\Calendrier;
 use App\Service\CalendrierTournoi;
+use App\Service\PhasesFinales;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,9 +40,9 @@ class TournoiController extends AbstractController
   {
     return $this->render('tournoi/index.html.twig', [
       'tournois' => $tournoiRepository->findAll(),
-      ]);
+    ]);
   }
-    
+
     /**
     * @Route("/new", name="tournoi_new", methods={"GET","POST"})
     */
@@ -63,9 +64,9 @@ class TournoiController extends AbstractController
       return $this->render('tournoi/new.html.twig', [
         'tournoi' => $tournoi,
         'form' => $form->createView(),
-        ]);
+      ]);
     }
-      
+
       /**
       * @Route("/{id}", name="tournoi_show", methods={"GET"})
       */
@@ -73,9 +74,9 @@ class TournoiController extends AbstractController
       {
         return $this->render('tournoi/show.html.twig', [
           'tournoi' => $tournoi,
-          ]);
+        ]);
       }
-        
+
         /**
         * @Route("/{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
         */
@@ -87,7 +88,7 @@ class TournoiController extends AbstractController
           $creneaux=$tournoi->getCreneau();
           $series=$tournoi->getSeries();
           
-         $lesPoules=array();
+          $lesPoules=array();
           foreach($series as $key => $serie)
           {
             $poules = $serie->getPoules();
@@ -117,20 +118,20 @@ class TournoiController extends AbstractController
               $eqs=$partie->getEquipes();
               $eq1=$eqs[0]->getId();
               $eq2=$eqs[1]->getId();
-             
+
             }
             $partieStr=($creneau->getCommentaire()==null || $creneau->getCommentaire()=="" ?($creneau->getPartie()!=null? $eq1."-".$eq2 :"N/A"):$creneau->getCommentaire());
             $aAjouter=array($heure=>$partieStr);
             $parties[$date]=(isset($parties[$date]) && is_array($parties[$date]) ? array_merge($parties[$date],$aAjouter):$aAjouter);
           }
-        
+
           $motif="/^[0-9]/";
           $event=array();
           foreach($parties as $key => $partieStr)
           {
             foreach($partieStr as $cle => $valeur)
             {
-              
+
               if(preg_match($motif, $valeur))
               {
                 $evenements[]=$valeur;
@@ -153,16 +154,16 @@ class TournoiController extends AbstractController
           //Envoi à la vue des informations
           return $this->render('tournoi/calendrier.html.twig', [
             'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi, "joueurs" => $joueurs, "series" =>$series, "poules"=>$lesPoules, "users"=>$lesUsers, 'evenements'=>$evenements, 'commentaires'=>$lesCommentaires
-            ]);
+          ]);
         }
 
-          
+
           /**
           * @Route("/{id}/calendrier/exportation", name="tournoi_export_calendrier")
           */
           public function choisirExport(Tournoi $tournoi): Response
           {
-           
+
             $series=$tournoi->getSeries();
             
             $poules = [];
@@ -178,16 +179,16 @@ class TournoiController extends AbstractController
 
 
 
-           
+
             $joueursRepository = $this->getDoctrine()->getRepository(User::class);
-          
+
             $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);
 
             
 
             return $this->render('tournoi/exportation.html.twig', [
               'tournoi' => $tournoi, 'joueurs' => $joueurs,  "series" => $series, "poules"=> $poules
-              ]);
+            ]);
           }
           
           /**
@@ -197,7 +198,7 @@ class TournoiController extends AbstractController
           public function exporterCalendrier(Tournoi $tournoi)
           {
             $partieRepository = $this->getDoctrine()->getRepository(Partie::class);
-              
+
             $creneauRepository = $this->getDoctrine()->getRepository(Creneau::class);
             
             $creneaux = $creneauRepository->getCreneauByTournoi($tournoi);
@@ -272,22 +273,54 @@ class TournoiController extends AbstractController
             fclose($f);
 
             header('Content-Description: File Transfer');
-              header('Content-Disposition: attachment; filename='.basename($file));
-              header('Expires: 0');
-              header('Cache-Control: must-revalidate');
-              header('Pragma: public');
-              header('Content-Length: ' . filesize($file));
-              header("Content-Type: text/plain");
-              
-              readfile($file);
-              unlink($file);
-              exit;
+            header('Content-Disposition: attachment; filename='.basename($file));
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            header("Content-Type: text/plain");
+
+            readfile($file);
+            unlink($file);
+            exit;
           }
-            
-           
+
+           /**
+           * @Route("/{id}/phasesFinales/{indic}", name="phasesFinales")
+           */
+           public function phasesFinales($id,$indic)
+           {
+
+            //trouver le tournoi correspondant
+            $tournoi=$this->getDoctrine()->getRepository(Tournoi::class)->find($id);
+
+              $parties=array();
+              $eqPoss=array();
+              $nbCols = $indic;
+              for ($i=1; $i < pow(2,$nbCols); $i++) { 
+                $parties[$i]=array("equipes" => array(null,null),
+                 "scores" => array(null,null)
+               );
+                $eqPoss[]=$i;
+              }
+              $eqPoss[]=pow(2,$nbCols);
+              $PF=new PhasesFinales($parties,$eqPoss);
+            if($indic!=0){
+
+              $phasesFinales=$PF->getPhasesFinales();
+            }else{
+              $phasesFinales=$PF->getChoix();
+              $phasesFinales=preg_replace('!aaa(\d+)bbb!',$this->generateUrl('phasesFinales',['id'=>$id,'indic'=>'0']).'${1}',$phasesFinales);
+            }
+
+        //Envoi à la vue des informations
+            return $this->render('tournoi/phasesfinales.html.twig', [
+              'controller_name' => 'GestionPeloteController', 'tournoi' => $tournoi,'phasesFinales' => $phasesFinales
+            ]);
+          }
           
-        
-            
+
+
             /**
             * @Route("/{id}", name="tournoi_delete", methods={"DELETE"})
             */
@@ -301,4 +334,4 @@ class TournoiController extends AbstractController
               
               return $this->redirectToRoute('tournoi_index');
             }
-}
+          }
