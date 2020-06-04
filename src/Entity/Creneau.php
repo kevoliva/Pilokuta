@@ -47,7 +47,7 @@ class Creneau
     private $commentaire;
 
     /**
-     * @ORM\OneToOne(targetEntity=Partie::class, inversedBy="creneau", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Partie::class, cascade={"persist", "remove"})
      */
     private $partie;
 
