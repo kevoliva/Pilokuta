@@ -13,7 +13,6 @@ class SerieType extends AbstractType
     {
         $builder
             ->add('libelle')
-            ->add('tournoi')
         ;
     }
 

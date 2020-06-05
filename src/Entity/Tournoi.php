@@ -50,7 +50,7 @@ class Tournoi
     private $creneau;
 
     /**
-     * @ORM\OneToMany(targetEntity=Serie::class, mappedBy="tournoi")
+     * @ORM\OneToMany(targetEntity=Serie::class, mappedBy="tournoi", cascade={"persist"})
      */
     private $series;
 
@@ -185,5 +185,22 @@ class Tournoi
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return (string) $this->getLibelle();
+    }
+
+    public function addSerie(Serie $serie)
+    {
+        $serie->setTournoi($this);
+
+        $this->series->add($serie);
+    }
+
+    public function removeSerie(Serie $serie)
+    {
+        $this->series->removeElement($serie);
     }
 }

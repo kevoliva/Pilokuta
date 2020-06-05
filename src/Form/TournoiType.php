@@ -4,10 +4,12 @@ namespace App\Form;
 
 use App\Entity\Serie;
 use App\Entity\Tournoi;
+use App\Entity\Poule;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 class TournoiType extends AbstractType
@@ -17,19 +19,16 @@ class TournoiType extends AbstractType
         $builder
             ->add('dateDebut')
             ->add('dateFin')
-            ->add('nbJoueursParEquipe')
             ->add('etat')
             ->add('libelle')
-            ->add('series', EntityType::class, 
-            [
-                'class' => Serie::class,
-                'choice_label' => function(Serie $serie)
-                {
-                  return $serie->getLibelle();  
-                },
-                    'multiple' => true,
-                    'expanded' => true
-            ]);
+            ->add('series', CollectionType::class, [
+                'entry_type' => SerieType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'by_reference' => false,
+                'allow_delete' => true,
+            ])
+            ;
     }
     
     public function configureOptions(OptionsResolver $resolver)

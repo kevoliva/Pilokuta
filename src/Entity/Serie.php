@@ -30,7 +30,7 @@ class Serie
     private $poules;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Tournoi::class, inversedBy="series")
+     * @ORM\ManyToOne(targetEntity=Tournoi::class, inversedBy="series", cascade={"persist"})
      */
     private $tournoi;
 

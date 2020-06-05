@@ -2,31 +2,32 @@
 
 namespace App\Controller;
 
-use App\Entity\Tournoi;
-use App\Entity\Partie;
 use App\Entity\User;
-use App\Entity\Serie;
 use App\Entity\Poule;
-use App\Form\TournoiType;
-use App\Repository\TournoiRepository;
-use App\Repository\CreneauRepository;
+use App\Entity\Serie;
+use App\Entity\Partie;
 use App\Entity\Creneau;
+use App\Entity\Tournoi;
+use App\Form\TournoiType;
 use App\Service\Calendrier;
-use App\Service\CalendrierTournoi;
 use App\Service\PhasesFinales;
-use Symfony\Component\Validator\Constraints\DateTime;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Jsvrcek\ICS\CalendarExport;
+use Jsvrcek\ICS\CalendarStream;
 use Jsvrcek\ICS\Model\Calendar;
+use App\Service\CalendrierTournoi;
+use Jsvrcek\ICS\Utility\Formatter;
 use Jsvrcek\ICS\Model\CalendarEvent;
+use App\Repository\CreneauRepository;
+use App\Repository\TournoiRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Jsvrcek\ICS\Model\Relationship\Attendee;
 use Jsvrcek\ICS\Model\Relationship\Organizer;
+use Symfony\Component\HttpFoundation\Request;
 
-use Jsvrcek\ICS\Utility\Formatter;
-use Jsvrcek\ICS\CalendarStream;
-use Jsvrcek\ICS\CalendarExport;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
 * @Route("/tournoi")
@@ -40,9 +41,9 @@ class TournoiController extends AbstractController
   {
     return $this->render('tournoi/index.html.twig', [
       'tournois' => $tournoiRepository->findAll(),
-    ]);
-  }
-
+      ]);
+    }
+    
     /**
     * @Route("/new", name="tournoi_new", methods={"GET","POST"})
     */
@@ -62,11 +63,57 @@ class TournoiController extends AbstractController
       }
       
       return $this->render('tournoi/new.html.twig', [
-        'tournoi' => $tournoi,
         'form' => $form->createView(),
-      ]);
-    }
-
+        ]);
+      }
+      
+    /**
+    * @Route("/edit/{id}", name="tournoi_edit", methods={"GET","POST"})
+    */
+      public function edit($id, Request $request, EntityManagerInterface $entityManager)
+      {
+        if (null === $tournoi = $entityManager->getRepository(Tournoi::class)->find($id)) {
+          throw $this->createNotFoundException('No tournoi found for id '.$id);
+        }
+        
+        $originalSeries = new ArrayCollection();
+        
+        // Create an ArrayCollection of the current Serie objects in the database
+        foreach ($tournoi->getSeries() as $serie) {
+          $originalSeries->add($serie);
+        }
+        
+        $editForm = $this->createForm(TournoiType::class, $tournoi);
+        
+        $editForm->handleRequest($request);
+        
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+          // remove the relationship between the Serie and the Tournoi
+          foreach ($originalSeries as $serie) {
+            if (false === $tournoi->getSeries()->contains($serie)) {
+              // remove the tournoi from the Serie
+              $serie->getTournois()->removeElement($tournoi);
+              
+              // if it was a many-to-one relationship, remove the relationship like this
+              // $serie->settournoi(null);
+              
+              $entityManager->persist($serie);
+              
+              // if you wanted to delete the Serie entirely, you can also do that
+              // $entityManager->remove($serie);
+            }
+          }
+          
+          $entityManager->persist($tournoi);
+          $entityManager->flush();
+          
+          // redirect back to some edit page
+          return $this->redirectToRoute('tournoi_edit', ['id' => $id]);
+        }
+        
+        return $this->render('tournoi_index');
+      }
+      
       /**
       * @Route("/{id}", name="tournoi_show", methods={"GET"})
       */
@@ -74,9 +121,9 @@ class TournoiController extends AbstractController
       {
         return $this->render('tournoi/show.html.twig', [
           'tournoi' => $tournoi,
-        ]);
-      }
-
+          ]);
+        }
+        
         /**
         * @Route("/{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
         */
@@ -97,7 +144,7 @@ class TournoiController extends AbstractController
               $lesPoules[]=$poule;
             }
           }
-
+          
           $parties=array();
           $lesUsers=array();
           $lesCommentaires=array();
@@ -118,20 +165,20 @@ class TournoiController extends AbstractController
               $eqs=$partie->getEquipes();
               $eq1=$eqs[0]->getId();
               $eq2=$eqs[1]->getId();
-
+              
             }
             $partieStr=($creneau->getCommentaire()==null || $creneau->getCommentaire()=="" ?($creneau->getPartie()!=null? $eq1."-".$eq2 :"N/A"):$creneau->getCommentaire());
             $aAjouter=array($heure=>$partieStr);
             $parties[$date]=(isset($parties[$date]) && is_array($parties[$date]) ? array_merge($parties[$date],$aAjouter):$aAjouter);
           }
-
+          
           $motif="/^[0-9]/";
           $event=array();
           foreach($parties as $key => $partieStr)
           {
             foreach($partieStr as $cle => $valeur)
             {
-
+              
               if(preg_match($motif, $valeur))
               {
                 $evenements[]=$valeur;
@@ -139,8 +186,8 @@ class TournoiController extends AbstractController
             }
           }
           
-
-
+          
+          
           $cal=new CalendrierTournoi($parties);
           $textCalendrier=$cal->getCalendrier($id);
           
@@ -154,16 +201,16 @@ class TournoiController extends AbstractController
           //Envoi à la vue des informations
           return $this->render('tournoi/calendrier.html.twig', [
             'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi, "joueurs" => $joueurs, "series" =>$series, "poules"=>$lesPoules, "users"=>$lesUsers, 'evenements'=>$evenements, 'commentaires'=>$lesCommentaires
-          ]);
-        }
-
-
+            ]);
+          }
+          
+          
           /**
           * @Route("/{id}/calendrier/exportation", name="tournoi_export_calendrier")
           */
           public function choisirExport(Tournoi $tournoi): Response
           {
-
+            
             $series=$tournoi->getSeries();
             
             $poules = [];
@@ -172,155 +219,155 @@ class TournoiController extends AbstractController
               $poule = $serie->getPoules();
               array_push($poules,$poule);
             }
-
             
             
-
-
-
-
-
+            
+            
+            
+            
+            
+            
             $joueursRepository = $this->getDoctrine()->getRepository(User::class);
-
-            $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);
-
             
-
+            $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);
+            
+            
+            
             return $this->render('tournoi/exportation.html.twig', [
               'tournoi' => $tournoi, 'joueurs' => $joueurs,  "series" => $series, "poules"=> $poules
-            ]);
-          }
-          
-          /**
-          * @Route("/{id}/calendrier/exportation/download", name="tournoi_download_calendrier")
-          */
-          
-          public function exporterCalendrier(Tournoi $tournoi)
-          {
-            $partieRepository = $this->getDoctrine()->getRepository(Partie::class);
-
-            $creneauRepository = $this->getDoctrine()->getRepository(Creneau::class);
-            
-            $creneaux = $creneauRepository->getCreneauByTournoi($tournoi);
-            
-            $calendar = new Calendar();
-            $calendar->setProdId('-//My Company//Cool Calendar App//EN');
-            $calendar->setTimezone(new \DateTimeZone('Europe/Paris'));
-            $id = 1;
-
-            foreach ($creneaux as $creneau) 
-            {
-
-              $partie = $partieRepository->getPartieByCreneau($creneau);
-
-              if(count($partie)==1)
-              {
-                $event = new CalendarEvent();
-
-                $dateDeb=$creneau->getDateEtHeure();
-                
-                $event->setStart($dateDeb);
-
-                $dateFin=$event->getEnd();
-                $dateFin->setTimestamp($dateFin->getTimestamp()+(($creneau->getDuree()-30)*60));
-                
-                $event->setEnd($dateFin);
-                
-                $equipes=$partie[0]->getEquipes();
-                
-                $event->setSummary($equipes[0]->getLibelle()."-".$equipes[1]->getLibelle());
-                $event->setUid('event-uid'.$id);
-                
-                
-                $calendar->addEvent($event);
-                unset($event);
-                $id++;
-
-              }else if($creneau->getCommentaire()!=null)
-              {
-                $event = new CalendarEvent();
-                
-                $dateDeb=$creneau->getDateEtHeure();
-                
-                
-                $event->setStart($dateDeb);
-                
-                $dateFin=$event->getEnd();
-                $dateFin->setTimestamp($dateFin->getTimestamp()+(($creneau->getDuree()-30)*60));
-                
-                $event->setEnd($dateFin);
-                
-                $event->setSummary($creneau->getCommentaire());
-                $event->setUid('event-uid'.$id);
-                
-                
-                $calendar->addEvent($event);
-                unset($event);
-                $id++;
-              }
+              ]);
             }
-
-            $calendarExport = new CalendarExport(new CalendarStream, new Formatter());
-            $calendarExport->addCalendar($calendar);
-            //output .ics formatted text
-            $leCalendrier = $calendarExport->getStream();
             
-
-            $file = "Calendrier - ".$tournoi->getLibelle().".ics";
-            $f = fopen($file, "w") or die("Unable to open file!");
-            fwrite($f, $leCalendrier);
-
-            fclose($f);
-
-            header('Content-Description: File Transfer');
-            header('Content-Disposition: attachment; filename='.basename($file));
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($file));
-            header("Content-Type: text/plain");
-
-            readfile($file);
-            unlink($file);
-            exit;
-          }
-
-           /**
-           * @Route("/{id}/phasesFinales/{indic}", name="phasesFinales")
-           */
-           public function phasesFinales($id,$indic)
-           {
-
-            //trouver le tournoi correspondant
-            $tournoi=$this->getDoctrine()->getRepository(Tournoi::class)->find($id);
-
+            /**
+            * @Route("/{id}/calendrier/exportation/download", name="tournoi_download_calendrier")
+            */
+            
+            public function exporterCalendrier(Tournoi $tournoi)
+            {
+              $partieRepository = $this->getDoctrine()->getRepository(Partie::class);
+              
+              $creneauRepository = $this->getDoctrine()->getRepository(Creneau::class);
+              
+              $creneaux = $creneauRepository->getCreneauByTournoi($tournoi);
+              
+              $calendar = new Calendar();
+              $calendar->setProdId('-//My Company//Cool Calendar App//EN');
+              $calendar->setTimezone(new \DateTimeZone('Europe/Paris'));
+              $id = 1;
+              
+              foreach ($creneaux as $creneau) 
+              {
+                
+                $partie = $partieRepository->getPartieByCreneau($creneau);
+                
+                if(count($partie)==1)
+                {
+                  $event = new CalendarEvent();
+                  
+                  $dateDeb=$creneau->getDateEtHeure();
+                  
+                  $event->setStart($dateDeb);
+                  
+                  $dateFin=$event->getEnd();
+                  $dateFin->setTimestamp($dateFin->getTimestamp()+(($creneau->getDuree()-30)*60));
+                  
+                  $event->setEnd($dateFin);
+                  
+                  $equipes=$partie[0]->getEquipes();
+                  
+                  $event->setSummary($equipes[0]->getLibelle()."-".$equipes[1]->getLibelle());
+                  $event->setUid('event-uid'.$id);
+                  
+                  
+                  $calendar->addEvent($event);
+                  unset($event);
+                  $id++;
+                  
+                }else if($creneau->getCommentaire()!=null)
+                {
+                  $event = new CalendarEvent();
+                  
+                  $dateDeb=$creneau->getDateEtHeure();
+                  
+                  
+                  $event->setStart($dateDeb);
+                  
+                  $dateFin=$event->getEnd();
+                  $dateFin->setTimestamp($dateFin->getTimestamp()+(($creneau->getDuree()-30)*60));
+                  
+                  $event->setEnd($dateFin);
+                  
+                  $event->setSummary($creneau->getCommentaire());
+                  $event->setUid('event-uid'.$id);
+                  
+                  
+                  $calendar->addEvent($event);
+                  unset($event);
+                  $id++;
+                }
+              }
+              
+              $calendarExport = new CalendarExport(new CalendarStream, new Formatter());
+              $calendarExport->addCalendar($calendar);
+              //output .ics formatted text
+              $leCalendrier = $calendarExport->getStream();
+              
+              
+              $file = "Calendrier - ".$tournoi->getLibelle().".ics";
+              $f = fopen($file, "w") or die("Unable to open file!");
+              fwrite($f, $leCalendrier);
+              
+              fclose($f);
+              
+              header('Content-Description: File Transfer');
+              header('Content-Disposition: attachment; filename='.basename($file));
+              header('Expires: 0');
+              header('Cache-Control: must-revalidate');
+              header('Pragma: public');
+              header('Content-Length: ' . filesize($file));
+              header("Content-Type: text/plain");
+              
+              readfile($file);
+              unlink($file);
+              exit;
+            }
+            
+            /**
+            * @Route("/{id}/phasesFinales/{indic}", name="phasesFinales")
+            */
+            public function phasesFinales($id,$indic)
+            {
+              
+              //trouver le tournoi correspondant
+              $tournoi=$this->getDoctrine()->getRepository(Tournoi::class)->find($id);
+              
               $parties=array();
               $eqPoss=array();
               $nbCols = $indic;
               for ($i=1; $i < pow(2,$nbCols); $i++) { 
                 $parties[$i]=array("equipes" => array(null,null),
-                 "scores" => array(null,null)
-               );
-                $eqPoss[]=$i;
-              }
-              $eqPoss[]=pow(2,$nbCols);
-              $PF=new PhasesFinales($parties,$eqPoss);
+                "scores" => array(null,null)
+              );
+              $eqPoss[]=$i;
+            }
+            $eqPoss[]=pow(2,$nbCols);
+            $PF=new PhasesFinales($parties,$eqPoss);
             if($indic!=0){
-
+              
               $phasesFinales=$PF->getPhasesFinales();
             }else{
               $phasesFinales=$PF->getChoix();
               $phasesFinales=preg_replace('!aaa(\d+)bbb!',$this->generateUrl('phasesFinales',['id'=>$id,'indic'=>'0']).'${1}',$phasesFinales);
             }
-
-        //Envoi à la vue des informations
+            
+            //Envoi à la vue des informations
             return $this->render('tournoi/phasesfinales.html.twig', [
               'controller_name' => 'GestionPeloteController', 'tournoi' => $tournoi,'phasesFinales' => $phasesFinales
-            ]);
-          }
-          
-
-
+              ]);
+            }
+            
+            
+            
             /**
             * @Route("/{id}", name="tournoi_delete", methods={"DELETE"})
             */
