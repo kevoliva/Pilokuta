@@ -65,4 +65,19 @@ class SerieRepository extends ServiceEntityRepository
         return $requete->execute();
 
     }
+    
+    /**
+      * @return Serie[] Returns an array of Serie objects
+      */
+    
+    public function findSeriesByTournoi($idTournoi)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.tournoi = :idTournoi')
+            ->setParameter('idTournoi', $idTournoi)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
 }

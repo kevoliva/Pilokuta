@@ -150,4 +150,6 @@ class SerieController extends AbstractController
 
         return $this->redirectToRoute('serie_index');
     }
+
+
 }

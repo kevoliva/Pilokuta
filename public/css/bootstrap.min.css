@@ -76,3 +76,6 @@
 }
 .tg .tg-0pky-fill{border-color:inherit;text-align:center;vertical-align:top;background-color: grey;}
 /*# sourceMappingURL=bootstrap.min.css.map */
+.col-form-label{
+    display:none;
+}

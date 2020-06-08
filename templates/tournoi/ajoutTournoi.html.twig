@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<center>
+<h3 class = "display-4">
+    Enregistrez votre nouveau tournoi
+</h3>
+</br></br>
+</center>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                {{ form_start(vueFormulaire) }}
+
+                <label>Date début</label>
+                {{ form_row(vueFormulaire.dateDebut) }}
+
+                <label>Date fin</label>
+                {{ form_row(vueFormulaire.dateFin) }}
+                
+                {{ form_row(vueFormulaire.libelle, {'attr' : {'placeholder':"Tournoi 2VS2"}}) }}
+
+                {{ form_row(vueFormulaire.etat, {'attr' : {'placeholder':"En cours"}}) }}
+
+                <H4>Series</H4>
+                <ul class="series" data-prototype="{{ form_widget(vueFormulaire.series.vars.prototype)|e('html_attr') }}">
+                {% for serie in vueFormulaire.series %}
+                <li>{{ form_row(serie.libelle, {'attr' : {'placeholder':"Serie 5"}}) }}</li>
+                {% endfor %}
+                </ul>
+
+                <button type="submit" class="btn btn-dark">Enregistrer</button>
+
+                {{ form_end(vueFormulaire) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -115,4 +115,9 @@ class Serie
     {
         $this->poules->removeElement($poule);
     }
+
+    public function __toString()
+    {
+        return (string) $this->getLibelle();
+    }
 }
