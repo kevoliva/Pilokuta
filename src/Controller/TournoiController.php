@@ -16,16 +16,19 @@ use Jsvrcek\ICS\CalendarStream;
 use Jsvrcek\ICS\Model\Calendar;
 use App\Service\CalendrierTournoi;
 use Jsvrcek\ICS\Utility\Formatter;
+use App\Repository\SerieRepository;
 use Jsvrcek\ICS\Model\CalendarEvent;
 use App\Repository\CreneauRepository;
 use App\Repository\TournoiRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Jsvrcek\ICS\Model\Relationship\Attendee;
 use Jsvrcek\ICS\Model\Relationship\Organizer;
-use Symfony\Component\HttpFoundation\Request;
 
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -44,9 +47,7 @@ class TournoiController extends AbstractController
       ]);
     }
     
-    /**
-    * @Route("/new", name="tournoi_new", methods={"GET","POST"})
-    */
+    
     public function new(Request $request): Response
     {
       $tournoi = new Tournoi();
@@ -67,9 +68,9 @@ class TournoiController extends AbstractController
         ]);
       }
       
-    /**
-    * @Route("/edit/{id}", name="tournoi_edit", methods={"GET","POST"})
-    */
+      /**
+      * @Route("/edit/{id}", name="tournoi_edit", methods={"GET","POST"})
+      */
       public function edit($id, Request $request, EntityManagerInterface $entityManager)
       {
         if (null === $tournoi = $entityManager->getRepository(Tournoi::class)->find($id)) {
@@ -108,10 +109,43 @@ class TournoiController extends AbstractController
           $entityManager->flush();
           
           // redirect back to some edit page
-          return $this->redirectToRoute('tournoi_edit', ['id' => $id]);
+          return $this->redirectToRoute('serie_index');
         }
         
-        return $this->render('tournoi_index');
+        return $this->render('tournoi_edit', ['id' => $id]);
+      }
+      
+      /**
+      * @Route("/new", name="tournoi_new", methods={"GET","POST"})
+      */
+      public function indexAjoutTournoi(Request $request, EntityManagerInterface $manager)
+      {
+        //Création d'un tournoi vierge qui sera rempli par le formulaire
+        $tournoi = new Tournoi();
+        
+        //Création du formulaire permettant de saisir un tournoi
+        $formulaireTournoi = $this->createForm(TournoiType::class, $tournoi);
+        
+        /* On demande au formulaire d'analyser la dernière requête Http. Si le tableau POST contenu dans cette requête contient
+        des variables nom, descriptif, etc. Alors la méthode handleRequest() recupère les valeurs de ces variables et les
+        affecte à l'objet $entreprise. */
+        $formulaireTournoi->handleRequest($request);
+        
+        if ($formulaireTournoi->isSubmitted() && $formulaireTournoi->isValid())
+        {
+          //Enregistrer le stage en base de données
+          $manager->persist($tournoi);
+          $manager->flush();
+          
+          $idTournoi = $tournoi->getId();
+          //Rediriger l'utilisateur vers la page d'accueil
+          return $this->redirectToRoute('serie_index_tournoi', ['idTournoi' => $idTournoi]);
+        }
+        
+        //Afficher la page présentant le formulaire d'ajout d'un tournoi
+        return $this->render('tournoi/ajoutTournoi.html.twig', ['vueFormulaire' => $formulaireTournoi->createView(), 
+        ]);
+        
       }
       
       /**
@@ -381,4 +415,15 @@ class TournoiController extends AbstractController
               
               return $this->redirectToRoute('tournoi_index');
             }
-          }
+            
+            /**
+            * @Route("/{idTournoi}/serie", name="serie_index_tournoi", methods={"GET", "POST"})
+            */
+            public function getSerieByTournoi(SerieRepository $repositorySerie, $idTournoi): Response
+            {
+              $series = $repositorySerie->findSeriesByTournoi($idTournoi);
+              return $this->render('serie/index.html.twig', [
+                'series' => $series,
+                ]);
+              }
+            }
