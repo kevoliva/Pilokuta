@@ -2,18 +2,29 @@
 
 namespace App\Form;
 
+use App\Entity\Poule;
 use App\Entity\Serie;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class SerieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('libelle')
-        ;
+            ->add('libelle',  TextType::class, [
+                'help' => 'Serie 1',])
+            ->add('poules', CollectionType::class, [
+                'entry_type' => PouleType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'by_reference' => false,
+                'allow_delete' => true,
+            ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -20,7 +20,9 @@
                 <td>{{ serie.libelle }}</td>
                 <td>
                     <a href="{{ path('serie_show', {'id': serie.id}) }}">show</a>
-                    <a href="{{ path('serie_edit', {'id': serie.id}) }}">edit</a>
+                    <hr>
+                    <a href="{{ path('serie_editer', {'id': serie.id}) }}">edit</a>
+                    
                 </td>
             </tr>
         {% else %}
@@ -30,6 +32,5 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('serie_new') }}">Create new</a>
+    <a href="{{ path('serie_new') }}">Rajouter une nouvelle Série</a>
 {% endblock %}

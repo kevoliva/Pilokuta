@@ -1,4 +1,83 @@
+<style>
+    .col-form-label{
+        display:none;
+    }
+</style>
+
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_row(form.libelle) }}
+    <h3>Poules</h3>
+    <ul class="poules" data-prototype="{{ form_widget(form.poules.vars.prototype)|e('html_attr') }}">
+    {% for poule in form.poules %}
+    <li>{{ form_row(poule.libelle) }}</li>
+    {% endfor %}
+    </ul>
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
+
+<script>
+var $collectionHolder;
+
+// setup an "add a poule" link
+var $addPouleButton = $('<button type="button" class="btn-success">Add a Poule</button>');
+var $newLinkLi = $('<li></li>').append($addPouleButton);
+
+jQuery(document).ready(function() {
+    // Get the ul that holds the collection of poules
+    $collectionHolder = $('ul.poules');
+
+    // add a delete link to all of the existing poule form li elements
+    $collectionHolder.find('li').each(function() {
+        addPouleFormDeleteLink($(this));
+    });
+
+    // add the "add a poule" anchor and li to the poules ul
+    $collectionHolder.append($newLinkLi);
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    $collectionHolder.data('index', $collectionHolder.find('input').length);
+
+    $addPouleButton.on('click', function(e) {
+        // add a new tag form (see next code block)
+        addPouleForm($collectionHolder, $newLinkLi);
+    });
+});
+
+function addPouleForm($collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+    var prototype = $collectionHolder.data('prototype');
+
+    // get the new index
+    var index = $collectionHolder.data('index');
+
+    var newForm = prototype;
+    // You need this only if you didn't set 'label' => false in your poules field in TournoiType
+    // Replace '__name__label__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    // newForm = newForm.replace(/__name__label__/g, index);
+
+    // Replace '__name__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    newForm = newForm.replace(/__name__/g, index);
+
+    // increase the index with one for the next item
+    $collectionHolder.data('index', index + 1);
+
+    // Display the form in the page in an li, before the "Add a poule" link li
+    var $newFormLi = $('<li></li>').append(newForm);
+    $newLinkLi.before($newFormLi);
+
+    addPouleFormDeleteLink($newFormLi);
+}
+
+function addPouleFormDeleteLink($pouleFormLi) {
+    var $removeFormButton = $('<button type="button" class="btn-danger">Delete this poule</button><hr>');
+    $pouleFormLi.append($removeFormButton);
+
+    $removeFormButton.on('click', function(e) {
+        // remove the li for the serie form
+        $pouleFormLi.remove();
+    });
+}
+</script>

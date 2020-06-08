@@ -13,7 +13,6 @@ class PouleType extends AbstractType
     {
         $builder
             ->add('libelle')
-            ->add('serie')
         ;
     }
 
