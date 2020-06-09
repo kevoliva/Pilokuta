@@ -7,9 +7,7 @@
 
     {{ include('tournoi/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('tournoi_index') }}">
-    <button class="btn btn-outline-secondary"></button>
-    </a>
+    <a href="{{ path('tournoi_index') }}">back to list</a>
 
     {{ include('tournoi/_delete_form.html.twig') }}
 {% endblock %}

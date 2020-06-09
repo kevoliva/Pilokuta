@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Poule;
 use App\Entity\Serie;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

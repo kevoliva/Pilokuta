@@ -48,24 +48,6 @@ class SerieRepository extends ServiceEntityRepository
     }
     */
 
-    public function getSerieByTournoi($id)
-    {
-        // Récupération du gestionnaire d'entité
-        $gestionnaireEntite = $this->getEntityManager();
-
-        // Construction de la requête
-        $requete = $gestionnaireEntite->createQuery(
-          'SELECT s, t
-          FROM App\Entity\Serie s
-          JOIN s.tournoi t
-          WHERE t.id = :id');
-        $requete->setParameter('id', $id);
-
-        // Retourner les résultats
-        return $requete->execute();
-
-    }
-    
     /**
       * @return Serie[] Returns an array of Serie objects
       */

@@ -47,5 +47,4 @@ class TournoiRepository extends ServiceEntityRepository
         ;
     }
     */
-
 }

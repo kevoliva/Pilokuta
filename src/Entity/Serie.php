@@ -64,6 +64,29 @@ class Serie
         return $this->poules;
     }
 
+    public function addPoule(Poule $poule): self
+    {
+        if (!$this->poules->contains($poule)) {
+            $this->poules[] = $poule;
+            $poule->setSerie($this);
+        }
+
+        return $this;
+    }
+
+    public function removePoule(Poule $poule): self
+    {
+        if ($this->poules->contains($poule)) {
+            $this->poules->removeElement($poule);
+            // set the owning side to null (unless already changed)
+            if ($poule->getSerie() === $this) {
+                $poule->setSerie(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getTournoi(): ?Tournoi
     {
         return $this->tournoi;
@@ -76,44 +99,9 @@ class Serie
         return $this;
     }
 
-    public function addPoules(Poule $poules): self
-    {
-        if (!$this->poules->contains($poules)) {
-            $this->poules[] = $poules;
-            $poules->setSerie($this);
-        }
-
-        return $this;
-    }
-
-    public function removePoules(Poule $poules): self
-    {
-        if ($this->poules->contains($poules)) {
-            $this->poules->removeElement($poules);
-            // set the owning side to null (unless already changed)
-            if ($poules->getSerie() === $this) {
-                $poules->setSerie(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function __toString()
     {
         return (string) $this->getLibelle();
-    }
-
-    public function addPoule(Poule $poule)
-    {
-        $poule->setSerie($this);
-
-        $this->poules->add($poule);
-    }
-
-    public function removePoule(Poule $poule)
-    {
-        $this->poules->removeElement($poule);
     }
 
     public function clearPoules()
