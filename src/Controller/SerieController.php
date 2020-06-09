@@ -26,7 +26,33 @@ class SerieController extends AbstractController
             'series' => $serieRepository->findAll(),
         ]);
     }
+    /**
+     * @Route("/{id}/editer", name="serie_editer", methods={"GET","POST"})
+     */
+    public function modifierSerie(Request $request, EntityManagerInterface $entityManager,Serie $serie)
+    {
+        //Création d'un formulaire permettant de saisir une serie
+        $formulaireSerie = $this->createForm(SerieType::class,$serie);
+  
+       $formulaireSerie->handleRequest($request);
 
+        if ($formulaireSerie->isSubmitted()){
+
+            //Enregistrer la serie en base de données
+            $entityManager->persist($serie);
+            $entityManager->flush();
+
+            //Rediriger l'utilisateur vers la page d'accueil
+            return $this->redirectToRoute('serie_index');
+
+        }
+
+        // Création de la représentation graphique du formulaire
+        $vueFormulaire=$formulaireSerie->createView();
+
+        //Afficher le formulaire pour créer une entreprise
+        return $this->render('serie/ModifSerie.html.twig',['form' => $vueFormulaire]);
+    }
     /**
      * @Route("/new", name="serie_new", methods={"GET","POST"})
      */
@@ -61,31 +87,11 @@ class SerieController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="serie_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Serie $serie): Response
-    {
-        $form = $this->createForm(SerieType::class, $serie);
-        $form->handleRequest($request);
-
-        $serie->clearPoules(); // La ligne magique
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('serie_index');
-        }
-
-        return $this->render('serie/edit.html.twig', [
-            'serie' => $serie,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * @Route("/{id}", name="serie_delete", methods={"GET","DELETE"})
      */
-    public function delete(Request $request, Serie $serie): Response
+    public function delete(Request $request, Serie $serie ): Response
     {
+         
         if ($this->isCsrfTokenValid('delete'.$serie->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $serie->clearPoules();
@@ -153,6 +159,7 @@ class SerieController extends AbstractController
             affecte à l'objet $serie. */
             $formulaireSerie->handleRequest($request);
     
+            $serie->clearPoules();
             if ($formulaireSerie->isSubmitted() && $formulaireSerie->isValid())
             {
                 //Enregistrer la série en base de données
