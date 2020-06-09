@@ -30,7 +30,7 @@ class Poule
     private $equipes;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Serie::class, inversedBy="poules")
+     * @ORM\ManyToOne(targetEntity=Serie::class, inversedBy="poules", cascade={"persist", "remove", "merge"})
      */
     private $serie;
 
@@ -97,5 +97,10 @@ class Poule
         $this->serie = $serie;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return (string) $this->getLibelle();
     }
 }

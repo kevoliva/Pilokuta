@@ -1,26 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Poule index{% endblock %}
+{% block title %}Index des Poules{% endblock %}
 
 {% block body %}
-    <h1>Poule index</h1>
+    <center class="display-4">Les Poules de votre tournoi</center><br><br>
 
-    <table class="table">
+    <table class="table table-dark">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Libelle</th>
-                <th>actions</th>
+                <th>Possibilités</th>
             </tr>
         </thead>
         <tbody>
         {% for poule in poules %}
             <tr>
-                <td>{{ poule.id }}</td>
                 <td>{{ poule.libelle }}</td>
                 <td>
-                    <a href="{{ path('poule_show', {'id': poule.id}) }}">show</a>
-                    <a href="{{ path('poule_edit', {'id': poule.id}) }}">edit</a>
+                    <a href="{{ path('poule_show', {'id': poule.id}) }}">Voir le détail</a><br>
+                    <a href="{{ path('poule_edit', {'id': poule.id}) }}">Modifier votre poule</a>
                 </td>
             </tr>
         {% else %}
@@ -30,6 +28,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('poule_new') }}">Create new</a>
 {% endblock %}

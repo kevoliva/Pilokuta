@@ -47,4 +47,19 @@ class PouleRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+      * @return Poule[] Returns an array of Poule objects
+      */
+    
+    public function findPoulesBySerie($idSerie)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.serie = :idSerie')
+            ->setParameter('idSerie', $idSerie)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
 }

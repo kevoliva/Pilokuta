@@ -25,7 +25,7 @@ class Serie
     private $libelle;
 
     /**
-     * @ORM\OneToMany(targetEntity=Poule::class, mappedBy="serie")
+     * @ORM\OneToMany(targetEntity=Poule::class, mappedBy="serie", orphanRemoval=true, cascade={"persist", "remove", "merge"})
      */
     private $poules;
 
@@ -102,5 +102,10 @@ class Serie
     public function __toString()
     {
         return (string) $this->getLibelle();
+    }
+
+    public function clearPoules()
+    {
+        $this->getPoules()->clear();
     }
 }

@@ -3,24 +3,33 @@
 {% block title %}Serie{% endblock %}
 
 {% block body %}
-    <h1>Serie</h1>
+<center class = "display-4">Serie</center><br><br>
 
-    <table class="table">
+    <table class="table table-dark">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ serie.id }}</td>
-            </tr>
-            <tr>
-                <th>Libelle</th>
+                <th>Nom de la série</th>
                 <td>{{ serie.libelle }}</td>
             </tr>
         </tbody>
     </table>
+    <hr>
+<center class = "display-4">Poule(s) associée(s)</center><br><br>
+<table class="table table-dark">
+    <tbody>
+        {% for poule in serie.poules %}
+        <tr>
+            <th>Nom de la poule</th>
+            <td>{{ poule.libelle }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table> <br> <br>
+<center>
+<a href="{{ path('series_index_tournoi', {'idTournoi': serie.tournoi.id}) }}"> <input type="button" class="btn btn-info" value="Retour"> </a> &nbsp; &#160; &#160;
 
-    <a href="{{ path('serie_index') }}">back to list</a>
+<a href="{{ path('serie_edit', {'id': serie.id}) }}"><input type="button" class="btn btn-info" value="Modifier"></a><br><br>
 
-    <a href="{{ path('serie_edit', {'id': serie.id}) }}">edit</a>
-
-    {{ include('serie/_delete_form.html.twig') }}
+{{ include('serie/_delete_form.html.twig') }}
+</center>
 {% endblock %}

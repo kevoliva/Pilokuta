@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<center>
+{% if action == "ajouter" %}
+<h3 class = "display-4">
+    Enregistrez votre nouvelle Série
+</h3>
+{% else %}
+<h3 class = "display-4">
+    Modifiez votre Série
+</h3>
+{% endif %}
+</br></br>
+</center>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                {{ form_start(vueFormulaire) }}
+
+                <label>Libelle</label>
+                {{ form_row(vueFormulaire.libelle) }}
+
+                <H4>Poules</H4>
+                <ul class="poules" data-prototype="{{ form_widget(vueFormulaire.poules.vars.prototype)|e('html_attr') }}">
+                {% for poule in vueFormulaire.poules %}
+                <li>{{ form_row(poule.libelle, {'attr' : {'placeholder':"Poule 3"}}) }}</li>
+                {% endfor %}
+                </ul>
+
+                <button type="submit" class="btn btn-dark">Enregistrer</button>
+
+                {{ form_end(vueFormulaire) }}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

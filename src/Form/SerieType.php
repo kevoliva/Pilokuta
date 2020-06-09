@@ -6,6 +6,7 @@ use App\Entity\Serie;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class SerieType extends AbstractType
 {
@@ -13,6 +14,14 @@ class SerieType extends AbstractType
     {
         $builder
             ->add('libelle')
+            ->add('poules', CollectionType::class, [
+                'entry_type' => PouleType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'by_reference' => false,
+                'allow_delete' => true,
+            ])
+            ;
         ;
     }
 

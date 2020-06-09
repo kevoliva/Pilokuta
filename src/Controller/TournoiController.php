@@ -45,198 +45,198 @@ class TournoiController extends AbstractController
     return $this->render('tournoi/index.html.twig', [
       'tournois' => $tournoiRepository->findAll(),
       ]);
-    }
+  }
     
     
-    public function new(Request $request): Response
+  public function new(Request $request): Response
+  {
+    $tournoi = new Tournoi();
+    $form = $this->createForm(TournoiType::class, $tournoi);
+    $form->handleRequest($request);
+    
+    if ($form->isSubmitted() && $form->isValid()) 
     {
-      $tournoi = new Tournoi();
-      $form = $this->createForm(TournoiType::class, $tournoi);
-      $form->handleRequest($request);
+      $entityManager = $this->getDoctrine()->getManager();
+      $entityManager->persist($tournoi);
+      $entityManager->flush();
+        
+      return $this->redirectToRoute('tournoi_index');
+    }
       
-      if ($form->isSubmitted() && $form->isValid()) 
+    return $this->render('tournoi/new.html.twig', [
+      'form' => $form->createView(),
+      ]);
+  }
+      
+  /**
+  * @Route("/edit/{id}", name="tournoi_edit", methods={"GET","POST"})
+  */
+  public function edit($id, Request $request, EntityManagerInterface $entityManager)
+  {
+    if (null === $tournoi = $entityManager->getRepository(Tournoi::class)->find($id)) 
+    {
+      throw $this->createNotFoundException('No tournoi found for id '.$id);
+    }
+        
+    $originalSeries = new ArrayCollection();
+        
+    // Create an ArrayCollection of the current Serie objects in the database
+    foreach ($tournoi->getSeries() as $serie) 
+    {
+      $originalSeries->add($serie);
+    }
+        
+    $editForm = $this->createForm(TournoiType::class, $tournoi);
+        
+    $editForm->handleRequest($request);
+        
+    if ($editForm->isSubmitted() && $editForm->isValid()) 
+    {
+      // remove the relationship between the Serie and the Tournoi
+      foreach ($originalSeries as $serie) 
       {
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($tournoi);
-        $entityManager->flush();
-        
-        return $this->redirectToRoute('tournoi_index');
-      }
-      
-      return $this->render('tournoi/new.html.twig', [
-        'form' => $form->createView(),
-        ]);
-      }
-      
-      /**
-      * @Route("/edit/{id}", name="tournoi_edit", methods={"GET","POST"})
-      */
-      public function edit($id, Request $request, EntityManagerInterface $entityManager)
-      {
-        if (null === $tournoi = $entityManager->getRepository(Tournoi::class)->find($id)) {
-          throw $this->createNotFoundException('No tournoi found for id '.$id);
-        }
-        
-        $originalSeries = new ArrayCollection();
-        
-        // Create an ArrayCollection of the current Serie objects in the database
-        foreach ($tournoi->getSeries() as $serie) {
-          $originalSeries->add($serie);
-        }
-        
-        $editForm = $this->createForm(TournoiType::class, $tournoi);
-        
-        $editForm->handleRequest($request);
-        
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-          // remove the relationship between the Serie and the Tournoi
-          foreach ($originalSeries as $serie) {
-            if (false === $tournoi->getSeries()->contains($serie)) {
-              // remove the tournoi from the Serie
-              $serie->getTournois()->removeElement($tournoi);
-              
-              // if it was a many-to-one relationship, remove the relationship like this
-              // $serie->settournoi(null);
-              
-              $entityManager->persist($serie);
-              
-              // if you wanted to delete the Serie entirely, you can also do that
-              // $entityManager->remove($serie);
-            }
-          }
-          
-          $entityManager->persist($tournoi);
-          $entityManager->flush();
-          
-          // redirect back to some edit page
-          return $this->redirectToRoute('serie_index');
-        }
-        
-        return $this->render('tournoi_edit', ['id' => $id]);
-      }
-      
-      /**
-      * @Route("/new", name="tournoi_new", methods={"GET","POST"})
-      */
-      public function indexAjoutTournoi(Request $request, EntityManagerInterface $manager)
-      {
-        //Création d'un tournoi vierge qui sera rempli par le formulaire
-        $tournoi = new Tournoi();
-        
-        //Création du formulaire permettant de saisir un tournoi
-        $formulaireTournoi = $this->createForm(TournoiType::class, $tournoi);
-        
-        /* On demande au formulaire d'analyser la dernière requête Http. Si le tableau POST contenu dans cette requête contient
-        des variables nom, descriptif, etc. Alors la méthode handleRequest() recupère les valeurs de ces variables et les
-        affecte à l'objet $entreprise. */
-        $formulaireTournoi->handleRequest($request);
-        
-        if ($formulaireTournoi->isSubmitted() && $formulaireTournoi->isValid())
+        if (false === $tournoi->getSeries()->contains($serie)) 
         {
-          //Enregistrer le stage en base de données
-          $manager->persist($tournoi);
-          $manager->flush();
-          
-          $idTournoi = $tournoi->getId();
-          //Rediriger l'utilisateur vers la page d'accueil
-          return $this->redirectToRoute('serie_index_tournoi', ['idTournoi' => $idTournoi]);
+          // remove the tournoi from the Serie
+          $serie->getTournois()->removeElement($tournoi);
+              
+          // if it was a many-to-one relationship, remove the relationship like this
+          // $serie->settournoi(null);
+        
+          $entityManager->persist($serie);
+              
+          // if you wanted to delete the Serie entirely, you can also do that
+          // $entityManager->remove($serie);
         }
-        
-        //Afficher la page présentant le formulaire d'ajout d'un tournoi
-        return $this->render('tournoi/ajoutTournoi.html.twig', ['vueFormulaire' => $formulaireTournoi->createView(), 
-        ]);
-        
       }
+          
+      $entityManager->persist($tournoi);
+      $entityManager->flush();
+          
+      // redirect back to some edit page
+      return $this->redirectToRoute('serie_index');
+    }
+    return $this->render('tournoi_edit', ['id' => $id]);
+  }
       
-      /**
-      * @Route("/{id}", name="tournoi_show", methods={"GET"})
-      */
-      public function show(Tournoi $tournoi): Response
-      {
-        return $this->render('tournoi/show.html.twig', [
-          'tournoi' => $tournoi,
-          ]);
-        }
+  /**
+   * @Route("/new", name="tournoi_new", methods={"GET","POST"})
+  */
+  public function indexAjoutTournoi(Request $request, EntityManagerInterface $manager)
+  {
+    //Création d'un tournoi vierge qui sera rempli par le formulaire
+    $tournoi = new Tournoi();
         
-        /**
-        * @Route("/{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
-        */
-        public function calendrier($id,$time=NULL, User $user)
+    //Création du formulaire permettant de saisir un tournoi
+    $formulaireTournoi = $this->createForm(TournoiType::class, $tournoi);
+        
+    /* On demande au formulaire d'analyser la dernière requête Http. Si le tableau POST contenu dans cette requête contient
+    des variables nom, descriptif, etc. Alors la méthode handleRequest() recupère les valeurs de ces variables et les
+    affecte à l'objet $entreprise. */
+    $formulaireTournoi->handleRequest($request);
+        
+    if ($formulaireTournoi->isSubmitted() && $formulaireTournoi->isValid())
+    {
+      //Enregistrer le stage en base de données
+      $manager->persist($tournoi);
+      $manager->flush();
+  
+      $idTournoi = $tournoi->getId();
+      //Rediriger l'utilisateur vers la page d'accueil
+      return $this->redirectToRoute('series_index_tournoi', ['idTournoi' => $idTournoi]);
+    }
+        
+    //Afficher la page présentant le formulaire d'ajout d'un tournoi
+    return $this->render('tournoi/ajoutTournoi.html.twig', ['vueFormulaire' => $formulaireTournoi->createView(), 
+    ]);      
+  }
+      
+    /**
+    * @Route("/{id}", name="tournoi_show", methods={"GET"})
+    */
+    public function show(Tournoi $tournoi): Response
+    {
+      return $this->render('tournoi/show.html.twig', [
+      'tournoi' => $tournoi, 
+      ]);
+    }    
+        
+    /**
+    * @Route("/{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
+    */
+    public function calendrier($id,$time=NULL, User $user)
+    {
+      //trouver le tournoi correspondant
+      $tournoi=$this->getDoctrine()->getRepository(Tournoi::class)->find($id);
+          
+      $creneaux=$tournoi->getCreneau();
+      $series=$tournoi->getSeries();
+          
+      $lesPoules=array();
+      foreach($series as $key => $serie)
+      {
+        $poules = $serie->getPoules();
+        foreach($poules as $key => $poule)
         {
-          //trouver le tournoi correspondant
-          $tournoi=$this->getDoctrine()->getRepository(Tournoi::class)->find($id);
+          $lesPoules[]=$poule;
+        }
+      }
+  
+      $parties=array();
+      $lesUsers=array();
+      $lesCommentaires=array();
+      foreach ($creneaux as $key => $creneau) 
+      { 
+        $unCommentaire=$creneau->getCommentaire();
+        $lesCommentaires[]=$unCommentaire;
+        if(($users=$creneau->getUser())!=null)
+        {
+          $userNom=$users->getNom();
+          $lesUsers[$userNom]=$userNom;
+        }
+        $date=$creneau->getDateEtHeure()->format("d/m/Y");
+        $heure=$creneau->getDateEtHeure()->format("H:i");
+  
+        if(($partie=$creneau->getPartie())!=null)
+        {
+          $eqs=$partie->getEquipes();
+          $eq1=$eqs[0]->getId();
+          $eq2=$eqs[1]->getId();
+        }
+        $partieStr=($creneau->getCommentaire()==null || $creneau->getCommentaire()=="" ?($creneau->getPartie()!=null? $eq1."-".$eq2 :"N/A"):$creneau->getCommentaire());
+        $aAjouter=array($heure=>$partieStr);
+        $parties[$date]=(isset($parties[$date]) && is_array($parties[$date]) ? array_merge($parties[$date],$aAjouter):$aAjouter);
+      }
           
-          $creneaux=$tournoi->getCreneau();
-          $series=$tournoi->getSeries();
-          
-          $lesPoules=array();
-          foreach($series as $key => $serie)
+      $motif="/^[0-9]/";
+      $event=array();
+      foreach($parties as $key => $partieStr)
+      {
+        foreach($partieStr as $cle => $valeur)
+        {
+          if(preg_match($motif, $valeur))
           {
-            $poules = $serie->getPoules();
-            foreach($poules as $key => $poule)
-            {
-              $lesPoules[]=$poule;
-            }
-          }
-          
-          $parties=array();
-          $lesUsers=array();
-          $lesCommentaires=array();
-          foreach ($creneaux as $key => $creneau) 
-          { 
-            $unCommentaire=$creneau->getCommentaire();
-            $lesCommentaires[]=$unCommentaire;
-            if(($users=$creneau->getUser())!=null)
-            {
-              $userNom=$users->getNom();
-              $lesUsers[$userNom]=$userNom;
-            }
-            $date=$creneau->getDateEtHeure()->format("d/m/Y");
-            $heure=$creneau->getDateEtHeure()->format("H:i");
-            
-            if(($partie=$creneau->getPartie())!=null)
-            {
-              $eqs=$partie->getEquipes();
-              $eq1=$eqs[0]->getId();
-              $eq2=$eqs[1]->getId();
-              
-            }
-            $partieStr=($creneau->getCommentaire()==null || $creneau->getCommentaire()=="" ?($creneau->getPartie()!=null? $eq1."-".$eq2 :"N/A"):$creneau->getCommentaire());
-            $aAjouter=array($heure=>$partieStr);
-            $parties[$date]=(isset($parties[$date]) && is_array($parties[$date]) ? array_merge($parties[$date],$aAjouter):$aAjouter);
-          }
-          
-          $motif="/^[0-9]/";
-          $event=array();
-          foreach($parties as $key => $partieStr)
-          {
-            foreach($partieStr as $cle => $valeur)
-            {
-              
-              if(preg_match($motif, $valeur))
-              {
-                $evenements[]=$valeur;
-              } 
-            }
-          }
+            $evenements[]=$valeur;
+          } 
+        }
+      }
           
           
           
-          $cal=new CalendrierTournoi($parties);
-          $textCalendrier=$cal->getCalendrier($id);
+      $cal=new CalendrierTournoi($parties);
+      $textCalendrier=$cal->getCalendrier($id);
+      // Récupérer joueurs tournoi
           
-          // Récupérer joueurs tournoi
+      $joueursRepository = $this->getDoctrine()->getRepository(User::class);
           
-          $joueursRepository = $this->getDoctrine()->getRepository(User::class);
-          
-          $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);
+      $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);
           
           
-          //Envoi à la vue des informations
-          return $this->render('tournoi/calendrier.html.twig', [
-            'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi, "joueurs" => $joueurs, "series" =>$series, "poules"=>$lesPoules, "users"=>$lesUsers, 'evenements'=>$evenements, 'commentaires'=>$lesCommentaires
-            ]);
-          }
+      //Envoi à la vue des informations
+      return $this->render('tournoi/calendrier.html.twig', [
+      'controller_name' => 'TournoiController', 'calendrier' => $textCalendrier,'time'=>$time, "tournoi" => $tournoi, "joueurs" => $joueurs, "series" =>$series, "poules"=>$lesPoules, "users"=>$lesUsers, 'evenements'=>$evenements, 'commentaires'=>$lesCommentaires
+      ]);
+    }
           
           
           /**
@@ -417,7 +417,7 @@ class TournoiController extends AbstractController
             }
             
             /**
-            * @Route("/{idTournoi}/serie", name="serie_index_tournoi", methods={"GET", "POST"})
+            * @Route("/{idTournoi}/series", name="series_index_tournoi", methods={"GET", "POST"})
             */
             public function getSerieByTournoi(SerieRepository $repositorySerie, $idTournoi): Response
             {
@@ -425,5 +425,6 @@ class TournoiController extends AbstractController
               return $this->render('serie/index.html.twig', [
                 'series' => $series,
                 ]);
-              }
             }
+}
+            

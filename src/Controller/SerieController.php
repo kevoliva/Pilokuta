@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Serie;
 use App\Form\SerieType;
+use App\Repository\PouleRepository;
 use App\Repository\SerieRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/serie")
@@ -66,6 +68,7 @@ class SerieController extends AbstractController
         $form = $this->createForm(SerieType::class, $serie);
         $form->handleRequest($request);
 
+        $serie->clearPoules(); // La ligne magique
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
@@ -79,12 +82,13 @@ class SerieController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="serie_delete", methods={"DELETE"})
+     * @Route("/{id}", name="serie_delete", methods={"GET","DELETE"})
      */
     public function delete(Request $request, Serie $serie): Response
     {
         if ($this->isCsrfTokenValid('delete'.$serie->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
+            $serie->clearPoules();
             $entityManager->remove($serie);
             $entityManager->flush();
         }
@@ -92,5 +96,86 @@ class SerieController extends AbstractController
         return $this->redirectToRoute('serie_index');
     }
 
+        /**
+        * @Route("/{idSerie}/poules", name="poules_index_serie", methods={"GET", "POST"})
+        */
+        public function getPouleBySerie(PouleRepository $repositoryPoule, $idSerie): Response
+        {
+            $poules = $repositoryPoule->findPoulesBySerie($idSerie);
+            return $this->render('poule/index.html.twig', [
+                'poules' => $poules,
+                ]);
+        }
 
+
+        /**
+        * @Route("/ajouter", name="add_serie", methods={"GET", "POST"})
+        */
+        public function indexAjoutSerie(Request $request, EntityManagerInterface $manager)
+        {
+            //Création d'une serie vierge qui sera remplie par le formulaire
+            $serie = new Serie();
+    
+            //Création du formulaire permettant de saisir une serie
+            $formulaireSerie = $this->createForm(SerieType::class, $serie);
+    
+            /* On demande au formulaire d'analyser la dernière requête Http. Si le tableau POST contenu dans cette requête contient
+            des variables nom, activite, etc. Alors la méthode handleRequest() recupère les valeurs de ces variables et les
+            affecte à l'objet $serie. */
+            $formulaireSerie->handleRequest($request);
+    
+            if ($formulaireSerie->isSubmitted() && $formulaireSerie->isValid())
+            {
+                //Enregistrer la série en base de données
+                $manager->persist($serie);
+                $manager->flush();
+    
+                //Rediriger l'utilisateur vers la page des séries
+                return $this->redirectToRoute('series_index_tournoi');
+            }
+    
+            //Afficher la page présentant le formulaire d'ajout d'une série
+            return $this->render('serie/ajoutModifSerie.html.twig', ['vueFormulaire' => $formulaireSerie->createView(), 
+            'action'=>"ajouter"]);
+        }
+    
+    
+        /**
+        * @Route("/modifier/{id}", name="modify_serie", methods={"GET", "POST"})
+        */
+        public function indexModifSerie(Request $request, EntityManagerInterface $manager, Serie $serie)
+        {
+            //Création du formulaire permettant de modifier une entreprise
+            $formulaireSerie = $this->createForm(SerieType::class, $serie);
+    
+            /* On demande au formulaire d'analyser la dernière requête Http. Si le tableau POST contenu dans cette requête contient
+            des variables nom, activite, etc. Alors la méthode handleRequest() recupère les valeurs de ces variables et les
+            affecte à l'objet $serie. */
+            $formulaireSerie->handleRequest($request);
+    
+            if ($formulaireSerie->isSubmitted() && $formulaireSerie->isValid())
+            {
+                //Enregistrer la série en base de données
+                $manager->persist($serie);
+                $manager->flush();
+    
+                //Rediriger l'utilisateur vers la page d'accueil
+                return $this->redirectToRoute('series_index_tournoi', ['idTournoi' => $serie->getTournoi()->getId()]);
+            }
+    
+            //Afficher la page présentant le formulaire d'ajout d'une serie
+            return $this->render('serie/ajoutModifSerie.html.twig', ['vueFormulaire' => $formulaireSerie->createView(), 
+            'action'=>"modifier"]);
+        }
+
+            /**
+            * @Route("/{idSerie}/poules", name="poules_index_serie", methods={"GET", "POST"})
+            */
+            public function getPoulesByQSerie(PouleRepository $repositoryPoule, $idSerie): Response
+            {
+              $poules = $repositoryPoule->findPoulesBySerie($idSerie);
+              return $this->render('poule/index.html.twig', [
+                'poule' => $poules,
+                ]);
+            }
 }

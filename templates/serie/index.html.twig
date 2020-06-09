@@ -1,35 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Serie index{% endblock %}
+{% block title %}Index des Séries{% endblock %}
 
 {% block body %}
-    <h1>Serie index</h1>
-
-    <table class="table">
+    <center class="display-4">Les Séries du tournoi</center><br><br>
+    <table class="table table-dark">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Libelle</th>
-                <th>actions</th>
+                <th>Possibilités</th>
             </tr>
         </thead>
         <tbody>
         {% for serie in series %}
             <tr>
-                <td>{{ serie.id }}</td>
                 <td>{{ serie.libelle }}</td>
                 <td>
-                    <a href="{{ path('serie_show', {'id': serie.id}) }}">show</a>
-                    <a href="{{ path('serie_edit', {'id': serie.id}) }}">edit</a>
+                    <a href="{{ path('serie_show', {'id': serie.id}) }}">Voir le détail</a><br>
+                    <a href="{{ path('modify_serie', {'id': serie.id}) }}">Modifier votre série</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">Vous n'avez rentré aucune Série</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('serie_new') }}">Create new</a>
 {% endblock %}
