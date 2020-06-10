@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Serie;
+use App\Entity\Tournoi;
 use App\Form\SerieType;
 use App\Repository\PouleRepository;
 use App\Repository\SerieRepository;
@@ -107,37 +108,6 @@ class SerieController extends AbstractController
                 ]);
         }
 
-
-        /**
-        * @Route("/ajouter", name="add_serie", methods={"GET", "POST"})
-        */
-        public function indexAjoutSerie(Request $request, EntityManagerInterface $manager)
-        {
-            //Création d'une serie vierge qui sera remplie par le formulaire
-            $serie = new Serie();
-    
-            //Création du formulaire permettant de saisir une serie
-            $formulaireSerie = $this->createForm(SerieType::class, $serie);
-    
-            /* On demande au formulaire d'analyser la dernière requête Http. Si le tableau POST contenu dans cette requête contient
-            des variables nom, activite, etc. Alors la méthode handleRequest() recupère les valeurs de ces variables et les
-            affecte à l'objet $serie. */
-            $formulaireSerie->handleRequest($request);
-    
-            if ($formulaireSerie->isSubmitted() && $formulaireSerie->isValid())
-            {
-                //Enregistrer la série en base de données
-                $manager->persist($serie);
-                $manager->flush();
-    
-                //Rediriger l'utilisateur vers la page des séries
-                return $this->redirectToRoute('series_index_tournoi');
-            }
-    
-            //Afficher la page présentant le formulaire d'ajout d'une série
-            return $this->render('serie/ajoutModifSerie.html.twig', ['vueFormulaire' => $formulaireSerie->createView(), 
-            'action'=>"ajouter"]);
-        }
     
     
         /**
@@ -145,7 +115,7 @@ class SerieController extends AbstractController
         */
         public function indexModifSerie(Request $request, EntityManagerInterface $manager, Serie $serie)
         {
-            //Création du formulaire permettant de modifier une entreprise
+            //Création du formulaire permettant de modifier une serie
             $formulaireSerie = $this->createForm(SerieType::class, $serie);
     
             /* On demande au formulaire d'analyser la dernière requête Http. Si le tableau POST contenu dans cette requête contient

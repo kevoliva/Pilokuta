@@ -9,6 +9,7 @@ use App\Entity\Partie;
 use App\Entity\Creneau;
 use App\Entity\Tournoi;
 use App\Form\TournoiType;
+use App\Form\SerieType;
 use App\Service\Calendrier;
 use App\Service\PhasesFinales;
 use Jsvrcek\ICS\CalendarExport;
@@ -422,9 +423,47 @@ class TournoiController extends AbstractController
             public function getSerieByTournoi(SerieRepository $repositorySerie, $idTournoi): Response
             {
               $series = $repositorySerie->findSeriesByTournoi($idTournoi);
+              $serie = $series[0];
+            
               return $this->render('serie/index.html.twig', [
                 'series' => $series,
+                'serieAjout'=>$serie
                 ]);
             }
+
+        /**
+        * @Route("/{idTournoi}/serie/ajouter", name="add_serie_tournoi", methods={"GET", "POST"})
+        */
+        public function indexAjoutSerie(Request $request, EntityManagerInterface $manager, $idTournoi, TournoiRepository $repositoryTournoi)
+        {
+            //Création d'une serie vierge qui sera remplie par le formulaire
+            $serie = new Serie();
+
+            $tournoi = $repositoryTournoi->findOneById($idTournoi);
+
+            $serie->setTournoi($tournoi);
+
+            //Création du formulaire permettant de saisir une serie
+            $formulaireSerie = $this->createForm(SerieType::class, $serie);
+    
+            /* On demande au formulaire d'analyser la dernière requête Http. Si le tableau POST contenu dans cette requête contient
+            des variables nom, activite, etc. Alors la méthode handleRequest() recupère les valeurs de ces variables et les
+            affecte à l'objet $serie. */
+            $formulaireSerie->handleRequest($request);
+    
+            if ($formulaireSerie->isSubmitted() && $formulaireSerie->isValid())
+            {
+                //Enregistrer la série en base de données
+                $manager->persist($serie);
+                $manager->flush();
+    
+                //Rediriger l'utilisateur vers la page des séries
+                return $this->redirectToRoute('series_index_tournoi', ['idTournoi' => $idTournoi]);
+            }
+    
+            //Afficher la page présentant le formulaire d'ajout d'une série
+            return $this->render('serie/ajoutModifSerie.html.twig', ['vueFormulaire' => $formulaireSerie->createView(), 
+            'action'=>"ajouter"]);
+        }
 }
             

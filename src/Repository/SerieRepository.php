@@ -61,5 +61,15 @@ class SerieRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findOneById($idTournoi): ?Serie
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.tournoi = :val')
+            ->setParameter('val', $idTournoi)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
     
 }

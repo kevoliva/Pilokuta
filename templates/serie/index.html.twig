@@ -27,4 +27,7 @@
         {% endfor %}
         </tbody>
     </table>
+    <center>
+    <a href="{{ path('add_serie_tournoi', {'idTournoi': serieAjout.tournoi.id}) }}"> <input type="button" class="btn btn-info" value="Ajouter une Série"> </a>
+    </center>
 {% endblock %}

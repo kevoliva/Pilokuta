@@ -47,4 +47,15 @@ class TournoiRepository extends ServiceEntityRepository
         ;
     }
     */
+
+      public function findOneById($idTournoi): ?Tournoi
+      {
+          return $this->createQueryBuilder('t')
+              ->andWhere('t.id = :val')
+              ->setParameter('val', $idTournoi)
+              ->getQuery()
+              ->getOneOrNullResult()
+          ;
+      }
+
 }
