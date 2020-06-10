@@ -32,6 +32,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Validator\Constraints\IsNull;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
 * @Route("/tournoi")
@@ -413,11 +415,15 @@ class TournoiController extends AbstractController
             /**
             * @Route("/{idTournoi}/series", name="series_index_tournoi", methods={"GET", "POST"})
             */
-            public function getSerieByTournoi(SerieRepository $repositorySerie, $idTournoi): Response
+            public function getSerieByTournoi(SerieRepository $repositorySerie, $idTournoi, TournoiRepository $repositoryTournoi): Response
             {
+              $tournoi = $repositoryTournoi->find($idTournoi);
               $series = $repositorySerie->findSeriesByTournoi($idTournoi);
-              $serie = $series[0];
-            
+              
+              $serie = New Serie();
+
+              $serie->setTournoi($tournoi);
+
               return $this->render('serie/index.html.twig', [
                 'series' => $series,
                 'serieAjout'=>$serie
