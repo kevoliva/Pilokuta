@@ -108,6 +108,11 @@ class Partie
         return $this->creneau;
     }
 
+    public function __toString()
+    {
+        return (string) $this->getCreneau();
+    }
+
     public function setCreneau(?Creneau $creneau): self
     {
         $this->creneau = $creneau;

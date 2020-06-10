@@ -16,8 +16,11 @@
             <tr>
                 <td>{{ serie.libelle }}</td>
                 <td>
-                    <a href="{{ path('serie_show', {'id': serie.id}) }}">Voir le détail</a><br>
-                    <a href="{{ path('modify_serie', {'id': serie.id}) }}">Modifier votre série</a>
+                    <a href="{{ path('serie_show', {'id': serie.id}) }}"><button type="button" class="btn btn-outline-light">Voir les détails</button></a>
+                    <hr>
+                    <a href="{{ path('modify_serie', {'id': serie.id}) }}"><button type="button" class="btn btn-outline-light">Modifier série</button></a>
+                    <hr>
+                    <a href="{{ path('poules_index_serie', {'idSerie': serie.id})}}"><button type="button" class="btn btn-outline-light">Affiche les poules correspondantes</button></a>
                 </td>
             </tr>
         {% else %}

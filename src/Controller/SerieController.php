@@ -107,8 +107,7 @@ class SerieController extends AbstractController
                 'poules' => $poules,
                 ]);
         }
-
-    
+   
     
         /**
         * @Route("/modifier/{id}", name="modify_serie", methods={"GET", "POST"})
@@ -145,7 +144,7 @@ class SerieController extends AbstractController
             {
               $poules = $repositoryPoule->findPoulesBySerie($idSerie);
               return $this->render('poule/index.html.twig', [
-                'poule' => $poules,
+                'poules' => $poules
                 ]);
             }
 }

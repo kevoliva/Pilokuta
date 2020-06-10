@@ -255,13 +255,6 @@ class TournoiController extends AbstractController
               array_push($poules,$poule);
             }
             
-            
-            
-            
-            
-            
-            
-            
             $joueursRepository = $this->getDoctrine()->getRepository(User::class);
             
             $joueurs = $joueursRepository->getJoueursByTournoi($tournoi);

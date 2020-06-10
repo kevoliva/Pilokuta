@@ -1,26 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Equipe index{% endblock %}
+{% block title %}Index des Equipes{% endblock %}
 
 {% block body %}
-    <h1>Equipe index</h1>
+    <center class="display-4">Les Equipes de votre tournoi</center><br><br>
 
-    <table class="table">
+    <table class="table table-dark">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Libelle</th>
-                <th>actions</th>
+                <th>Possibilités</th>
             </tr>
         </thead>
         <tbody>
         {% for equipe in equipes %}
             <tr>
-                <td>{{ equipe.id }}</td>
                 <td>{{ equipe.libelle }}</td>
                 <td>
-                    <a href="{{ path('equipe_show', {'id': equipe.id}) }}">show</a>
-                    <a href="{{ path('equipe_edit', {'id': equipe.id}) }}">edit</a>
+                    <a href="{{ path('equipe_show', {'id': equipe.id}) }}">Voir les détails</a><br>
+                    <a href="{{ path('equipe_edit', {'id': equipe.id}) }}">Modifier votre equipe</a>
                 </td>
             </tr>
         {% else %}
@@ -30,6 +28,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('equipe_new') }}">Create new</a>
 {% endblock %}

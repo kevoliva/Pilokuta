@@ -32,7 +32,7 @@ class Equipe
     private $partie;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Poule::class, inversedBy="equipes")
+     * @ORM\ManyToOne(targetEntity=Poule::class, inversedBy="equipes",cascade={"persist", "remove", "merge"})
      */
     private $poule;
 
