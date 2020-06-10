@@ -47,4 +47,18 @@ class EquipeRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+    * @return Equipe[] Returns an array of Equipe objects
+    */
+    
+      public function findEquipesByPoule($idPoule)
+      {
+          return $this->createQueryBuilder('e')
+              ->andWhere('e.poule = :idPoule')
+              ->setParameter('idPoule', $idPoule)
+              ->getQuery()
+              ->getResult()
+          ;
+      }
 }

@@ -25,7 +25,7 @@ class Poule
     private $libelle;
 
     /**
-     * @ORM\OneToMany(targetEntity=Equipe::class, mappedBy="poule")
+     * @ORM\OneToMany(targetEntity=Equipe::class, mappedBy="poule",orphanRemoval=true, cascade={"persist", "remove", "merge"})
      */
     private $equipes;
 
@@ -102,5 +102,10 @@ class Poule
     public function __toString()
     {
         return (string) $this->getLibelle();
+    }
+
+    public function clearEquipes()
+    {
+        $this->getEquipes()->clear();
     }
 }

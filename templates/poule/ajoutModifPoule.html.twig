@@ -4,11 +4,11 @@
 <center>
 {% if action == "ajouter" %}
 <h3 class = "display-4">
-    Enregistrez votre nouvelle Série
+    Enregistrez votre nouvelle Poule
 </h3>
 {% else %}
 <h3 class = "display-4">
-    Modifiez votre Série
+    Modifiez votre Poule
 </h3>
 {% endif %}
 </br></br>
@@ -18,13 +18,13 @@
         <div class="row">
             <div class="col-md-9">
                 {{ form_start(vueFormulaire) }}
-                <H4>Series</H4>
+                <H4>Poules</H4>
                 {{ form_row(vueFormulaire.libelle) }}
 
-                <H4>Poules</H4>
-                <ul class="poules" data-prototype="{{ form_widget(vueFormulaire.poules.vars.prototype)|e('html_attr') }}">
-                {% for poule in vueFormulaire.poules %}
-                <li>{{ form_row(poule.libelle, {'attr' : {'placeholder':"Poule 3"}}) }}</li>
+                <H4>Equipes</H4>
+                <ul class="equipes" data-prototype="{{ form_widget(vueFormulaire.equipes.vars.prototype)|e('html_attr') }}">
+                {% for equipe in vueFormulaire.equipes %}
+                <li>{{ form_row(equipe.libelle, {'attr' : {'placeholder':"18"}}) }}</li>
                 {% endfor %}
                 </ul>
 

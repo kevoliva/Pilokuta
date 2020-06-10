@@ -123,7 +123,7 @@ class SerieController extends AbstractController
             des variables nom, activite, etc. Alors la méthode handleRequest() recupère les valeurs de ces variables et les
             affecte à l'objet $serie. */
             $formulaireSerie->handleRequest($request);
-    
+            dd($formulaireSerie);
             if ($formulaireSerie->isSubmitted() && $formulaireSerie->isValid())
             {
                 //Enregistrer la série en base de données
@@ -132,6 +132,7 @@ class SerieController extends AbstractController
     
                 //Rediriger l'utilisateur vers la page des séries
                 return $this->redirectToRoute('series_index_tournoi');
+                
             }
     
             //Afficher la page présentant le formulaire d'ajout d'une série
@@ -175,7 +176,7 @@ class SerieController extends AbstractController
             {
               $poules = $repositoryPoule->findPoulesBySerie($idSerie);
               return $this->render('poule/index.html.twig', [
-                'poule' => $poules,
+                'poules' => $poules
                 ]);
             }
 }

@@ -13,9 +13,6 @@ class EquipeType extends AbstractType
     {
         $builder
             ->add('libelle')
-            ->add('joueurs')
-            ->add('partie')
-            ->add('poule')
         ;
     }
 

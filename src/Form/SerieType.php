@@ -22,7 +22,6 @@ class SerieType extends AbstractType
                 'allow_delete' => true,
             ])
             ;
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
