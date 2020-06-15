@@ -50,7 +50,7 @@ class Tournoi
     private $creneau;
 
     /**
-     * @ORM\OneToMany(targetEntity=Serie::class, mappedBy="tournoi", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Serie::class, mappedBy="tournoi", orphanRemoval=true, cascade={"persist", "remove", "merge"})
      */
     private $series;
 

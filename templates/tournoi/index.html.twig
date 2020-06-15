@@ -35,6 +35,13 @@
         <a href="{{path('tournoi_show', {id:tournoi.id})}}">
           <button class="btn btn-outline-success">Consulter</button>
         </a>
+        <a href="{{path('tournoi_index')}}"><br><br>
+        <form method="post" action="{{ path('tournoi_delete', {'id': tournoi.id}) }}" onsubmit="return confirm('Voulez-vous supprimer ce Tournoi?');">
+          <input type="hidden" name="_method" value="DELETE">
+          <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tournoi.id) }}">
+          <button class="btn btn-outline-danger">Supprimer</button>
+        </form>
+        </a>
       </center>
     </div>
   </div>
