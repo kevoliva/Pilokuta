@@ -24,9 +24,12 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">Vous n'avez rentré aucune poule</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+     <center>
+    <a href="{{ path('add_poule_serie', {'idSerie': pouleAjout.serie.id}) }}"> <input type="button" class="btn btn-info" value="Ajouter une poule"> </a>
+    </center>
 {% endblock %}

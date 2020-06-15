@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Poule;
 use App\Entity\Serie;
 use App\Entity\Tournoi;
 use App\Form\SerieType;
+use App\Form\PouleType;
 use App\Repository\PouleRepository;
 use App\Repository\SerieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -89,12 +91,13 @@ class SerieController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$serie->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
+            $idTournoi=$serie->getTournoi()->getId();
             $serie->clearPoules();
             $entityManager->remove($serie);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('serie_index');
+        return $this->redirectToRoute('series_index_tournoi', ['idTournoi' => $idTournoi]);
     }
 
         /**
@@ -140,11 +143,51 @@ class SerieController extends AbstractController
             /**
             * @Route("/{idSerie}/poules", name="poules_index_serie", methods={"GET", "POST"})
             */
-            public function getPoulesByQSerie(PouleRepository $repositoryPoule, $idSerie): Response
+            public function getPoulesBySerie(PouleRepository $repositoryPoule, SerieRepository $repositorySerie, $idSerie): Response
             {
+                $serie = $repositorySerie->find($idSerie);
               $poules = $repositoryPoule->findPoulesBySerie($idSerie);
+              $poule = New Poule();
+              $poule->setSerie($serie);
+
               return $this->render('poule/index.html.twig', [
-                'poules' => $poules
+                'poules' => $poules,
+                'pouleAjout'=>$poule
                 ]);
             }
+
+             /**
+        * @Route("/{idSerie}/poule/ajouter", name="add_poule_serie", methods={"GET", "POST"})
+        */
+        public function indexAjoutPoule(Request $request, EntityManagerInterface $manager, $idSerie, SerieRepository $repositorySerie)
+        {
+            //Création d'une poule vierge qui sera remplie par le formulaire
+            $poule = new Poule();
+
+            $serie = $repositorySerie->find($idSerie);
+
+            $poule->setSerie($serie);
+            
+            //Création du formulaire permettant de saisir une poule
+            $formulairePoule = $this->createForm(PouleType::class, $poule);
+    
+            /* On demande au formulaire d'analyser la dernière requête Http. Si le tableau POST contenu dans cette requête contient
+            des variables nom, activite, etc. Alors la méthode handleRequest() recupère les valeurs de ces variables et les
+            affecte à l'objet $poule. */
+            $formulairePoule->handleRequest($request);
+    
+            if ($formulairePoule->isSubmitted() && $formulairePoule->isValid())
+            {
+                //Enregistrer la poule en base de données
+                $manager->persist($poule);
+                $manager->flush();
+    
+                //Rediriger l'utilisateur vers la page des poules
+                return $this->redirectToRoute('poules_index_serie', ['idSerie' => $idSerie]);
+            }
+    
+            //Afficher la page présentant le formulaire d'ajout d'une série
+            return $this->render('poule/ajoutModifPoule.html.twig', ['vueFormulaire' => $formulairePoule->createView(), 
+            'action'=>"ajouter"]);
+        }
 }

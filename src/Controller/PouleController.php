@@ -67,12 +67,13 @@ class PouleController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$poule->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $poule->clearEquipes(); // La ligne magique
+            $idSerie=$poule->getSerie()->getId();
+            $poule->clearEquipes();
             $entityManager->remove($poule);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('poule_index');
+        return $this->redirectToRoute('poules_index_serie', ['idSerie' => $idSerie]);
     }
 
     /**
