@@ -17,15 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class PouleController extends AbstractController
 {
-    /**
-     * @Route("/", name="poule_index", methods={"GET"})
-     */
-    public function index(PouleRepository $pouleRepository): Response
-    {
-        return $this->render('poule/index.html.twig', [
-            'poules' => $pouleRepository->findAll(),
-        ]);
-    }
 
     /**
      * @Route("/new", name="poule_new", methods={"GET","POST"})
@@ -77,12 +68,12 @@ class PouleController extends AbstractController
     }
 
     /**
-    * @Route("/{idSerie}/poules", name="poules_index_serie", methods={"GET", "POST"})
+    * @Route("/{idPoule}/equipes", name="equipes_index_poule", methods={"GET", "POST"})
     */
     public function getEquipeByPoule(EquipeRepository $repositoryEquipe, $idPoule): Response
     {
         $equipes = $repositoryEquipe->findEquipesByPoule($idPoule);
-        return $this->render('poule/index.html.twig', [
+        return $this->render('equipe/index.html.twig', [
             'equipes' => $equipes,
             ]);
     }
@@ -148,14 +139,4 @@ class PouleController extends AbstractController
             'action'=>"modifier"]);
         }
 
-            /**
-            * @Route("/{idPoule}/equipes", name="equipes_index_poule", methods={"GET", "POST"})
-            */
-            public function getEquipesByQPoule(EquipeRepository $repositoryEquipe, $idPoule): Response
-            {
-              $equipes = $repositoryEquipe->findEquipesByPoule($idPoule);
-              return $this->render('equipe/index.html.twig', [
-                'equipe' => $equipes,
-                ]);
-            }
 }

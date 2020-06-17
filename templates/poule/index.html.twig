@@ -20,6 +20,9 @@
                     <a href="{{ path('poule_show', {'id': poule.id}) }}"><button type="button" class="btn btn-outline-light">Voir les détails</button></a>
                     <hr>
                     <a href="{{ path('modify_poule', {'id': poule.id}) }}"><button type="button" class="btn btn-outline-light">Modifier poule</button></a>
+                    <hr>
+                    <a href="{{ path('equipes_index_poule', {'idPoule': poule.id})}}"><button type="button" class="btn btn-outline-light">Affiche les équipes correspondantes</button></a>
+
                 </td>
             </tr>
         {% else %}
