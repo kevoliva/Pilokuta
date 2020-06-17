@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-
 use App\Entity\User;
 use App\Entity\Equipe;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -23,6 +22,7 @@ class EquipeType extends AbstractType
                 'required' => false
                 ));
         ;
+        
     }
 
     public function configureOptions(OptionsResolver $resolver)

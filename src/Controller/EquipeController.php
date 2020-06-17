@@ -15,15 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class EquipeController extends AbstractController
 {
-    /**
-     * @Route("/", name="equipe_index", methods={"GET"})
-     */
-    public function index(EquipeRepository $equipeRepository): Response
-    {
-        return $this->render('equipe/index.html.twig', [
-            'equipes' => $equipeRepository->findAll(),
-        ]);
-    }
 
     /**
      * @Route("/new", name="equipe_new", methods={"GET","POST"})

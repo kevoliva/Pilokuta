@@ -17,8 +17,9 @@
             <tr>
                 <td>{{ equipe.libelle }}</td>
                 <td>
-                    <a href="{{ path('equipe_show', {'id': equipe.id}) }}">Voir les détails</a><br>
-                    <a href="{{ path('equipe_edit', {'id': equipe.id}) }}">Modifier votre equipe</a>
+                    <a href="{{ path('equipe_show', {'id': equipe.id}) }}"><button type="button" class="btn btn-outline-light">Voir les détails </button></a>
+                    <hr> 
+                    <a href="{{ path('equipe_edit', {'id': equipe.id}) }}"><button type="button" class="btn btn-outline-light">Modifier votre equipe</button></a>
                 </td>
             </tr>
         {% else %}
