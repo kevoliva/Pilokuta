@@ -156,7 +156,7 @@ class SerieController extends AbstractController
                 ]);
             }
 
-             /**
+        /**
         * @Route("/{idSerie}/poule/ajouter", name="add_poule_serie", methods={"GET", "POST"})
         */
         public function indexAjoutPoule(Request $request, EntityManagerInterface $manager, $idSerie, SerieRepository $repositorySerie)

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<center>
+{% if action == "ajouter" %}
+<h3 class = "display-4">
+    Enregistrez votre nouvelle Equipe
+</h3>
+{% else %}
+<h3 class = "display-4">
+    Modifiez votre Equipe
+</h3>
+{% endif %}
+</br></br>
+</center>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                {{ form_start(vueFormulaire) }}
+                <H4>Equipe</H4>
+                {{ form_row(vueFormulaire.libelle) }}
+
+                <H4>Joueurs</H4>
+                {{ form_row(vueFormulaire.users) }}
+                <button type="submit" class="btn btn-dark">Enregistrer</button>
+
+                {{ form_end(vueFormulaire) }}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

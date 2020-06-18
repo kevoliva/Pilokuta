@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Poule;
+use App\Entity\Equipe;
 use App\Form\PouleType;
+use App\Form\EquipeType;
 use App\Repository\PouleRepository;
 use App\Repository\EquipeRepository;
+use App\Repository\SerieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,43 +73,52 @@ class PouleController extends AbstractController
     /**
     * @Route("/{idPoule}/equipes", name="equipes_index_poule", methods={"GET", "POST"})
     */
-    public function getEquipeByPoule(EquipeRepository $repositoryEquipe, $idPoule): Response
+    public function getEquipeByPoule(PouleRepository $repositoryPoule,EquipeRepository $repositoryEquipe, $idPoule): Response
     {
+        $poule = $repositoryPoule->find($idPoule);
         $equipes = $repositoryEquipe->findEquipesByPoule($idPoule);
+        $equipe = New Equipe();
+        $equipe->setPoule($poule);
+
         return $this->render('equipe/index.html.twig', [
             'equipes' => $equipes,
+            'equipeAjout'=>$equipe
             ]);
     }
 
 
         /**
-        * @Route("/ajouter", name="add_poule", methods={"GET", "POST"})
+        * @Route("/{idPoule}/equipe/ajouter", name="add_poule_equipe", methods={"GET", "POST"})
         */
-        public function indexAjoutSerie(Request $request, EntityManagerInterface $manager)
+        public function indexAjoutEquipe(Request $request, EntityManagerInterface $manager, pouleRepository $repositoryPoule, $idPoule)
         {
             //Création d'une poule vierge qui sera remplie par le formulaire
             $poule = new Poule();
+            $poule = $repositoryPoule->find($idPoule);
+            $equipe = new Equipe();
+            $equipe->setPoule($poule);
     
             //Création du formulaire permettant de saisir une poule
-            $formulairePoule = $this->createForm(PouleType::class, $poule);
+            $formulaireEquipe = $this->createForm(EquipeType::class, $equipe);
     
             /* On demande au formulaire d'analyser la dernière requête Http. Si le tableau POST contenu dans cette requête contient
             des variables nom, activite, etc. Alors la méthode handleRequest() recupère les valeurs de ces variables et les
             affecte à l'objet $poule. */
-            $formulairePoule->handleRequest($request);
+            $formulaireEquipe->handleRequest($request);
+
     
-            if ($formulairePoule->isSubmitted() && $formulairePoule->isValid())
+            if ($formulaireEquipe->isSubmitted() && $formulaireEquipe->isValid())
             {
                 //Enregistrer la poule en base de données
-                $manager->persist($poule);
+                $manager->persist($equipe);
                 $manager->flush();
     
                 //Rediriger l'utilisateur vers la page des séries
-                return $this->redirectToRoute('poules_index_serie');
+                return $this->redirectToRoute('poules_index_serie', ['idSerie' => $poule->getSerie()->getId()]);
             }
     
             //Afficher la page présentant le formulaire d'ajout d'une série
-            return $this->render('poule/ajoutModifPoule.html.twig', ['vueFormulaire' => $formulairePoule->createView(), 
+            return $this->render('equipe/ajoutModifEquipe.html.twig', ['vueFormulaire' => $formulaireEquipe->createView(), 
             'action'=>"ajouter"]);
         }
     
