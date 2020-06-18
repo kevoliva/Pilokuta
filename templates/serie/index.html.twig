@@ -15,12 +15,16 @@
         {% for serie in series %}
             <tr>
                 <td>{{ serie.libelle }}</td>
-                <td>
-                    <a href="{{ path('serie_show', {'id': serie.id}) }}"><button type="button" class="btn btn-outline-light">Voir les détails</button></a>
+                <td>           
+                    <a href="{{ path('modify_serie', {'id': serie.id}) }}"><button type="button" class="btn btn-outline-light">Ajouter des Poules</button></a>
                     <hr>
-                    <a href="{{ path('modify_serie', {'id': serie.id}) }}"><button type="button" class="btn btn-outline-light">Modifier série</button></a>
+                    <a href="{{ path('poules_index_serie', {'idSerie': serie.id})}}"><button type="button" class="btn btn-outline-light">Afficher l'index des Poules</button></a>
                     <hr>
-                    <a href="{{ path('poules_index_serie', {'idSerie': serie.id})}}"><button type="button" class="btn btn-outline-light">Affiche les poules correspondantes</button></a>
+                    <form method="post" action="{{ path('serie_delete', {'id': serie.id}) }}" onsubmit="return confirm('Voulez-vous supprimer cette Série ?');">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ serie.id) }}">
+                    <button class="btn btn-outline-danger">Supprimer cette Série et son contenu</button>
+                    </form> 
                 </td>
             </tr>
         {% else %}
@@ -31,6 +35,7 @@
         </tbody>
     </table>
     <center>
-    <a href="{{ path('add_serie_tournoi', {'idTournoi': serieAjout.tournoi.id}) }}"> <input type="button" class="btn btn-info" value="Ajouter une Série"> </a>
+    <a href="{{path('tournoi_show', {id:serieAjout.tournoi.id})}}"> <input type="button" class="btn btn-outline-info" value="Retourner sur le Tournoi"> </a> &nbsp; &#160; &#160; &#160;
+    <a href="{{ path('add_serie_tournoi', {'idTournoi': serieAjout.tournoi.id}) }}"> <input type="button" class="btn btn-outline-info" value="Ajouter une Série"> </a>
     </center>
 {% endblock %}

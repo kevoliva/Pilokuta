@@ -17,22 +17,26 @@
             <tr>
                 <td>{{ poule.libelle }}</td>
                 <td>
-                    <a href="{{ path('poule_show', {'id': poule.id}) }}"><button type="button" class="btn btn-outline-light">Voir les détails</button></a>
+                    <a href="{{ path('modify_poule', {'id': poule.id}) }}"><button type="button" class="btn btn-outline-light">Ajouter des Équipes</button></a>
                     <hr>
-                    <a href="{{ path('modify_poule', {'id': poule.id}) }}"><button type="button" class="btn btn-outline-light">Modifier poule</button></a>
+                    <a href="{{ path('equipes_index_poule', {'idPoule': poule.id})}}"><button type="button" class="btn btn-outline-light">Affiche l'index des Équipes</button></a>
                     <hr>
-                    <a href="{{ path('equipes_index_poule', {'idPoule': poule.id})}}"><button type="button" class="btn btn-outline-light">Affiche les équipes correspondantes</button></a>
-
+                    <form method="post" action="{{ path('poule_delete', {'id': poule.id}) }}" onsubmit="return confirm('Voulez-vous supprimer cette Poule ?');">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ poule.id) }}">
+                    <button class="btn btn-outline-danger">Supprimer cette Poule et son contenu</button>
+                    </form>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">Vous n'avez rentré aucune poule</td>
+                <td colspan="3">Vous n'avez rentré aucune Poule</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
      <center>
-    <a href="{{ path('add_poule_serie', {'idSerie': pouleAjout.serie.id}) }}"> <input type="button" class="btn btn-info" value="Ajouter une poule"> </a>
+    <a href="{{ path('series_index_tournoi', {'idTournoi': pouleAjout.serie.tournoi.id}) }}"> <input type="button" class="btn btn-outline-info" value="Retourner sur les Séries"> </a> &nbsp; &#160; &#160; &#160;
+    <a href="{{ path('add_poule_serie', {'idSerie': pouleAjout.serie.id}) }}"> <input type="button" class="btn btn-outline-info" value="Ajouter une Poule"> </a>
     </center>
 {% endblock %}

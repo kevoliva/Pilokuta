@@ -1,7 +1,7 @@
 var $collectionHolderPoule;
 
 // setup an "add a poule" link
-var $addPouleButton = $('<button type="button" class="btn-success">Add a Poule</button>');
+var $addPouleButton = $('<button type="button" class="btn-success">Ajouter une Poule</button>');
 var $newLinkLiPoule = $('<li></li>').append($addPouleButton);
 
 jQuery(document).ready(function() {
@@ -54,7 +54,7 @@ function addPouleForm($collectionHolderPoule, $newLinkLiPoule) {
 }
 
 function addPouleFormDeleteLink($pouleFormLi) {
-    var $removeFormButton = $('<button type="button" class="btn-danger">Delete this Poule</button><hr>');
+    var $removeFormButton = $('<button type="button" class="btn-danger">Supprimer cette Poule</button><hr>');
     $pouleFormLi.append($removeFormButton);
     
     $removeFormButton.on('click', function(e) {

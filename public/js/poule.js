@@ -1,7 +1,7 @@
 var $collectionHolderEquipe;
 
 // setup an "add a poule" link
-var $addEquipeButton = $('<button type="button" class="btn-success">Add an Equipe</button>');
+var $addEquipeButton = $('<button type="button" class="btn-success">Ajouter une Équipe</button>');
 var $newLinkLiEquipe = $('<li></li>').append($addEquipeButton);
 
 jQuery(document).ready(function() {
@@ -22,11 +22,11 @@ jQuery(document).ready(function() {
     
     $addEquipeButton.on('click', function(e) {
         // add a new tag form (see next code block)
-        addPouleForm($collectionHolderEquipe, $newLinkLiEquipe);
+        addEquipeForm($collectionHolderEquipe, $newLinkLiEquipe);
     });
 });
 
-function addPouleForm($collectionHolderEquipe, $newLinkLiEquipe) {
+function addEquipeForm($collectionHolderEquipe, $newLinkLiEquipe) {
     // Get the data-prototype explained earlier
     var prototype = $collectionHolderEquipe.data('prototype');
     
@@ -53,12 +53,12 @@ function addPouleForm($collectionHolderEquipe, $newLinkLiEquipe) {
     addEquipeFormDeleteLink($newFormLi);
 }
 
-function addEquipeFormDeleteLink($pouleFormLi) {
-    var $removeFormButton = $('<button type="button" class="btn-danger">Delete this Poule</button><hr>');
-    $pouleFormLi.append($removeFormButton);
+function addEquipeFormDeleteLink($equipeFormLi) {
+    var $removeFormButton = $('<button type="button" class="btn-danger">Supprimer cette Équipe</button><hr>');
+    $equipeFormLi.append($removeFormButton);
     
     $removeFormButton.on('click', function(e) {
         // remove the li for the poule form
-        $pouleFormLi.remove();
+        $equipeFormLi.remove();
     });
 }

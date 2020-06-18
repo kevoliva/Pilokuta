@@ -19,8 +19,8 @@ class TournoiType extends AbstractType
         $builder
             ->add('dateDebut')
             ->add('dateFin')
-            ->add('etat')
             ->add('libelle')
+            ->add('nbJoueursParEquipe')
             ->add('series', CollectionType::class, [
                 'entry_type' => SerieType::class,
                 'entry_options' => ['label' => false],

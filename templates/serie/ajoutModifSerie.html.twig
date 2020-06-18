@@ -27,9 +27,11 @@
                 <li>{{ form_row(poule.libelle, {'attr' : {'placeholder':"Poule 3"}}) }}</li>
                 {% endfor %}
                 </ul>
-
+                {% if action == "ajouter" %}
+                <button type="submit" class="btn btn-dark">Créer</button>
+                {% else %}
                 <button type="submit" class="btn btn-dark">Enregistrer</button>
-
+                {% endif %} 
                 {{ form_end(vueFormulaire) }}
 
             </div>

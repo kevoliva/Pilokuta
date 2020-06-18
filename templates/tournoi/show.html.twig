@@ -21,6 +21,10 @@
   <h2>2 vs 2</h2>
   {% endif %}
   <h6>{{ tournoi.etat }}</h6>
+  <br> 
+  <a href="{{ path('series_index_tournoi', {'idTournoi': tournoi.id}) }}">
+  <input type="button" class="btn btn-outline-info" value="Voir les Séries de ce Tournoi"> 
+  </a>
 </center>
 
 {% endblock %}

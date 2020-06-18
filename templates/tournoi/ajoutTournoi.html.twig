@@ -20,7 +20,7 @@
                 
                 {{ form_row(vueFormulaire.libelle, {'attr' : {'placeholder':"Tournoi 2VS2"}}) }}
 
-                {{ form_row(vueFormulaire.etat, {'attr' : {'placeholder':"En cours"}}) }}
+                {{ form_row(vueFormulaire.nbJoueursParEquipe, {'attr' : {'placeholder':"1"}}) }}
 
                 <H4>Series</H4>
                 <ul class="series" data-prototype="{{ form_widget(vueFormulaire.series.vars.prototype)|e('html_attr') }}">
@@ -29,7 +29,7 @@
                 {% endfor %}
                 </ul>
 
-                <button type="submit" class="btn btn-dark">Enregistrer</button>
+                <button type="submit" class="btn btn-dark">Créer</button>
 
                 {{ form_end(vueFormulaire) }}
             </div>

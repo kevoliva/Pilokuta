@@ -1,7 +1,7 @@
 var $collectionHolder;
 
 // setup an "add a serie" link
-var $addSerieButton = $('<button type="button" class="btn-success">Add a Serie</button>');
+var $addSerieButton = $('<button type="button" class="btn-success">Ajouter une Série</button>');
 var $newLinkLi = $('<li></li>').append($addSerieButton);
 
 jQuery(document).ready(function() {
@@ -54,7 +54,7 @@ function addSerieForm($collectionHolder, $newLinkLi) {
 }
 
 function addSerieFormDeleteLink($serieFormLi) {
-    var $removeFormButton = $('<button type="button" class="btn-danger">Delete this serie</button><hr>');
+    var $removeFormButton = $('<button type="button" class="btn-danger">Supprimer cette serie</button><hr>');
     $serieFormLi.append($removeFormButton);
     
     $removeFormButton.on('click', function(e) {
