@@ -24,7 +24,10 @@
                 <H4>Equipes</H4>
                 <ul class="equipes" data-prototype="{{ form_widget(vueFormulaire.equipes.vars.prototype)|e('html_attr') }}">
                 {% for equipe in vueFormulaire.equipes %}
-                <li>{{ form_row(equipe.libelle, {'attr' : {'placeholder':"18"}}) }}</li>
+                <li>
+                {{ form_row(equipe.libelle, {'attr' : {'placeholder':"18"}}) }} 
+                {{ form_row(equipe.users) }}
+                </li>
                 {% endfor %}
                 </ul>
 
