@@ -3,7 +3,7 @@
 {% block title %}Index des Poules{% endblock %}
 
 {% block body %}
-    <center class="display-4">Les Poules de votre série</center><br><br>
+    <center class="display-4">Les Poules de votre Série</center><br><br>
 
     <table class="table table-dark">
         <thead>
@@ -36,7 +36,7 @@
         </tbody>
     </table>
      <center>
-    <a href="{{ path('poules_index_serie', {'idSerie': pouleAjout.serie.tournoi.id}) }}"> <input type="button" class="btn btn-outline-info" value="Retourner sur les Séries"> </a> &nbsp; &#160; &#160; &#160;
+    <a href="{{ path('series_index_tournoi', {'idTournoi': pouleAjout.serie.tournoi.id}) }}"> <input type="button" class="btn btn-outline-info" value="Retourner sur les Séries"> </a> &nbsp; &#160; &#160; &#160;
     <a href="{{ path('add_poule_serie', {'idSerie': pouleAjout.serie.id}) }}"> <input type="button" class="btn btn-outline-info" value="Ajouter une Poule"> </a>
     </center>
 {% endblock %}

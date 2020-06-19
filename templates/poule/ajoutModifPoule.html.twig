@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-md-9">
                 {{ form_start(vueFormulaire) }}
-                <H4>Poules</H4>
+                <H4>Poule</H4>
                 {{ form_row(vueFormulaire.libelle) }}
 
                 <H4>Equipes</H4>
@@ -30,8 +30,12 @@
                 </li>
                 {% endfor %}
                 </ul>
-
+                
+                {% if action == "ajouter" %}
+                <button type="submit" class="btn btn-dark">Créer</button>
+                {% else %}
                 <button type="submit" class="btn btn-dark">Enregistrer</button>
+                {% endif %}
 
                 {{ form_end(vueFormulaire) }}
 
