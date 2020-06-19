@@ -98,19 +98,7 @@ class SerieController extends AbstractController
         }
 
         return $this->redirectToRoute('series_index_tournoi', ['idTournoi' => $idTournoi]);
-    }
-
-        /**
-        * @Route("/{idSerie}/poules", name="poules_index_serie", methods={"GET", "POST"})
-        */
-        public function getPouleBySerie(PouleRepository $repositoryPoule, $idSerie): Response
-        {
-            $poules = $repositoryPoule->findPoulesBySerie($idSerie);
-            return $this->render('poule/index.html.twig', [
-                'poules' => $poules,
-                ]);
-        }
-   
+    }   
     
         /**
         * @Route("/modifier/{id}", name="modify_serie", methods={"GET", "POST"})
