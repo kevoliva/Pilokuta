@@ -133,11 +133,11 @@ class SerieController extends AbstractController
             */
             public function getPoulesBySerie(PouleRepository $repositoryPoule, SerieRepository $repositorySerie, $idSerie): Response
             {
-                $serie = $repositorySerie->find($idSerie);
+            $serie = $repositorySerie->find($idSerie);
               $poules = $repositoryPoule->findPoulesBySerie($idSerie);
+              
               $poule = New Poule();
               $poule->setSerie($serie);
-
               return $this->render('poule/index.html.twig', [
                 'poules' => $poules,
                 'pouleAjout'=>$poule
@@ -153,9 +153,9 @@ class SerieController extends AbstractController
             $poule = new Poule();
 
             $serie = $repositorySerie->find($idSerie);
+            
 
             $poule->setSerie($serie);
-            
             //Création du formulaire permettant de saisir une poule
             $formulairePoule = $this->createForm(PouleType::class, $poule);
     

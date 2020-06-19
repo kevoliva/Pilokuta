@@ -72,7 +72,7 @@ class EquipeController extends AbstractController
      /**
         * @Route("/modifier/{id}", name="modify_equipe", methods={"GET", "POST"})
         */
-        public function indexModifPoule(Request $request, EntityManagerInterface $manager, Equipe $equipe)
+        public function indexModifEquipe(Request $request, EntityManagerInterface $manager, Equipe $equipe)
         {
             //Création du formulaire permettant de modifier une poule
             $formulairePoule = $this->createForm(EquipeType::class, $equipe);

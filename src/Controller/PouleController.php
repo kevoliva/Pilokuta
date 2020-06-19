@@ -74,8 +74,8 @@ class PouleController extends AbstractController
     * @Route("/{idPoule}/equipes", name="equipes_index_poule", methods={"GET", "POST"})
     */
     public function getEquipeByPoule(PouleRepository $repositoryPoule,EquipeRepository $repositoryEquipe, $idPoule): Response
-    {
-        $poule = $repositoryPoule->find($idPoule);
+    {        
+        $poule = $repositoryPoule->find($idPoule);       
         $equipes = $repositoryEquipe->findEquipesByPoule($idPoule);
         $equipe = New Equipe();
         $equipe->setPoule($poule);
@@ -97,7 +97,6 @@ class PouleController extends AbstractController
             $poule = $repositoryPoule->find($idPoule);
             $equipe = new Equipe();
             $equipe->setPoule($poule);
-    
             //Création du formulaire permettant de saisir une poule
             $formulaireEquipe = $this->createForm(EquipeType::class, $equipe);
     

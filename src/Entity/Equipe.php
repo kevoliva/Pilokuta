@@ -32,12 +32,12 @@ class Equipe
     private $partie;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Poule::class, inversedBy="equipes",cascade={"persist", "remove", "merge"})
+     * @ORM\ManyToOne(targetEntity=Poule::class, inversedBy="equipes",cascade={"persist"})
      */
     private $poule;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="equipe")
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="equipe", cascade={"persist"})
      */
     private $users;
 
