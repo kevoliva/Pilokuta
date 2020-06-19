@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Equipe;
 use App\Form\EquipeType;
+use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Repository\EquipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -105,7 +106,7 @@ class EquipeController extends AbstractController
             $equipe = new Equipe();
             $equipe = $repositoryEquipe->find($idEquipe);
             $user = new User();
-            $user->setUser($user);
+            $user->addEquipe($equipe);
     
             //Création du formulaire permettant de saisir un user
             $formulaireUser = $this->createForm(UserType::class, $user);
@@ -127,7 +128,7 @@ class EquipeController extends AbstractController
             }
     
             //Afficher la page présentant le formulaire d'ajout d'une equipe
-            return $this->render('equipe/ajoutModifEquipe.html.twig', ['vueFormulaire' => $formulaireUser->createView(), 
-            'action'=>"ajouter"]);
+            return $this->render('user/ajoutModifUser.html.twig', ['vueFormulaire' => $formulaireUser->createView(), 
+            ]);
         }  
 }
