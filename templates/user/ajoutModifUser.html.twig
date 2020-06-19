@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<center>
+<h3 class = "display-4">
+    Enregistrez votre nouveau joueur
+</h3>
+</br></br>
+</center>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                {{ form_start(vueFormulaire) }}
+
+                {{ form_row(vueFormulaire.nom,{'attr' : {'placeholder':"Marque"}}) }}
+
+                {{ form_row(vueFormulaire.prenom, {'attr' : {'placeholder':"Quentin"}}) }}
+                
+                {{ form_row(vueFormulaire.email, {'attr' : {'placeholder':"qmarque@hotmail.com"}}) }}
+
+                {{ form_row(vueFormulaire.password, {'attr' : {'placeholder':"Qareiuceni457"}}) }}
+
+                {{ form_row(vueFormulaire.telephone, {'attr' : {'placeholder':"0789457154"}}) }}
+             
+                <button type="submit" class="btn btn-dark">Créer</button>
+
+                {{ form_end(vueFormulaire) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
