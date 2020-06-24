@@ -133,14 +133,15 @@ class SerieController extends AbstractController
             */
             public function getPoulesBySerie(PouleRepository $repositoryPoule, SerieRepository $repositorySerie, $idSerie): Response
             {
-            $serie = $repositorySerie->find($idSerie);
+              $serie = $repositorySerie->find($idSerie);
               $poules = $repositoryPoule->findPoulesBySerie($idSerie);
               
               $poule = New Poule();
               $poule->setSerie($serie);
               return $this->render('poule/index.html.twig', [
                 'poules' => $poules,
-                'pouleAjout'=>$poule
+                'pouleAjout'=>$poule,
+                'serie' => $serie
                 ]);
             }
 

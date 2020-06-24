@@ -82,7 +82,8 @@ class PouleController extends AbstractController
 
         return $this->render('equipe/index.html.twig', [
             'equipes' => $equipes,
-            'equipeAjout'=>$equipe
+            'equipeAjout'=>$equipe,
+            'poule' => $poule
             ]);
     }
 
