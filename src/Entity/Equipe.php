@@ -135,4 +135,9 @@ class Equipe
 
         return $this;
     }
+
+    public function countUsers(): ?int
+    {
+        return count($this->users);
+    }
 }

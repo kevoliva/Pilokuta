@@ -87,6 +87,11 @@ class Poule
         return $this;
     }
 
+    public function countEquipes(): ?int
+    {
+        return count($this->equipes);
+    }
+
     public function getSerie(): ?Serie
     {
         return $this->serie;

@@ -20,6 +20,7 @@
                     <a href="{{ path('modify_equipe', {'id': equipe.id}) }}"><button type="button" class="btn btn-outline-light">Modifier votre Équipe</button></a>
                     <hr>
                     <a href="{{ path('add_equipe_user', {'idEquipe': equipe.id}) }}"><button type="button" class="btn btn-outline-light">Ajouter un joueur</button></a>
+                    &nbsp; &#160; Il y a {{ equipe.countUsers() }} joueur{% if equipe.countUsers()>1 %}s{% endif %}
                     <hr>
                     <form method="post" action="{{ path('equipe_delete', {'id': equipe.id}) }}" onsubmit="return confirm('Voulez-vous supprimer cette Équipe ?');">
                         <input type="hidden" name="_method" value="DELETE">
