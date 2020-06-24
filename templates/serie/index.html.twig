@@ -19,6 +19,7 @@
                     <a href="{{ path('modify_serie', {'id': serie.id}) }}"><button type="button" class="btn btn-outline-light">Ajouter des Poules</button></a>
                     <hr>
                     <a href="{{ path('poules_index_serie', {'idSerie': serie.id})}}"><button type="button" class="btn btn-outline-light">Afficher l'index des Poules</button></a>
+                    &nbsp; &#160; Il y a {{ serie.countPoules() }} poule{% if serie.countPoules()>1 %}s{% endif %}
                     <hr>
                     <form method="post" action="{{ path('serie_delete', {'id': serie.id}) }}" onsubmit="return confirm('Voulez-vous supprimer cette Série ?');">
                     <input type="hidden" name="_method" value="DELETE">

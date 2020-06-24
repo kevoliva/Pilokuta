@@ -87,6 +87,11 @@ class Serie
         return $this;
     }
 
+    public function countPoules(): ?int
+    {
+        return count($this->poules);
+    }
+
     public function getTournoi(): ?Tournoi
     {
         return $this->tournoi;
