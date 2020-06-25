@@ -163,7 +163,8 @@ class TournoiController extends AbstractController
       'tournoi' => $tournoi, 
       ]);
     }    
-        
+    
+
     /**
     * @Route("/{id}/calendrier", name="tournoi_show_calendrier", methods={"GET"})
     */
@@ -192,6 +193,7 @@ class TournoiController extends AbstractController
       { 
         $unCommentaire=$creneau->getCommentaire();
         $lesCommentaires[]=$unCommentaire;
+        
         if(($users=$creneau->getUser())!=null)
         {
           $userNom=$users->getNom();
@@ -212,15 +214,17 @@ class TournoiController extends AbstractController
       }
           
       $motif="/^[0-9]/";
-      $event=array();
-      foreach($parties as $key => $partieStr)
+      $evenements=array();
+      foreach($parties as $partieStr)
       {
-        foreach($partieStr as $cle => $valeur)
+        foreach($partieStr as $valeur)
         {
-          if(preg_match($motif, $valeur))
-          {
-            $evenements[]=$valeur;
-          } 
+          
+            if(preg_match($motif, $valeur))
+            {
+              $evenements[]=$valeur;
+            } 
+           
         }
       }
           
@@ -228,6 +232,7 @@ class TournoiController extends AbstractController
           
       $cal=new CalendrierTournoi($parties);
       $textCalendrier=$cal->getCalendrier($id);
+     
       // Récupérer joueurs tournoi
           
       $joueursRepository = $this->getDoctrine()->getRepository(User::class);
